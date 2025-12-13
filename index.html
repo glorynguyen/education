@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lộ Trình Học Web Development</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .progress-bar {
+            background: rgba(255,255,255,0.2);
+            height: 30px;
+            border-radius: 15px;
+            margin-top: 20px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4ade80, #22c55e);
+            border-radius: 15px;
+            transition: width 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .month-section {
+            margin-bottom: 40px;
+            border: 2px solid #e5e7eb;
+            border-radius: 15px;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .month-section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .month-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .month-title {
+            font-size: 1.8em;
+            font-weight: bold;
+        }
+
+        .month-progress {
+            background: rgba(255,255,255,0.3);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+        }
+
+        .month-content {
+            padding: 30px;
+            background: #f9fafb;
+        }
+
+        .section {
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            font-size: 1.3em;
+            color: #667eea;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        .topic-list {
+            list-style: none;
+        }
+
+        .topic-item {
+            background: white;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .topic-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .topic-item.completed {
+            border-left-color: #22c55e;
+            background: #f0fdf4;
+        }
+
+        .checkbox {
+            width: 24px;
+            height: 24px;
+            border: 2px solid #667eea;
+            border-radius: 6px;
+            margin-right: 15px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .topic-item.completed .checkbox {
+            background: #22c55e;
+            border-color: #22c55e;
+        }
+
+        .checkbox::after {
+            content: '✓';
+            color: white;
+            font-weight: bold;
+            display: none;
+        }
+
+        .topic-item.completed .checkbox::after {
+            display: block;
+        }
+
+        .topic-text {
+            flex: 1;
+            font-size: 1.05em;
+        }
+
+        .project-card {
+            background: white;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            border: 2px solid #e5e7eb;
+            transition: all 0.3s ease;
+        }
+
+        .project-card:hover {
+            border-color: #667eea;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .project-card.completed {
+            border-color: #22c55e;
+            background: #f0fdf4;
+        }
+
+        .project-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .project-title {
+            font-weight: bold;
+            font-size: 1.1em;
+            flex: 1;
+        }
+
+        .project-status {
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .project-card.completed .project-status {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+            padding: 30px;
+            background: #f9fafb;
+            border-radius: 15px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .stat-number {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .stat-label {
+            color: #6b7280;
+            margin-top: 5px;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+            margin: 10px 5px;
+            transition: transform 0.3s ease;
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+        }
+
+        .actions {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .notes-section {
+            margin-top: 30px;
+            padding: 20px;
+            background: #fffbeb;
+            border-radius: 10px;
+            border-left: 4px solid #f59e0b;
+        }
+
+        .notes-title {
+            font-weight: bold;
+            color: #92400e;
+            margin-bottom: 10px;
+        }
+
+        .notes-content {
+            width: 100%;
+            min-height: 100px;
+            padding: 10px;
+            border: 1px solid #fbbf24;
+            border-radius: 5px;
+            font-family: inherit;
+            resize: vertical;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 Lộ Trình Học Web Development</h1>
+            <p>Hành trình 2-3 tháng để trở thành Web Developer</p>
+            <div class="progress-bar">
+                <div class="progress-fill" id="overallProgress">0%</div>
+            </div>
+        </div>
+
+        <div class="content">
+            <!-- Tháng 1 -->
+            <div class="month-section" data-month="1">
+                <div class="month-header">
+                    <div class="month-title">📚 Tháng 1 - Nền Tảng Web</div>
+                    <div class="month-progress" id="month1Progress">0/7</div>
+                </div>
+                <div class="month-content">
+                    <div class="section">
+                        <div class="section-title">Kiến thức cần học:</div>
+                        <ul class="topic-list">
+                            <li class="topic-item" onclick="toggleTopic(this)">
+                                <div class="checkbox"></div>
+                                <div class="topic-text">HTML5 - Cấu trúc và semantic tags</div>
+                            </li>
+                            <li class="topic-item" onclick="toggleTopic(this)">
+                                <div class="checkbox"></div>
+                                <div class="topic-text">CSS3 - Flexbox layout</div>
+                            </li>
+                            <li class="topic-item" onclick="toggleTopic(this)">
+                                <div class="checkbox"></div>
+                                <div class="topic-text">CSS3 - Grid layout</div>
+                            </li>
+                            <li class="topic-item" onclick="toggleTopic(this)">
+                                <div class="checkbox"></div>
+                                <div class="topic-text">JavaScript cơ bản - Biến và kiểu dữ liệu</div>
+                            </li>
+                            <li class="topic-item" onclick="toggleTopic(this)">
+                                <div class="checkbox"></div>
+                                <div class="topic-text">JavaScript cơ bản - Functions</div>
+                            </li>
+                            <li class="topic-item" onclick="toggleTopic(this)">
+                                <div class="checkbox"></div>
+                                <div class="topic-text">JavaScript cơ bản - Array và Object</div>
+                            </li>
+                            <li class="topic-item" onclick="toggleTopic(this)">
+                                <div class="checkbox"></div>
+                                <div class="topic-text">JavaScript cơ bản - DOM manipulation</div>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="section">
+                        <div class="section-title">Dự án thực hành:</div>
+                        <div class="project-card" onclick="toggleProject(this)">
+                            <div class="project-header">
+                                <div class="checkbox"></div>
+                                <div class="project-title">Landing Page Công Ty</div>
+                                <div class="project-status">Đang làm</div>
+                            </div>
+                            <div style="color: #6b7280; margin-top: 10px;">
+                                Tạo trang giới thiệu công ty với header, about, services, contact form
+                            </div>
+                        </div>
+                        <div class="project-card" onclick="toggleProject(this)">
+                            <div class="project-header">
+                                <div class="checkbox"></div>
+                                <div class="project-title">Website Bán Hàng Đơn Giản</div>
+                                <div class="project-status">Đang làm</div>
+                            </div>
+                            <div style="color: #6b7280; margin-top: 10px;">
+                                Trang sản phẩm với filter, shopping cart cơ bản
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tháng 2 -->
+            <div class="month-section" data-month="2">
+                <div class="month-header">
+                    <div class="month-title">⚡ Tháng 2 - Nâng Cao</div>
+                    <div class="month-progress" id="month2Progress">0/8</div>
+                </div>
+                <div class="month-content">
+                    <div class="section">
+                        <div class="section-title">Kiến thức cần học:</div>
+                        <ul class="topic-list">
+                            <li class="topic-item" onclick="toggleTopic(this)">
+                                <div class="checkbox"></div>
+                                <div class="topic-text">JavaScript nâng cao - Promises</div>
+                            </li>
+                            <li class="topic-item" onclick="toggleTopic(this)">
+                                <div class="checkbox"></div>
+                                <div class="topic-text">JavaScript nâng cao - Async/Await</div>
+                            </li>
+                            <li class="topic-item" onclick="toggleTopic(this)">
+                                <div class="checkbox"></div>
+                                <div class="topic-text">React - Components và Props</div>
+                            </li>
+                            <li class="topic-item" onclick="toggleTopic(this)">
+                                <div class="checkbox"></div>
+                                <div class="topic-text">React - State và Hooks (useState, useEffect)</div>
+                            </li>
+                            <li class="topic-item" onclick="toggleTopic(this)">
+                                <div class="checkbox"></div>
+                                <div class="topic-text">React - Routing với React Router</div>
+                            </li>
+                            <li class="topic-item" onclick="toggleTopic(this)">
+                                <div class="checkbox"></div>
+                                <div class="topic-text">API - RESTful API concepts</div>
+                            </li>
+                            <li class="topic-item" onclick="toggleTopic(this)">
+                                <div class="checkbox"></div>
+                                <div class="topic-text">API - Fetch và Axios để gọi API</div>
+                            </li>
+                            <li class="topic-item" onclick="toggleTopic(this)">
+                                <div class="checkbox"></div>
+                                <div class="topic-text">Next.js cơ bản (hoặc tiếp tục với React)</div>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="section">
+                        <div class="section-title">Dự án thực hành:</div>
+                        <div class="project-card" onclick="toggleProject(this)">
+                            <div class="project-header">
+                                <div class="checkbox"></div>
+                                <div class="project-title">Website Blog Cá Nhân</div>
+                                <div class="project-status">Đang làm</div>
+                            </div>
+                            <div style="color: #6b7280; margin-top: 10px;">
+                                Blog với routing, list posts, single post view, markdown support
+                            </div>
+                        </div>
+                        <div class="project-card" onclick="toggleProject(this)">
+                            <div class="project-header">
+                                <div class="checkbox"></div>
+                                <div class="project-title">Movie App với TMDB API</div>
+                                <div class="project-status">Đang làm</div>
+                            </div>
+                            <div style="color: #6b7280; margin-top: 10px;">
+                                Ứng dụng xem phim với search, filter, detail page, favorites
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tháng 3 -->
+            <div class="month-section" data-month="3">
+                <div class="month-header">
+                    <div class="month-title">🎯 Tháng 3 - Hoàn Thiện Portfolio</div>
+                    <div class="month-progress" id="month3Progress">0/6</div>
+                </div>
+                <div class="month-content">
+                    <div class="section">
+                        <div class="section-title">Công việc cần làm:</div>
+                        <ul class="topic-list">
+                            <li class="topic-item" onclick="toggleTopic(this)">
+                                <div class="checkbox"></div>
+                                <div class="topic-text">Tạo tài khoản GitHub và học Git cơ bản</div>
+                            </li>
+                            <li class="topic-item" onclick="toggleTopic(this)">
+                                <div class="checkbox"></div>
+                                <div class="topic-text">Push tất cả dự án lên GitHub với README tốt</div>
+                            </li>
+                            <li class="topic-item" onclick="toggleTopic(this)">
+                                <div class="checkbox"></div>
+                                <div class="topic-text">Deploy dự án lên Vercel/Netlify</div>
+                            </li>
+                            <li class="topic-item" onclick="toggleTopic(this)">
+                                <div class="checkbox"></div>
+                                <div class="topic-text">Tạo Portfolio Website giới thiệu bản thân</div>
+                            </li>
+                            <li class="topic-item" onclick="toggleTopic(this)">
+                                <div class="checkbox"></div>
+                                <div class="topic-text">Hoàn thiện CV và LinkedIn profile</div>
+                            </li>
+                            <li class="topic-item" onclick="toggleTopic(this)">
+                                <div class="checkbox"></div>
+                                <div class="topic-text">Review code, refactor và optimize dự án</div>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="section">
+                        <div class="section-title">Checklist trước khi apply:</div>
+                        <ul class="topic-list">
+                            <li class="topic-item" onclick="toggleTopic(this)">
+                                <div class="checkbox"></div>
+                                <div class="topic-text">✓ Có ít nhất 4-5 dự án hoàn chỉnh</div>
+                            </li>
+                            <li class="topic-item" onclick="toggleTopic(this)">
+                                <div class="checkbox"></div>
+                                <div class="topic-text">✓ Tất cả dự án đã deploy và chạy tốt</div>
+                            </li>
+                            <li class="topic-item" onclick="toggleTopic(this)">
+                                <div class="checkbox"></div>
+                                <div class="topic-text">✓ GitHub profile trông professional</div>
+                            </li>
+                            <li class="topic-item" onclick="toggleTopic(this)">
+                                <div class="checkbox"></div>
+                                <div class="topic-text">✓ Portfolio website sẵn sàng</div>
+                            </li>
+                            <li class="topic-item" onclick="toggleTopic(this)">
+                                <div class="checkbox"></div>
+                                <div class="topic-text">✓ CV được update với skills mới</div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Statistics -->
+            <div class="stats">
+                <div class="stat-card">
+                    <div class="stat-number" id="totalCompleted">0</div>
+                    <div class="stat-label">Hoàn thành</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="totalRemaining">26</div>
+                    <div class="stat-label">Còn lại</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="daysLeft">90</div>
+                    <div class="stat-label">Ngày còn lại</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="completionRate">0%</div>
+                    <div class="stat-label">Tiến độ</div>
+                </div>
+            </div>
+
+            <!-- Notes Section -->
+            <div class="notes-section">
+                <div class="notes-title">📝 Ghi chú học tập:</div>
+                <textarea class="notes-content" id="notes" placeholder="Ghi chú những điều quan trọng, khó khăn gặp phải, hoặc ideas mới..."></textarea>
+            </div>
+
+            <!-- Actions -->
+            <div class="actions">
+                <button class="btn" onclick="saveProgress()">💾 Lưu tiến độ</button>
+                <button class="btn" onclick="resetProgress()">🔄 Reset tất cả</button>
+                <button class="btn" onclick="exportData()">📤 Xuất dữ liệu</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Load saved progress from localStorage
+        function loadProgress() {
+            try {
+                const saved = localStorage.getItem('webDevProgress');
+                if (saved) {
+                    const data = JSON.parse(saved);
+                    
+                    // Restore topic checkboxes
+                    document.querySelectorAll('.topic-item').forEach((item, index) => {
+                        if (data.topics && data.topics[index]) {
+                            item.classList.add('completed');
+                        }
+                    });
+
+                    // Restore project cards
+                    document.querySelectorAll('.project-card').forEach((card, index) => {
+                        if (data.projects && data.projects[index]) {
+                            card.classList.add('completed');
+                            const status = card.querySelector('.project-status');
+                            status.textContent = 'Hoàn thành';
+                        }
+                    });
+
+                    // Restore notes
+                    if (data.notes) {
+                        document.getElementById('notes').value = data.notes;
+                    }
+
+                    updateStats();
+                    console.log('✅ Đã tải tiến độ từ localStorage');
+                }
+            } catch (error) {
+                console.error('❌ Lỗi khi tải tiến độ:', error);
+            }
+        }
+
+        // Toggle topic completion
+        function toggleTopic(element) {
+            element.classList.toggle('completed');
+            updateStats();
+            autoSave();
+        }
+
+        // Toggle project completion
+        function toggleProject(element) {
+            element.classList.toggle('completed');
+            const status = element.querySelector('.project-status');
+            if (element.classList.contains('completed')) {
+                status.textContent = 'Hoàn thành';
+            } else {
+                status.textContent = 'Đang làm';
+            }
+            updateStats();
+            autoSave();
+        }
+
+        // Update statistics
+        function updateStats() {
+            const allItems = document.querySelectorAll('.topic-item, .project-card');
+            const completedItems = document.querySelectorAll('.topic-item.completed, .project-card.completed');
+            
+            const total = allItems.length;
+            const completed = completedItems.length;
+            const remaining = total - completed;
+            const percentage = Math.round((completed / total) * 100);
+
+            document.getElementById('totalCompleted').textContent = completed;
+            document.getElementById('totalRemaining').textContent = remaining;
+            document.getElementById('completionRate').textContent = percentage + '%';
+            document.getElementById('overallProgress').textContent = percentage + '%';
+            document.getElementById('overallProgress').style.width = percentage + '%';
+
+            // Update each month progress
+            for (let month = 1; month <= 3; month++) {
+                const section = document.querySelector(`[data-month="${month}"]`);
+                const monthItems = section.querySelectorAll('.topic-item, .project-card');
+                const monthCompleted = section.querySelectorAll('.topic-item.completed, .project-card.completed');
+                const progressEl = document.getElementById(`month${month}Progress`);
+                progressEl.textContent = `${monthCompleted.length}/${monthItems.length}`;
+            }
+        }
+
+        // Save progress to localStorage
+        function saveProgress() {
+            try {
+                const topics = [];
+                document.querySelectorAll('.topic-item').forEach(item => {
+                    topics.push(item.classList.contains('completed'));
+                });
+
+                const projects = [];
+                document.querySelectorAll('.project-card').forEach(card => {
+                    projects.push(card.classList.contains('completed'));
+                });
+
+                const notes = document.getElementById('notes').value;
+
+                const data = { 
+                    topics, 
+                    projects, 
+                    notes,
+                    lastSaved: new Date().toISOString()
+                };
+                localStorage.setItem('webDevProgress', JSON.stringify(data));
+                
+                alert('✅ Đã lưu tiến độ thành công!');
+                console.log('💾 Dữ liệu đã lưu:', data);
+            } catch (error) {
+                alert('❌ Lỗi khi lưu: ' + error.message);
+                console.error('❌ Lỗi khi lưu tiến độ:', error);
+            }
+        }
+
+        // Auto save function (silent save without alert)
+        function autoSave() {
+            try {
+                const topics = [];
+                document.querySelectorAll('.topic-item').forEach(item => {
+                    topics.push(item.classList.contains('completed'));
+                });
+
+                const projects = [];
+                document.querySelectorAll('.project-card').forEach(card => {
+                    projects.push(card.classList.contains('completed'));
+                });
+
+                const notes = document.getElementById('notes').value;
+
+                const data = { 
+                    topics, 
+                    projects, 
+                    notes,
+                    lastSaved: new Date().toISOString()
+                };
+                localStorage.setItem('webDevProgress', JSON.stringify(data));
+                console.log('💾 Tự động lưu thành công');
+            } catch (error) {
+                console.error('❌ Lỗi tự động lưu:', error);
+            }
+        }
+
+        // Reset all progress
+        function resetProgress() {
+            if (confirm('Bạn có chắc muốn reset tất cả tiến độ?')) {
+                localStorage.removeItem('webDevProgress');
+                document.querySelectorAll('.topic-item, .project-card').forEach(item => {
+                    item.classList.remove('completed');
+                });
+                document.querySelectorAll('.project-status').forEach(status => {
+                    status.textContent = 'Đang làm';
+                });
+                document.getElementById('notes').value = '';
+                updateStats();
+                alert('✅ Đã reset tất cả!');
+            }
+        }
+
+        // Export data as JSON
+        function exportData() {
+            const data = localStorage.getItem('webDevProgress');
+            if (!data) {
+                alert('Chưa có dữ liệu để xuất!');
+                return;
+            }
+
+            const blob = new Blob([data], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'web-dev-progress.json';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        // Calculate days left
+        function updateDaysLeft() {
+            const startDate = new Date();
+            const endDate = new Date(startDate);
+            endDate.setDate(endDate.getDate() + 90);
+            
+            const saved = localStorage.getItem('webDevStartDate');
+            if (!saved) {
+                localStorage.setItem('webDevStartDate', startDate.toISOString());
+            }
+            
+            const savedStart = new Date(saved || startDate);
+            const now = new Date();
+            const diffTime = endDate - now;
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            
+            document.getElementById('daysLeft').textContent = Math.max(0, diffDays);
+        }
+
+        // Initialize
+        loadProgress();
+        updateStats();
+        updateDaysLeft();
+
+        // Auto-save notes every 30 seconds
+        setInterval(() => {
+            autoSave();
+        }, 30000);
+
+        // Save on page unload
+        window.addEventListener('beforeunload', () => {
+            autoSave();
+        });
+    </script>
+</body>
+</html>
