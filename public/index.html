@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -23,7 +24,7 @@
             margin: 0 auto;
             background: white;
             border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
             overflow: hidden;
         }
 
@@ -45,7 +46,7 @@
         }
 
         .progress-bar {
-            background: rgba(255,255,255,0.2);
+            background: rgba(255, 255, 255, 0.2);
             height: 30px;
             border-radius: 15px;
             margin-top: 20px;
@@ -78,7 +79,7 @@
 
         .month-section:hover {
             transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
         }
 
         .month-header {
@@ -96,7 +97,7 @@
         }
 
         .month-progress {
-            background: rgba(255,255,255,0.3);
+            background: rgba(255, 255, 255, 0.3);
             padding: 5px 15px;
             border-radius: 20px;
             font-size: 0.9em;
@@ -136,7 +137,7 @@
 
         .topic-item:hover {
             transform: translateX(5px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
         }
 
         .topic-item.completed {
@@ -189,7 +190,7 @@
 
         .project-card:hover {
             border-color: #667eea;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
         }
 
         .project-card.completed {
@@ -237,7 +238,7 @@
             padding: 20px;
             border-radius: 10px;
             text-align: center;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
         }
 
         .stat-number {
@@ -298,6 +299,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <div class="header">
@@ -535,7 +537,8 @@
             <!-- Notes Section -->
             <div class="notes-section">
                 <div class="notes-title">📝 Ghi chú học tập:</div>
-                <textarea class="notes-content" id="notes" placeholder="Ghi chú những điều quan trọng, khó khăn gặp phải, hoặc ideas mới..."></textarea>
+                <textarea class="notes-content" id="notes"
+                    placeholder="Ghi chú những điều quan trọng, khó khăn gặp phải, hoặc ideas mới..."></textarea>
             </div>
 
             <!-- Actions -->
@@ -554,7 +557,7 @@
                 const saved = localStorage.getItem('webDevProgress');
                 if (saved) {
                     const data = JSON.parse(saved);
-                    
+
                     // Restore topic checkboxes
                     document.querySelectorAll('.topic-item').forEach((item, index) => {
                         if (data.topics && data.topics[index]) {
@@ -608,7 +611,7 @@
         function updateStats() {
             const allItems = document.querySelectorAll('.topic-item, .project-card');
             const completedItems = document.querySelectorAll('.topic-item.completed, .project-card.completed');
-            
+
             const total = allItems.length;
             const completed = completedItems.length;
             const remaining = total - completed;
@@ -645,14 +648,14 @@
 
                 const notes = document.getElementById('notes').value;
 
-                const data = { 
-                    topics, 
-                    projects, 
+                const data = {
+                    topics,
+                    projects,
                     notes,
                     lastSaved: new Date().toISOString()
                 };
                 localStorage.setItem('webDevProgress', JSON.stringify(data));
-                
+
                 alert('✅ Đã lưu tiến độ thành công!');
                 console.log('💾 Dữ liệu đã lưu:', data);
             } catch (error) {
@@ -676,9 +679,9 @@
 
                 const notes = document.getElementById('notes').value;
 
-                const data = { 
-                    topics, 
-                    projects, 
+                const data = {
+                    topics,
+                    projects,
                     notes,
                     lastSaved: new Date().toISOString()
                 };
@@ -727,17 +730,17 @@
             const startDate = new Date();
             const endDate = new Date(startDate);
             endDate.setDate(endDate.getDate() + 90);
-            
+
             const saved = localStorage.getItem('webDevStartDate');
             if (!saved) {
                 localStorage.setItem('webDevStartDate', startDate.toISOString());
             }
-            
+
             const savedStart = new Date(saved || startDate);
             const now = new Date();
             const diffTime = endDate - now;
             const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-            
+
             document.getElementById('daysLeft').textContent = Math.max(0, diffDays);
         }
 
@@ -756,5 +759,36 @@
             autoSave();
         });
     </script>
+    <!-- Firebase SDK (place these before your main app script) -->
+    <script src="https://www.gstatic.com/firebasejs/10.x.x/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.x.x/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.x.x/firebase-database-compat.js"></script>
+    <!-- Add other Firebase products you plan to use, e.g., Firestore, Storage -->
+    <!-- <script src="https://www.gstatic.com/firebasejs/10.x.x/firebase-firestore-compat.js"></script> -->
+    <!-- <script src="https://www.gstatic.com/firebasejs/10.x.x/firebase-storage-compat.js"></script> -->
+
+    <script>
+        // Your Firebase project configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCrayfdLPobe8xiTU6siDYbI1T6bv9K9jo",
+            authDomain: "baucua-70f9b.firebaseapp.com",
+            databaseURL: "https://baucua-70f9b-default-rtdb.firebaseio.com",
+            projectId: "baucua-70f9b",
+            storageBucket: "baucua-70f9b.firebasestorage.app",
+            messagingSenderId: "807035202882",
+            appId: "1:807035202882:web:a3afb540b888cf8c636cdb",
+            measurementId: "G-0LW1XK5PWR"
+        };
+
+        // Initialize Firebase
+        const app = firebase.initializeApp(firebaseConfig);
+
+        // You can now access Firebase services like this:
+        // const auth = firebase.auth();
+        // const database = firebase.database();
+        // const firestore = firebase.firestore(); // If you added firestore SDK
+        // ...
+    </script>
 </body>
+
 </html>
