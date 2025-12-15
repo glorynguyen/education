@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ngày 1: HTML Cơ Bản</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        /* CSS riêng cho bài học này */
+        .code-block {
+            background: #1f2937;
+            color: #e5e7eb;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Consolas', monospace;
+            margin: 10px 0 20px 0;
+            overflow-x: auto;
+            border-left: 4px solid #667eea;
+        }
+
+        .concept-card {
+            background: #f3f4f6;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .highlight {
+            color: #7c3aed;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📅 Tháng 1 - Ngày 1</h1>
+            <p>Học cấu trúc và semantic tags trong HTML5</p>
+        </div>
+
+        <div class="content">
+            <a href="../index.html" class="btn"
+                style="display: inline-block; text-decoration: none; margin-bottom: 20px;">
+                ⬅️ Quay lại Lộ trình
+            </a>
+
+            <div class="section">
+                <div class="section-title">1. Cấu trúc cơ bản của HTML</div>
+                <p>HTML (HyperText Markup Language) là ngôn ngữ đánh dấu siêu văn bản.</p>
+                <div class="code-block">
+                    &lt;!DOCTYPE html&gt;
+                    &lt;html lang="vi"&gt;
+                    &lt;head&gt;
+                    &lt;meta charset="UTF-8"&gt;
+                    &lt;title&gt;Trang web đầu tiên&lt;/title&gt;
+                    &lt;/head&gt;
+                    &lt;body&gt;
+                    &lt;!-- Nội dung trang web --&gt;
+                    &lt;/body&gt;
+                    &lt;/html&gt;
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">2. Các semantic tags quan trọng</div>
+                <div class="concept-card">
+                    <ul class="topic-list">
+                        <li class="topic-item">
+                            <div class="topic-text">
+                                <span class="highlight">&lt;header&gt;</span> - Phần đầu trang
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <div class="topic-text">
+                                <span class="highlight">&lt;nav&gt;</span> - Menu điều hướng
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <div class="topic-text">
+                                <span class="highlight">&lt;main&gt;</span> - Nội dung chính
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <div class="topic-text">
+                                <span class="highlight">&lt;article&gt;</span> - Bài viết
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <div class="topic-text">
+                                <span class="highlight">&lt;footer&gt;</span> - Phần chân trang
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">🎯 Bài tập về nhà</div>
+                <div class="project-card">
+                    <div class="project-header">
+                        <div class="project-title">Tạo trang HTML đơn giản</div>
+                    </div>
+                    <p style="margin-top: 10px; line-height: 1.6;">
+                        Tạo một file <code>index.html</code> với:
+                    </p>
+                    <ul style="margin: 10px 0 10px 20px; color: #4b5563;">
+                        <li>Header với logo và menu</li>
+                        <li>Main content với một bài viết</li>
+                        <li>Footer với thông tin liên hệ</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="actions">
+                <button id="completeBtn" class="btn" onclick="completeLesson()">✅ Hoàn thành bài học</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function completeLesson() {
+            alert("Chúc mừng! Bạn đã hoàn thành bài học Ngày 1.");
+            window.location.href = "../index.html";
+        }
+    </script>
+</body>
+
+</html>

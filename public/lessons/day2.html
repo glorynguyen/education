@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ngày 2 - CSS Cơ Bản & Flexbox</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        /* CSS riêng cho bài học này */
+        .code-block {
+            background: #1f2937;
+            color: #e5e7eb;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Consolas', monospace;
+            margin: 10px 0 20px 0;
+            overflow-x: auto;
+            border-left: 4px solid #667eea;
+        }
+
+        .concept-card {
+            background: #f3f4f6;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .highlight {
+            color: #7c3aed;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📅 Tháng 1 - Ngày 2</h1>
+            <p>Học cách style với CSS và layout với Flexbox</p>
+        </div>
+
+        <div class="content">
+            <a href="../index.html" class="btn"
+                style="display: inline-block; text-decoration: none; margin-bottom: 20px;">
+                ⬅️ Quay lại Lộ trình
+            </a>
+
+            <div class="section">
+                <div class="section-title">1. CSS Cơ Bản</div>
+                <p>CSS (Cascading Style Sheets) là ngôn ngữ định dạng trang web.</p>
+                <div class="code-block">
+                    /* Cách viết CSS */<br>
+                    selector {<br>
+                    &nbsp;&nbsp;property: value;<br>
+                    }
+                </div>
+                <p>Ví dụ:</p>
+                <div class="code-block">
+                    .button {<br>
+                    &nbsp;&nbsp;background: blue;<br>
+                    &nbsp;&nbsp;color: white;<br>
+                    &nbsp;&nbsp;padding: 10px 20px;<br>
+                    &nbsp;&nbsp;border-radius: 5px;<br>
+                    }
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">2. Flexbox Layout</div>
+                <p>Flexbox giúp layout dễ dàng hơn:</p>
+                <div class="code-block">
+                    .container {<br>
+                    &nbsp;&nbsp;display: flex;<br>
+                    &nbsp;&nbsp;justify-content: space-between;<br>
+                    &nbsp;&nbsp;align-items: center;<br>
+                    }
+                </div>
+                <p>Các thuộc tính quan trọng:</p>
+                <div class="concept-card">
+                    <ul class="topic-list">
+                        <li class="topic-item">
+                            <div class="topic-text">
+                                <span class="highlight">display: flex</span> - Bật flex mode
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <div class="topic-text">
+                                <span class="highlight">flex-direction</span> - Hướng layout
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <div class="topic-text">
+                                <span class="highlight">justify-content</span> - Căn chỉnh ngang
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <div class="topic-text">
+                                <span class="highlight">align-items</span> - Căn chỉnh dọc
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <p>Thử nghiệm với Flexbox:</p>
+                <div style="display: flex; gap: 20px;">
+                    <div>
+                        <label for="justify-content">justify-content:</label>
+                        <select id="justify-content" onchange="updateFlexboxPreview()">
+                            <option value="flex-start">flex-start</option>
+                            <option value="center">center</option>
+                            <option value="flex-end">flex-end</option>
+                            <option value="space-between">space-between</option>
+                            <option value="space-around">space-around</option>
+                        </select>
+                        <br><br>
+                        <label for="align-items">align-items:</label>
+                        <select id="align-items" onchange="updateFlexboxPreview()">
+                            <option value="stretch">stretch</option>
+                            <option value="flex-start">flex-start</option>
+                            <option value="center">center</option>
+                            <option value="flex-end">flex-end</option>
+                        </select>
+                    </div>
+                    <div id="flexbox-preview"
+                        style="width: 300px; height: 200px; border: 1px solid #ccc; display: flex;">
+                        <div style="background: #667eea; padding: 20px; color: white;">Item 1</div>
+                        <div style="background: #7c3aed; padding: 20px; color: white;">Item 2</div>
+                        <div style="background: #10b981; padding: 20px; color: white;">Item 3</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">🎯 Bài tập về nhà</div>
+                <div class="project-card">
+                    <div class="project-header">
+                        <div class="project-title">Tạo navigation bar responsive</div>
+                    </div>
+                    <p style="margin-top: 10px; line-height: 1.6;">
+                        Tạo một file <code>navbar.html</code> với:
+                    </p>
+                    <ul style="margin: 10px 0 10px 20px; color: #4b5563;">
+                        <li>Logo bên trái</li>
+                        <li>Menu items bên phải</li>
+                        <li>Responsive cho mobile</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="actions">
+                <button class="btn" onclick="window.location.href='day1.html'">⬅️ Quay lại ngày 1</button>
+                <button class="btn" onclick="window.location.href='day3.html'">Tiếp tục ngày 3 ➡️</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function updateFlexboxPreview() {
+            const justifyContent = document.getElementById('justify-content').value;
+            const alignItems = document.getElementById('align-items').value;
+            const preview = document.getElementById('flexbox-preview');
+
+            preview.style.justifyContent = justifyContent;
+            preview.style.alignItems = alignItems;
+        }
+    </script>
+</body>
+
+</html>
