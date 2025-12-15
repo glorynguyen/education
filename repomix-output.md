@@ -56,313 +56,6 @@ repomix.config.json
 
 # Files
 
-## File: public/lessons/day1.html
-```html
-<!DOCTYPE html>
-<html lang="vi">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ngày 1: HTML Cơ Bản</title>
-    <link rel="stylesheet" href="../css/style.css">
-    <style>
-        /* CSS riêng cho bài học này */
-        .code-block {
-            background: #1f2937;
-            color: #e5e7eb;
-            padding: 15px;
-            border-radius: 8px;
-            font-family: 'Consolas', monospace;
-            margin: 10px 0 20px 0;
-            overflow-x: auto;
-            border-left: 4px solid #667eea;
-        }
-
-        .concept-card {
-            background: #f3f4f6;
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-        }
-
-        .highlight {
-            color: #7c3aed;
-            font-weight: bold;
-        }
-    </style>
-</head>
-
-<body>
-    <div class="container">
-        <div class="header">
-            <h1>📅 Tháng 1 - Ngày 1</h1>
-            <p>Học cấu trúc và semantic tags trong HTML5</p>
-        </div>
-
-        <div class="content">
-            <a href="../index.html" class="btn"
-                style="display: inline-block; text-decoration: none; margin-bottom: 20px;">
-                ⬅️ Quay lại Lộ trình
-            </a>
-
-            <div class="section">
-                <div class="section-title">1. Cấu trúc cơ bản của HTML</div>
-                <p>HTML (HyperText Markup Language) là ngôn ngữ đánh dấu siêu văn bản.</p>
-                <div class="code-block">
-                    &lt;!DOCTYPE html&gt;
-                    &lt;html lang="vi"&gt;
-                    &lt;head&gt;
-                    &lt;meta charset="UTF-8"&gt;
-                    &lt;title&gt;Trang web đầu tiên&lt;/title&gt;
-                    &lt;/head&gt;
-                    &lt;body&gt;
-                    &lt;!-- Nội dung trang web --&gt;
-                    &lt;/body&gt;
-                    &lt;/html&gt;
-                </div>
-            </div>
-
-            <div class="section">
-                <div class="section-title">2. Các semantic tags quan trọng</div>
-                <div class="concept-card">
-                    <ul class="topic-list">
-                        <li class="topic-item">
-                            <div class="topic-text">
-                                <span class="highlight">&lt;header&gt;</span> - Phần đầu trang
-                            </div>
-                        </li>
-                        <li class="topic-item">
-                            <div class="topic-text">
-                                <span class="highlight">&lt;nav&gt;</span> - Menu điều hướng
-                            </div>
-                        </li>
-                        <li class="topic-item">
-                            <div class="topic-text">
-                                <span class="highlight">&lt;main&gt;</span> - Nội dung chính
-                            </div>
-                        </li>
-                        <li class="topic-item">
-                            <div class="topic-text">
-                                <span class="highlight">&lt;article&gt;</span> - Bài viết
-                            </div>
-                        </li>
-                        <li class="topic-item">
-                            <div class="topic-text">
-                                <span class="highlight">&lt;footer&gt;</span> - Phần chân trang
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="section">
-                <div class="section-title">🎯 Bài tập về nhà</div>
-                <div class="project-card">
-                    <div class="project-header">
-                        <div class="project-title">Tạo trang HTML đơn giản</div>
-                    </div>
-                    <p style="margin-top: 10px; line-height: 1.6;">
-                        Tạo một file <code>index.html</code> với:
-                    </p>
-                    <ul style="margin: 10px 0 10px 20px; color: #4b5563;">
-                        <li>Header với logo và menu</li>
-                        <li>Main content với một bài viết</li>
-                        <li>Footer với thông tin liên hệ</li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="actions">
-                <button id="completeBtn" class="btn" onclick="completeLesson()">✅ Hoàn thành bài học</button>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        function completeLesson() {
-            alert("Chúc mừng! Bạn đã hoàn thành bài học Ngày 1.");
-            window.location.href = "../index.html";
-        }
-    </script>
-</body>
-
-</html>
-```
-
-## File: public/lessons/day2.html
-```html
-<!DOCTYPE html>
-<html lang="vi">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ngày 2 - CSS Cơ Bản & Flexbox</title>
-    <link rel="stylesheet" href="../css/style.css">
-    <style>
-        /* CSS riêng cho bài học này */
-        .code-block {
-            background: #1f2937;
-            color: #e5e7eb;
-            padding: 15px;
-            border-radius: 8px;
-            font-family: 'Consolas', monospace;
-            margin: 10px 0 20px 0;
-            overflow-x: auto;
-            border-left: 4px solid #667eea;
-        }
-
-        .concept-card {
-            background: #f3f4f6;
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-        }
-
-        .highlight {
-            color: #7c3aed;
-            font-weight: bold;
-        }
-    </style>
-</head>
-
-<body>
-    <div class="container">
-        <div class="header">
-            <h1>📅 Tháng 1 - Ngày 2</h1>
-            <p>Học cách style với CSS và layout với Flexbox</p>
-        </div>
-
-        <div class="content">
-            <a href="../index.html" class="btn"
-                style="display: inline-block; text-decoration: none; margin-bottom: 20px;">
-                ⬅️ Quay lại Lộ trình
-            </a>
-
-            <div class="section">
-                <div class="section-title">1. CSS Cơ Bản</div>
-                <p>CSS (Cascading Style Sheets) là ngôn ngữ định dạng trang web.</p>
-                <div class="code-block">
-                    /* Cách viết CSS */<br>
-                    selector {<br>
-                    &nbsp;&nbsp;property: value;<br>
-                    }
-                </div>
-                <p>Ví dụ:</p>
-                <div class="code-block">
-                    .button {<br>
-                    &nbsp;&nbsp;background: blue;<br>
-                    &nbsp;&nbsp;color: white;<br>
-                    &nbsp;&nbsp;padding: 10px 20px;<br>
-                    &nbsp;&nbsp;border-radius: 5px;<br>
-                    }
-                </div>
-            </div>
-
-            <div class="section">
-                <div class="section-title">2. Flexbox Layout</div>
-                <p>Flexbox giúp layout dễ dàng hơn:</p>
-                <div class="code-block">
-                    .container {<br>
-                    &nbsp;&nbsp;display: flex;<br>
-                    &nbsp;&nbsp;justify-content: space-between;<br>
-                    &nbsp;&nbsp;align-items: center;<br>
-                    }
-                </div>
-                <p>Các thuộc tính quan trọng:</p>
-                <div class="concept-card">
-                    <ul class="topic-list">
-                        <li class="topic-item">
-                            <div class="topic-text">
-                                <span class="highlight">display: flex</span> - Bật flex mode
-                            </div>
-                        </li>
-                        <li class="topic-item">
-                            <div class="topic-text">
-                                <span class="highlight">flex-direction</span> - Hướng layout
-                            </div>
-                        </li>
-                        <li class="topic-item">
-                            <div class="topic-text">
-                                <span class="highlight">justify-content</span> - Căn chỉnh ngang
-                            </div>
-                        </li>
-                        <li class="topic-item">
-                            <div class="topic-text">
-                                <span class="highlight">align-items</span> - Căn chỉnh dọc
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-                <p>Thử nghiệm với Flexbox:</p>
-                <div style="display: flex; gap: 20px;">
-                    <div>
-                        <label for="justify-content">justify-content:</label>
-                        <select id="justify-content" onchange="updateFlexboxPreview()">
-                            <option value="flex-start">flex-start</option>
-                            <option value="center">center</option>
-                            <option value="flex-end">flex-end</option>
-                            <option value="space-between">space-between</option>
-                            <option value="space-around">space-around</option>
-                        </select>
-                        <br><br>
-                        <label for="align-items">align-items:</label>
-                        <select id="align-items" onchange="updateFlexboxPreview()">
-                            <option value="stretch">stretch</option>
-                            <option value="flex-start">flex-start</option>
-                            <option value="center">center</option>
-                            <option value="flex-end">flex-end</option>
-                        </select>
-                    </div>
-                    <div id="flexbox-preview"
-                        style="width: 300px; height: 200px; border: 1px solid #ccc; display: flex;">
-                        <div style="background: #667eea; padding: 20px; color: white;">Item 1</div>
-                        <div style="background: #7c3aed; padding: 20px; color: white;">Item 2</div>
-                        <div style="background: #10b981; padding: 20px; color: white;">Item 3</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="section">
-                <div class="section-title">🎯 Bài tập về nhà</div>
-                <div class="project-card">
-                    <div class="project-header">
-                        <div class="project-title">Tạo navigation bar responsive</div>
-                    </div>
-                    <p style="margin-top: 10px; line-height: 1.6;">
-                        Tạo một file <code>navbar.html</code> với:
-                    </p>
-                    <ul style="margin: 10px 0 10px 20px; color: #4b5563;">
-                        <li>Logo bên trái</li>
-                        <li>Menu items bên phải</li>
-                        <li>Responsive cho mobile</li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="actions">
-                <button class="btn" onclick="window.location.href='day1.html'">⬅️ Quay lại ngày 1</button>
-                <button class="btn" onclick="window.location.href='day3.html'">Tiếp tục ngày 3 ➡️</button>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        function updateFlexboxPreview() {
-            const justifyContent = document.getElementById('justify-content').value;
-            const alignItems = document.getElementById('align-items').value;
-            const preview = document.getElementById('flexbox-preview');
-
-            preview.style.justifyContent = justifyContent;
-            preview.style.alignItems = alignItems;
-        }
-    </script>
-</body>
-
-</html>
-```
-
 ## File: public/css/style.css
 ```css
 /* ===========================
@@ -1125,6 +818,313 @@ function exportData() {
 setInterval(() => saveAllProgress(true), 30000);
 ```
 
+## File: public/lessons/day1.html
+```html
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ngày 1: HTML Cơ Bản</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        /* CSS riêng cho bài học này */
+        .code-block {
+            background: #1f2937;
+            color: #e5e7eb;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Consolas', monospace;
+            margin: 10px 0 20px 0;
+            overflow-x: auto;
+            border-left: 4px solid #667eea;
+        }
+
+        .concept-card {
+            background: #f3f4f6;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .highlight {
+            color: #7c3aed;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📅 Tháng 1 - Ngày 1</h1>
+            <p>Học cấu trúc và semantic tags trong HTML5</p>
+        </div>
+
+        <div class="content">
+            <a href="../index.html" class="btn"
+                style="display: inline-block; text-decoration: none; margin-bottom: 20px;">
+                ⬅️ Quay lại Lộ trình
+            </a>
+
+            <div class="section">
+                <div class="section-title">1. Cấu trúc cơ bản của HTML</div>
+                <p>HTML (HyperText Markup Language) là ngôn ngữ đánh dấu siêu văn bản.</p>
+                <div class="code-block">
+                    &lt;!DOCTYPE html&gt;
+                    &lt;html lang="vi"&gt;
+                    &lt;head&gt;
+                    &lt;meta charset="UTF-8"&gt;
+                    &lt;title&gt;Trang web đầu tiên&lt;/title&gt;
+                    &lt;/head&gt;
+                    &lt;body&gt;
+                    &lt;!-- Nội dung trang web --&gt;
+                    &lt;/body&gt;
+                    &lt;/html&gt;
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">2. Các semantic tags quan trọng</div>
+                <div class="concept-card">
+                    <ul class="topic-list">
+                        <li class="topic-item">
+                            <div class="topic-text">
+                                <span class="highlight">&lt;header&gt;</span> - Phần đầu trang
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <div class="topic-text">
+                                <span class="highlight">&lt;nav&gt;</span> - Menu điều hướng
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <div class="topic-text">
+                                <span class="highlight">&lt;main&gt;</span> - Nội dung chính
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <div class="topic-text">
+                                <span class="highlight">&lt;article&gt;</span> - Bài viết
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <div class="topic-text">
+                                <span class="highlight">&lt;footer&gt;</span> - Phần chân trang
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">🎯 Bài tập về nhà</div>
+                <div class="project-card">
+                    <div class="project-header">
+                        <div class="project-title">Tạo trang HTML đơn giản</div>
+                    </div>
+                    <p style="margin-top: 10px; line-height: 1.6;">
+                        Tạo một file <code>index.html</code> với:
+                    </p>
+                    <ul style="margin: 10px 0 10px 20px; color: #4b5563;">
+                        <li>Header với logo và menu</li>
+                        <li>Main content với một bài viết</li>
+                        <li>Footer với thông tin liên hệ</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="actions">
+                <button id="completeBtn" class="btn" onclick="completeLesson()">✅ Hoàn thành bài học</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function completeLesson() {
+            alert("Chúc mừng! Bạn đã hoàn thành bài học Ngày 1.");
+            window.location.href = "../index.html";
+        }
+    </script>
+</body>
+
+</html>
+```
+
+## File: public/lessons/day2.html
+```html
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ngày 2 - CSS Cơ Bản & Flexbox</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        /* CSS riêng cho bài học này */
+        .code-block {
+            background: #1f2937;
+            color: #e5e7eb;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Consolas', monospace;
+            margin: 10px 0 20px 0;
+            overflow-x: auto;
+            border-left: 4px solid #667eea;
+        }
+
+        .concept-card {
+            background: #f3f4f6;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .highlight {
+            color: #7c3aed;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📅 Tháng 1 - Ngày 2</h1>
+            <p>Học cách style với CSS và layout với Flexbox</p>
+        </div>
+
+        <div class="content">
+            <a href="../index.html" class="btn"
+                style="display: inline-block; text-decoration: none; margin-bottom: 20px;">
+                ⬅️ Quay lại Lộ trình
+            </a>
+
+            <div class="section">
+                <div class="section-title">1. CSS Cơ Bản</div>
+                <p>CSS (Cascading Style Sheets) là ngôn ngữ định dạng trang web.</p>
+                <div class="code-block">
+                    /* Cách viết CSS */<br>
+                    selector {<br>
+                    &nbsp;&nbsp;property: value;<br>
+                    }
+                </div>
+                <p>Ví dụ:</p>
+                <div class="code-block">
+                    .button {<br>
+                    &nbsp;&nbsp;background: blue;<br>
+                    &nbsp;&nbsp;color: white;<br>
+                    &nbsp;&nbsp;padding: 10px 20px;<br>
+                    &nbsp;&nbsp;border-radius: 5px;<br>
+                    }
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">2. Flexbox Layout</div>
+                <p>Flexbox giúp layout dễ dàng hơn:</p>
+                <div class="code-block">
+                    .container {<br>
+                    &nbsp;&nbsp;display: flex;<br>
+                    &nbsp;&nbsp;justify-content: space-between;<br>
+                    &nbsp;&nbsp;align-items: center;<br>
+                    }
+                </div>
+                <p>Các thuộc tính quan trọng:</p>
+                <div class="concept-card">
+                    <ul class="topic-list">
+                        <li class="topic-item">
+                            <div class="topic-text">
+                                <span class="highlight">display: flex</span> - Bật flex mode
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <div class="topic-text">
+                                <span class="highlight">flex-direction</span> - Hướng layout
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <div class="topic-text">
+                                <span class="highlight">justify-content</span> - Căn chỉnh ngang
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <div class="topic-text">
+                                <span class="highlight">align-items</span> - Căn chỉnh dọc
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <p>Thử nghiệm với Flexbox:</p>
+                <div style="display: flex; gap: 20px;">
+                    <div>
+                        <label for="justify-content">justify-content:</label>
+                        <select id="justify-content" onchange="updateFlexboxPreview()">
+                            <option value="flex-start">flex-start</option>
+                            <option value="center">center</option>
+                            <option value="flex-end">flex-end</option>
+                            <option value="space-between">space-between</option>
+                            <option value="space-around">space-around</option>
+                        </select>
+                        <br><br>
+                        <label for="align-items">align-items:</label>
+                        <select id="align-items" onchange="updateFlexboxPreview()">
+                            <option value="stretch">stretch</option>
+                            <option value="flex-start">flex-start</option>
+                            <option value="center">center</option>
+                            <option value="flex-end">flex-end</option>
+                        </select>
+                    </div>
+                    <div id="flexbox-preview"
+                        style="width: 300px; height: 200px; border: 1px solid #ccc; display: flex;">
+                        <div style="background: #667eea; padding: 20px; color: white;">Item 1</div>
+                        <div style="background: #7c3aed; padding: 20px; color: white;">Item 2</div>
+                        <div style="background: #10b981; padding: 20px; color: white;">Item 3</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">🎯 Bài tập về nhà</div>
+                <div class="project-card">
+                    <div class="project-header">
+                        <div class="project-title">Tạo navigation bar responsive</div>
+                    </div>
+                    <p style="margin-top: 10px; line-height: 1.6;">
+                        Tạo một file <code>navbar.html</code> với:
+                    </p>
+                    <ul style="margin: 10px 0 10px 20px; color: #4b5563;">
+                        <li>Logo bên trái</li>
+                        <li>Menu items bên phải</li>
+                        <li>Responsive cho mobile</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="actions">
+                <button class="btn" onclick="window.location.href='day1.html'">⬅️ Quay lại ngày 1</button>
+                <button class="btn" onclick="window.location.href='day3.html'">Tiếp tục ngày 3 ➡️</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function updateFlexboxPreview() {
+            const justifyContent = document.getElementById('justify-content').value;
+            const alignItems = document.getElementById('align-items').value;
+            const preview = document.getElementById('flexbox-preview');
+
+            preview.style.justifyContent = justifyContent;
+            preview.style.alignItems = alignItems;
+        }
+    </script>
+</body>
+
+</html>
+```
+
 ## File: public/lessons/day3.html
 ```html
 <!DOCTYPE html>
@@ -1697,281 +1697,788 @@ node_modules/
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lộ Trình Học Web Development</title>
-    <link rel="stylesheet" href="css/style.css">
+    <title>🚀 Lộ Trình Web Development</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+            animation: fadeInDown 0.6s ease;
+        }
+
+        .header h1 {
+            font-size: 3em;
+            font-weight: 800;
+            margin-bottom: 10px;
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .header p {
+            font-size: 1.3em;
+            opacity: 0.95;
+            font-weight: 500;
+        }
+
+        .progress-wrapper {
+            max-width: 600px;
+            margin: 30px auto 0;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 20px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+
+        .progress-bar {
+            background: rgba(255, 255, 255, 0.3);
+            height: 40px;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #10b981, #059669);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.1em;
+            transition: width 0.5s ease;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
+        }
+
+        /* Auth Section */
+        .auth-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: white;
+            padding: 20px 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 0.6s ease 0.2s both;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+            color: #1f2937;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 28px;
+            border-radius: 25px;
+            font-weight: 600;
+            font-size: 0.95em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        /* Today's Lesson */
+        .today-lesson {
+            background: white;
+            border-radius: 20px;
+            padding: 35px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 0.6s ease 0.3s both;
+        }
+
+        .today-lesson h2 {
+            font-size: 1.8em;
+            color: #1f2937;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .lesson-card {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border-radius: 15px;
+            padding: 30px;
+            display: grid;
+            grid-template-columns: 100px 1fr;
+            gap: 25px;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .lesson-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+        }
+
+        .lesson-number {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            width: 100px;
+            height: 100px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.1em;
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .lesson-info h3 {
+            font-size: 1.5em;
+            color: #92400e;
+            margin-bottom: 10px;
+        }
+
+        .lesson-info p {
+            color: #78350f;
+            margin-bottom: 15px;
+            font-size: 1.05em;
+        }
+
+        .lesson-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .lesson-link:hover {
+            transform: translateX(5px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        /* Month Sections */
+        .month-section {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 0.6s ease 0.4s both;
+        }
+
+        .month-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px 35px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .month-title {
+            font-size: 1.8em;
+            font-weight: 700;
+        }
+
+        .month-progress {
+            background: rgba(255, 255, 255, 0.3);
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: 600;
+            backdrop-filter: blur(10px);
+        }
+
+        .month-content {
+            padding: 35px;
+        }
+
+        .section-title {
+            font-size: 1.4em;
+            color: #667eea;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        /* Topic Items */
+        .topic-list {
+            list-style: none;
+            display: grid;
+            gap: 12px;
+        }
+
+        .topic-item {
+            background: #f9fafb;
+            padding: 18px 20px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-left: 4px solid transparent;
+        }
+
+        .topic-item:hover {
+            background: #f3f4f6;
+            transform: translateX(5px);
+            border-left-color: #667eea;
+        }
+
+        .topic-item.completed {
+            background: #ecfdf5;
+            border-left-color: #10b981;
+        }
+
+        .checkbox {
+            width: 28px;
+            height: 28px;
+            border: 3px solid #d1d5db;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+        }
+
+        .topic-item.completed .checkbox {
+            background: #10b981;
+            border-color: #10b981;
+        }
+
+        .checkbox::after {
+            content: '✓';
+            color: white;
+            font-weight: bold;
+            font-size: 1.2em;
+            display: none;
+        }
+
+        .topic-item.completed .checkbox::after {
+            display: block;
+        }
+
+        .topic-text {
+            flex: 1;
+            font-size: 1.05em;
+            color: #374151;
+            font-weight: 500;
+        }
+
+        .inline-lesson-link {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+            padding: 4px 12px;
+            background: rgba(102, 126, 234, 0.1);
+            border-radius: 6px;
+            transition: all 0.2s ease;
+            font-size: 0.9em;
+        }
+
+        .inline-lesson-link:hover {
+            background: rgba(102, 126, 234, 0.2);
+        }
+
+        /* Project Cards */
+        .project-card {
+            background: #f9fafb;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .project-card:hover {
+            border-color: #667eea;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+        }
+
+        .project-card.completed {
+            background: #ecfdf5;
+            border-color: #10b981;
+        }
+
+        .project-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 12px;
+        }
+
+        .project-title {
+            flex: 1;
+            font-size: 1.2em;
+            font-weight: 700;
+            color: #1f2937;
+        }
+
+        .project-status {
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 600;
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .project-card.completed .project-status {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .project-desc {
+            color: #6b7280;
+            line-height: 1.6;
+            padding-left: 43px;
+        }
+
+        /* Stats */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .stat-number {
+            font-size: 3em;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            color: #6b7280;
+            font-size: 1.1em;
+            font-weight: 600;
+        }
+
+        /* Notes */
+        .notes-section {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 30px 0;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .notes-title {
+            font-size: 1.4em;
+            color: #1f2937;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .notes-content {
+            width: 100%;
+            min-height: 120px;
+            padding: 15px;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            font-family: inherit;
+            font-size: 1em;
+            resize: vertical;
+            transition: border-color 0.3s ease;
+        }
+
+        .notes-content:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        /* Actions */
+        .actions {
+            text-align: center;
+            padding: 30px;
+        }
+
+        .actions .btn {
+            margin: 0 8px;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2em;
+            }
+
+            .lesson-card {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .lesson-number {
+                margin: 0 auto;
+            }
+
+            .auth-section {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+        }
+    </style>
 </head>
 
 <body>
     <div class="container">
+        <!-- Header -->
         <div class="header">
-            <h1>🚀 Lộ Trình Học Web Development</h1>
+            <h1>🚀 Lộ Trình Web Development</h1>
             <p>Hành trình 2-3 tháng để trở thành Web Developer</p>
-            <div class="progress-bar">
-                <div class="progress-fill" id="overallProgress">0%</div>
+
+            <div class="progress-wrapper">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="overallProgress" style="width: 0%">0%</div>
+                </div>
             </div>
         </div>
 
-        <div class="content">
-            <!-- Auth Section -->
-            <div class="auth-section">
-                <div class="user-info">
-                    <span id="userInfo" style="display: none;">
-                        👤 <span class="user-email" id="userEmail"></span>
-                    </span>
-                    <span id="loginPrompt">
-                        🔔 Đăng nhập để lưu tiến độ lên mây!
-                    </span>
-                </div>
-                <div class="auth-buttons">
-                    <button class="btn" id="loginBtn" onclick="signInWithGoogle()">
-                        🔐 Đăng nhập Google
-                    </button>
-                    <button class="btn" id="logoutBtn" onclick="signOut()" style="display: none;">
-                        🚪 Đăng xuất
-                    </button>
+        <!-- Auth Section -->
+        <div class="auth-section">
+            <div class="user-info" id="userInfo" style="display: none;">
+                👤 <span id="userEmail"></span>
+            </div>
+            <div id="loginPrompt">🔔 Đăng nhập để lưu tiến độ lên cloud!</div>
+            <div>
+                <button class="btn" id="loginBtn" onclick="signInWithGoogle()">🔐 Đăng nhập</button>
+                <button class="btn" id="logoutBtn" onclick="signOut()" style="display: none;">🚪 Đăng
+                    xuất</button>
+            </div>
+        </div>
+
+        <!-- Today's Lesson -->
+        <div class="today-lesson">
+            <h2>📖 Bài học hôm nay</h2>
+            <div class="lesson-card">
+                <div class="lesson-number">Ngày 3</div>
+                <div class="lesson-info">
+                    <h3>CSS Cơ bản & Box Model</h3>
+                    <p>Học về cú pháp CSS, selectors và mô hình hộp</p>
+                    <a href="lessons/day3.html" class="lesson-link">
+                        Bắt đầu học
+                        <span>→</span>
+                    </a>
                 </div>
             </div>
+        </div>
 
-            <!-- Month 1 -->
-            <div class="month-section" data-month="1">
-                <div class="month-header">
-                    <div class="month-title">📚 Tháng 1 - Nền Tảng Web</div>
-                    <div class="month-progress" id="month1Progress">0/7</div>
-                </div>
-                <div class="month-content">
-                    <div class="section">
-                        <div class="section-title">Kiến thức cần học:</div>
-                        <ul class="topic-list">
-                            <li class="topic-item" onclick="toggleTopic(this)">
-                                <div class="checkbox"></div>
-                                <div class="topic-text">HTML5 - Cấu trúc và semantic tags</div>
-                            </li>
-                            <li class="topic-item" onclick="toggleTopic(this)">
-                                <div class="checkbox"></div>
-                                <a href="lessons/day3.html" class="topic-text"
-                                    style="text-decoration: none; color: inherit; display: block; width: 100%;">
-                                    Ngày 3: CSS Cơ bản & Box Model (Xem bài học)
-                                </a>
-                                <div class="topic-text">CSS3 - Flexbox layout</div>
-                            </li>
-                            <li class="topic-item" onclick="toggleTopic(this)">
-                                <div class="checkbox"></div>
-                                <div class="topic-text">CSS3 - Grid layout</div>
-                            </li>
-                            <li class="topic-item" onclick="toggleTopic(this)">
-                                <div class="checkbox"></div>
-                                <div class="topic-text">JavaScript cơ bản - Biến và kiểu dữ liệu</div>
-                            </li>
-                            <li class="topic-item" onclick="toggleTopic(this)">
-                                <div class="checkbox"></div>
-                                <div class="topic-text">JavaScript cơ bản - Functions</div>
-                            </li>
-                            <li class="topic-item" onclick="toggleTopic(this)">
-                                <div class="checkbox"></div>
-                                <div class="topic-text">JavaScript cơ bản - Array và Object</div>
-                            </li>
-                            <li class="topic-item" onclick="toggleTopic(this)">
-                                <div class="checkbox"></div>
-                                <div class="topic-text">JavaScript cơ bản - DOM manipulation</div>
-                            </li>
-                        </ul>
+        <!-- Month 1 -->
+        <div class="month-section">
+            <div class="month-header">
+                <div class="month-title">📚 Tháng 1 - Nền Tảng Web</div>
+                <div class="month-progress" id="month1Progress">0/10</div>
+            </div>
+            <div class="month-content">
+                <h3 class="section-title">Kiến thức cần học:</h3>
+                <ul class="topic-list">
+                    <li class="topic-item" onclick="toggleTopic(this)">
+                        <div class="checkbox"></div>
+                        <span class="topic-text">
+                            📝 Ngày 1: HTML5 - Cấu trúc và semantic tags
+                            <a href="lessons/day1.html" class="inline-lesson-link">Xem bài học</a>
+                        </span>
+                    </li>
+                    <li class="topic-item" onclick="toggleTopic(this)">
+                        <div class="checkbox"></div>
+                        <span class="topic-text">
+                            📝 Ngày 2: CSS Cơ bản - Selectors, Flexbox
+                            <a href="lessons/day2.html" class="inline-lesson-link">Xem bài học</a>
+                        </span>
+                    </li>
+                    <li class="topic-item" onclick="toggleTopic(this)">
+                        <div class="checkbox"></div>
+                        <span class="topic-text">
+                            📝 Ngày 3: CSS Cơ bản & Box Model
+                            <a href="lessons/day3.html" class="inline-lesson-link">Xem bài học</a>
+                        </span>
+                    </li>
+                    <li class="topic-item" onclick="toggleTopic(this)">
+                        <div class="checkbox"></div>
+                        <span class="topic-text">Ngày 4: CSS3 - Grid Layout</span>
+                    </li>
+                    <li class="topic-item" onclick="toggleTopic(this)">
+                        <div class="checkbox"></div>
+                        <span class="topic-text">Ngày 5: JavaScript cơ bản - Biến và kiểu dữ liệu</span>
+                    </li>
+                    <li class="topic-item" onclick="toggleTopic(this)">
+                        <div class="checkbox"></div>
+                        <span class="topic-text">Ngày 6: JavaScript cơ bản - Functions</span>
+                    </li>
+                    <li class="topic-item" onclick="toggleTopic(this)">
+                        <div class="checkbox"></div>
+                        <span class="topic-text">Ngày 7: JavaScript cơ bản - Array và Object</span>
+                    </li>
+                    <li class="topic-item" onclick="toggleTopic(this)">
+                        <div class="checkbox"></div>
+                        <span class="topic-text">Ngày 8: JavaScript cơ bản - DOM manipulation</span>
+                    </li>
+                </ul>
+
+                <h3 class="section-title" style="margin-top: 30px;">Dự án thực hành:</h3>
+                <div class="project-card" onclick="toggleTopic(this)">
+                    <div class="project-header">
+                        <div class="checkbox"></div>
+                        <div class="project-title">Landing Page Công Ty</div>
+                        <div class="project-status">Đang làm</div>
                     </div>
-                    <div class="section">
-                        <div class="section-title">Dự án thực hành:</div>
-                        <div class="project-card" onclick="toggleProject(this)">
-                            <div class="project-header">
-                                <div class="checkbox"></div>
-                                <div class="project-title">Landing Page Công Ty</div>
-                                <div class="project-status">Đang làm</div>
-                            </div>
-                            <div style="color: #6b7280; margin-top: 10px;">
-                                Tạo trang giới thiệu công ty với header, about, services, contact form
-                            </div>
+                    <div class="project-desc">Tạo trang giới thiệu công ty với header, about, services, contact form
+                    </div>
+                </div>
+                <div class="project-card" onclick="toggleTopic(this)">
+                    <div class="project-header">
+                        <div class="checkbox"></div>
+                        <div class="project-title">Website Bán Hàng Đơn Giản</div>
+                        <div class="project-status">Đang làm</div>
+                    </div>
+                    <div class="project-desc">Trang sản phẩm với filter, shopping cart cơ bản</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="month-section" data-month="2">
+            <div class="month-header">
+                <div class="month-title">⚡ Tháng 2 - Nâng Cao</div>
+                <div class="month-progress" id="month2Progress">0/8</div>
+            </div>
+            <div class="month-content">
+                <div class="section">
+                    <div class="section-title">Kiến thức cần học:</div>
+                    <ul class="topic-list">
+                        <li class="topic-item" onclick="toggleTopic(this)">
+                            <div class="checkbox"></div>
+                            <div class="topic-text">JavaScript nâng cao - Promises</div>
+                        </li>
+                        <li class="topic-item" onclick="toggleTopic(this)">
+                            <div class="checkbox"></div>
+                            <div class="topic-text">JavaScript nâng cao - Async/Await</div>
+                        </li>
+                        <li class="topic-item" onclick="toggleTopic(this)">
+                            <div class="checkbox"></div>
+                            <div class="topic-text">React - Components và Props</div>
+                        </li>
+                        <li class="topic-item" onclick="toggleTopic(this)">
+                            <div class="checkbox"></div>
+                            <div class="topic-text">React - State và Hooks (useState, useEffect)</div>
+                        </li>
+                        <li class="topic-item" onclick="toggleTopic(this)">
+                            <div class="checkbox"></div>
+                            <div class="topic-text">React - Routing với React Router</div>
+                        </li>
+                        <li class="topic-item" onclick="toggleTopic(this)">
+                            <div class="checkbox"></div>
+                            <div class="topic-text">API - RESTful API concepts</div>
+                        </li>
+                        <li class="topic-item" onclick="toggleTopic(this)">
+                            <div class="checkbox"></div>
+                            <div class="topic-text">API - Fetch và Axios để gọi API</div>
+                        </li>
+                        <li class="topic-item" onclick="toggleTopic(this)">
+                            <div class="checkbox"></div>
+                            <div class="topic-text">Next.js cơ bản (hoặc tiếp tục với React)</div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="section">
+                    <div class="section-title">Dự án thực hành:</div>
+                    <div class="project-card" onclick="toggleProject(this)">
+                        <div class="project-header">
+                            <div class="checkbox"></div>
+                            <div class="project-title">Website Blog Cá Nhân</div>
+                            <div class="project-status">Đang làm</div>
                         </div>
-                        <div class="project-card" onclick="toggleProject(this)">
-                            <div class="project-header">
-                                <div class="checkbox"></div>
-                                <div class="project-title">Website Bán Hàng Đơn Giản</div>
-                                <div class="project-status">Đang làm</div>
-                            </div>
-                            <div style="color: #6b7280; margin-top: 10px;">
-                                Trang sản phẩm với filter, shopping cart cơ bản
-                            </div>
+                        <div style="color: #6b7280; margin-top: 10px;">
+                            Blog với routing, list posts, single post view, markdown support
+                        </div>
+                    </div>
+                    <div class="project-card" onclick="toggleProject(this)">
+                        <div class="project-header">
+                            <div class="checkbox"></div>
+                            <div class="project-title">Movie App với TMDB API</div>
+                            <div class="project-status">Đang làm</div>
+                        </div>
+                        <div style="color: #6b7280; margin-top: 10px;">
+                            Ứng dụng xem phim với search, filter, detail page, favorites
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
 
-            <!-- Month 2 -->
-            <div class="month-section" data-month="2">
-                <div class="month-header">
-                    <div class="month-title">⚡ Tháng 2 - Nâng Cao</div>
-                    <div class="month-progress" id="month2Progress">0/8</div>
+        <!-- Month 3 -->
+        <div class="month-section" data-month="3">
+            <div class="month-header">
+                <div class="month-title">🎯 Tháng 3 - Hoàn Thiện Portfolio</div>
+                <div class="month-progress" id="month3Progress">0/6</div>
+            </div>
+            <div class="month-content">
+                <div class="section">
+                    <div class="section-title">Công việc cần làm:</div>
+                    <ul class="topic-list">
+                        <li class="topic-item" onclick="toggleTopic(this)">
+                            <div class="checkbox"></div>
+                            <div class="topic-text">Tạo tài khoản GitHub và học Git cơ bản</div>
+                        </li>
+                        <li class="topic-item" onclick="toggleTopic(this)">
+                            <div class="checkbox"></div>
+                            <div class="topic-text">Push tất cả dự án lên GitHub với README tốt</div>
+                        </li>
+                        <li class="topic-item" onclick="toggleTopic(this)">
+                            <div class="checkbox"></div>
+                            <div class="topic-text">Deploy dự án lên Vercel/Netlify</div>
+                        </li>
+                        <li class="topic-item" onclick="toggleTopic(this)">
+                            <div class="checkbox"></div>
+                            <div class="topic-text">Tạo Portfolio Website giới thiệu bản thân</div>
+                        </li>
+                        <li class="topic-item" onclick="toggleTopic(this)">
+                            <div class="checkbox"></div>
+                            <div class="topic-text">Hoàn thiện CV và LinkedIn profile</div>
+                        </li>
+                        <li class="topic-item" onclick="toggleTopic(this)">
+                            <div class="checkbox"></div>
+                            <div class="topic-text">Review code, refactor và optimize dự án</div>
+                        </li>
+                    </ul>
                 </div>
-                <div class="month-content">
-                    <div class="section">
-                        <div class="section-title">Kiến thức cần học:</div>
-                        <ul class="topic-list">
-                            <li class="topic-item" onclick="toggleTopic(this)">
-                                <div class="checkbox"></div>
-                                <div class="topic-text">JavaScript nâng cao - Promises</div>
-                            </li>
-                            <li class="topic-item" onclick="toggleTopic(this)">
-                                <div class="checkbox"></div>
-                                <div class="topic-text">JavaScript nâng cao - Async/Await</div>
-                            </li>
-                            <li class="topic-item" onclick="toggleTopic(this)">
-                                <div class="checkbox"></div>
-                                <div class="topic-text">React - Components và Props</div>
-                            </li>
-                            <li class="topic-item" onclick="toggleTopic(this)">
-                                <div class="checkbox"></div>
-                                <div class="topic-text">React - State và Hooks (useState, useEffect)</div>
-                            </li>
-                            <li class="topic-item" onclick="toggleTopic(this)">
-                                <div class="checkbox"></div>
-                                <div class="topic-text">React - Routing với React Router</div>
-                            </li>
-                            <li class="topic-item" onclick="toggleTopic(this)">
-                                <div class="checkbox"></div>
-                                <div class="topic-text">API - RESTful API concepts</div>
-                            </li>
-                            <li class="topic-item" onclick="toggleTopic(this)">
-                                <div class="checkbox"></div>
-                                <div class="topic-text">API - Fetch và Axios để gọi API</div>
-                            </li>
-                            <li class="topic-item" onclick="toggleTopic(this)">
-                                <div class="checkbox"></div>
-                                <div class="topic-text">Next.js cơ bản (hoặc tiếp tục với React)</div>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="section">
-                        <div class="section-title">Dự án thực hành:</div>
-                        <div class="project-card" onclick="toggleProject(this)">
-                            <div class="project-header">
-                                <div class="checkbox"></div>
-                                <div class="project-title">Website Blog Cá Nhân</div>
-                                <div class="project-status">Đang làm</div>
-                            </div>
-                            <div style="color: #6b7280; margin-top: 10px;">
-                                Blog với routing, list posts, single post view, markdown support
-                            </div>
-                        </div>
-                        <div class="project-card" onclick="toggleProject(this)">
-                            <div class="project-header">
-                                <div class="checkbox"></div>
-                                <div class="project-title">Movie App với TMDB API</div>
-                                <div class="project-status">Đang làm</div>
-                            </div>
-                            <div style="color: #6b7280; margin-top: 10px;">
-                                Ứng dụng xem phim với search, filter, detail page, favorites
-                            </div>
-                        </div>
-                    </div>
+                <div class="section">
+                    <div class="section-title">Checklist trước khi apply:</div>
+                    <ul class="topic-list">
+                        <li class="topic-item" onclick="toggleTopic(this)">
+                            <div class="checkbox"></div>
+                            <div class="topic-text">✓ Có ít nhất 4-5 dự án hoàn chỉnh</div>
+                        </li>
+                        <li class="topic-item" onclick="toggleTopic(this)">
+                            <div class="checkbox"></div>
+                            <div class="topic-text">✓ Tất cả dự án đã deploy và chạy tốt</div>
+                        </li>
+                        <li class="topic-item" onclick="toggleTopic(this)">
+                            <div class="checkbox"></div>
+                            <div class="topic-text">✓ GitHub profile trông professional</div>
+                        </li>
+                        <li class="topic-item" onclick="toggleTopic(this)">
+                            <div class="checkbox"></div>
+                            <div class="topic-text">✓ Portfolio website sẵn sàng</div>
+                        </li>
+                        <li class="topic-item" onclick="toggleTopic(this)">
+                            <div class="checkbox"></div>
+                            <div class="topic-text">✓ CV được update với skills mới</div>
+                        </li>
+                    </ul>
                 </div>
             </div>
+        </div>
 
-            <!-- Month 3 -->
-            <div class="month-section" data-month="3">
-                <div class="month-header">
-                    <div class="month-title">🎯 Tháng 3 - Hoàn Thiện Portfolio</div>
-                    <div class="month-progress" id="month3Progress">0/6</div>
-                </div>
-                <div class="month-content">
-                    <div class="section">
-                        <div class="section-title">Công việc cần làm:</div>
-                        <ul class="topic-list">
-                            <li class="topic-item" onclick="toggleTopic(this)">
-                                <div class="checkbox"></div>
-                                <div class="topic-text">Tạo tài khoản GitHub và học Git cơ bản</div>
-                            </li>
-                            <li class="topic-item" onclick="toggleTopic(this)">
-                                <div class="checkbox"></div>
-                                <div class="topic-text">Push tất cả dự án lên GitHub với README tốt</div>
-                            </li>
-                            <li class="topic-item" onclick="toggleTopic(this)">
-                                <div class="checkbox"></div>
-                                <div class="topic-text">Deploy dự án lên Vercel/Netlify</div>
-                            </li>
-                            <li class="topic-item" onclick="toggleTopic(this)">
-                                <div class="checkbox"></div>
-                                <div class="topic-text">Tạo Portfolio Website giới thiệu bản thân</div>
-                            </li>
-                            <li class="topic-item" onclick="toggleTopic(this)">
-                                <div class="checkbox"></div>
-                                <div class="topic-text">Hoàn thiện CV và LinkedIn profile</div>
-                            </li>
-                            <li class="topic-item" onclick="toggleTopic(this)">
-                                <div class="checkbox"></div>
-                                <div class="topic-text">Review code, refactor và optimize dự án</div>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="section">
-                        <div class="section-title">Checklist trước khi apply:</div>
-                        <ul class="topic-list">
-                            <li class="topic-item" onclick="toggleTopic(this)">
-                                <div class="checkbox"></div>
-                                <div class="topic-text">✓ Có ít nhất 4-5 dự án hoàn chỉnh</div>
-                            </li>
-                            <li class="topic-item" onclick="toggleTopic(this)">
-                                <div class="checkbox"></div>
-                                <div class="topic-text">✓ Tất cả dự án đã deploy và chạy tốt</div>
-                            </li>
-                            <li class="topic-item" onclick="toggleTopic(this)">
-                                <div class="checkbox"></div>
-                                <div class="topic-text">✓ GitHub profile trông professional</div>
-                            </li>
-                            <li class="topic-item" onclick="toggleTopic(this)">
-                                <div class="checkbox"></div>
-                                <div class="topic-text">✓ Portfolio website sẵn sàng</div>
-                            </li>
-                            <li class="topic-item" onclick="toggleTopic(this)">
-                                <div class="checkbox"></div>
-                                <div class="topic-text">✓ CV được update với skills mới</div>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
 
-            <!-- Statistics -->
-            <div class="stats">
-                <div class="stat-card">
-                    <div class="stat-number" id="totalCompleted">0</div>
-                    <div class="stat-label">Hoàn thành</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number" id="totalRemaining">26</div>
-                    <div class="stat-label">Còn lại</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number" id="daysLeft">90</div>
-                    <div class="stat-label">Ngày còn lại</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number" id="completionRate">0%</div>
-                    <div class="stat-label">Tiến độ</div>
-                </div>
+        <!-- Stats -->
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-number" id="totalCompleted">0</div>
+                <div class="stat-label">Hoàn thành</div>
             </div>
+            <div class="stat-card">
+                <div class="stat-number" id="totalRemaining">26</div>
+                <div class="stat-label">Còn lại</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="daysLeft">90</div>
+                <div class="stat-label">Ngày còn lại</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="completionRate">0%</div>
+                <div class="stat-label">Tiến độ</div>
+            </div>
+        </div>
 
-            <!-- Notes Section -->
-            <div class="notes-section">
-                <div class="notes-title">📝 Ghi chú học tập:</div>
-                <textarea class="notes-content" id="notes"
-                    placeholder="Ghi chú những điều quan trọng, khó khăn gặp phải, hoặc ideas mới..."></textarea>
-            </div>
+        <!-- Notes -->
+        <div class="notes-section">
+            <h3 class="notes-title">📝 Ghi chú học tập</h3>
+            <textarea class="notes-content" id="notes" placeholder="Viết ghi chú của bạn ở đây..."></textarea>
+        </div>
 
-            <!-- Actions -->
-            <div class="actions">
-                <button class="btn" onclick="manualSave()">💾 Lưu tiến độ</button>
-                <button class="btn" onclick="resetProgress()">🔄 Reset tất cả</button>
-                <button class="btn" onclick="exportData()">📤 Xuất dữ liệu</button>
-            </div>
+        <!-- Actions -->
+        <div class="actions">
+            <button class="btn" onclick="alert('Lưu tiến độ')">💾 Lưu tiến độ</button>
+            <button class="btn" onclick="alert('Reset')">🔄 Reset tất cả</button>
+            <button class="btn" onclick="alert('Xuất dữ liệu')">📤 Xuất dữ liệu</button>
         </div>
     </div>
-
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
