@@ -839,6 +839,7 @@ setInterval(() => saveAllProgress(true), 30000);
             margin: 10px 0 20px 0;
             overflow-x: auto;
             border-left: 4px solid #667eea;
+            white-space: pre-wrap;
         }
 
         .concept-card {
@@ -871,18 +872,16 @@ setInterval(() => saveAllProgress(true), 30000);
             <div class="section">
                 <div class="section-title">1. Cấu trúc cơ bản của HTML</div>
                 <p>HTML (HyperText Markup Language) là ngôn ngữ đánh dấu siêu văn bản.</p>
-                <div class="code-block">
-                    &lt;!DOCTYPE html&gt;
-                    &lt;html lang="vi"&gt;
-                    &lt;head&gt;
-                    &lt;meta charset="UTF-8"&gt;
-                    &lt;title&gt;Trang web đầu tiên&lt;/title&gt;
-                    &lt;/head&gt;
-                    &lt;body&gt;
-                    &lt;!-- Nội dung trang web --&gt;
-                    &lt;/body&gt;
-                    &lt;/html&gt;
-                </div>
+                <pre class="code-block">&lt;!DOCTYPE html&gt;
+&lt;html lang="vi"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;Trang web đầu tiên&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;!-- Nội dung trang web --&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
             </div>
 
             <div class="section">
