@@ -46,6 +46,7 @@ public/
     day1.html
     day2.html
     day3.html
+    day4.html
   index.html
 .firebaserc
 .gitignore
@@ -55,6 +56,769 @@ repomix.config.json
 ```
 
 # Files
+
+## File: public/lessons/day4.html
+```html
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ngày 4: CSS Grid Layout</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        .code-block {
+            background: #1f2937;
+            color: #e5e7eb;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: Consolas, monospace;
+            margin: 10px 0 20px;
+            overflow-x: auto;
+            border-left: 4px solid #667eea;
+        }
+
+        .code-block pre {
+            margin: 0;
+            white-space: pre;
+            /* giữ indent chuẩn */
+        }
+
+        .concept-card {
+            background: #f3f4f6;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .highlight {
+            color: #7c3aed;
+            font-weight: bold;
+        }
+
+        /* Grid Interactive Demo */
+        .demo-wrapper {
+            display: flex;
+            gap: 30px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+
+        .controls {
+            flex: 1;
+            min-width: 280px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .control-group label {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: #4b5563;
+        }
+
+        .control-group input,
+        .control-group select {
+            padding: 10px 12px;
+            font-size: 1rem;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            background-color: #f9fafb;
+            cursor: pointer;
+            transition: all 0.2s;
+            outline: none;
+        }
+
+        .control-group input:focus,
+        .control-group select:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+        }
+
+        .preview-area {
+            flex: 1.5;
+            min-width: 350px;
+        }
+
+        .preview-label {
+            font-size: 0.85rem;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        #grid-preview {
+            width: 100%;
+            min-height: 350px;
+            border: 2px dashed #cbd5e1;
+            border-radius: 12px;
+            background-color: #f8fafc;
+            display: grid;
+            gap: 10px;
+            padding: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .grid-item {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            font-weight: bold;
+            font-size: 1.1rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 80px;
+            transition: all 0.3s ease;
+        }
+
+        .grid-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Comparison Table */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .comparison-table th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .comparison-table td {
+            padding: 15px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .comparison-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .comparison-table tr:hover {
+            background: #f9fafb;
+        }
+
+        /* Quiz Styles */
+        .quiz-container {
+            background: #fff;
+            border: 2px solid #e5e7eb;
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 30px;
+        }
+
+        .question-item {
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .question-text {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #374151;
+        }
+
+        .options-list {
+            list-style: none;
+        }
+
+        .option-label {
+            display: block;
+            padding: 10px 15px;
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .option-label:hover {
+            background: #edf2f7;
+            border-color: #cbd5e1;
+        }
+
+        .option-label input {
+            margin-right: 10px;
+        }
+
+        .option-label.correct {
+            background: #dcfce7;
+            border-color: #22c55e;
+            color: #166534;
+        }
+
+        .option-label.wrong {
+            background: #fee2e2;
+            border-color: #ef4444;
+            color: #991b1b;
+        }
+
+        #quiz-feedback {
+            margin-top: 15px;
+            font-weight: bold;
+            text-align: center;
+            padding: 10px;
+            border-radius: 8px;
+            display: none;
+        }
+
+        #completeBtn {
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        /* Template Visual Demo */
+        .template-demo {
+            background: #f3f4f6;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .template-visual {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: auto 1fr auto;
+            gap: 10px;
+            min-height: 300px;
+            background: white;
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+        .area-header {
+            grid-column: 1 / -1;
+            background: #667eea;
+            color: white;
+            padding: 20px;
+            border-radius: 6px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .area-sidebar {
+            background: #a78bfa;
+            color: white;
+            padding: 20px;
+            border-radius: 6px;
+            font-weight: bold;
+        }
+
+        .area-main {
+            grid-column: 2 / -1;
+            background: #86efac;
+            color: #166534;
+            padding: 20px;
+            border-radius: 6px;
+            font-weight: bold;
+        }
+
+        .area-footer {
+            grid-column: 1 / -1;
+            background: #fbbf24;
+            color: #78350f;
+            padding: 20px;
+            border-radius: 6px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .info-box {
+            background: #eff6ff;
+            border-left: 4px solid #3b82f6;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 6px;
+        }
+
+        .warning-box {
+            background: #fef3c7;
+            border-left: 4px solid #f59e0b;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 6px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📅 Tháng 1 - Ngày 4</h1>
+            <p>Làm chủ CSS Grid Layout - Công cụ layout mạnh mẽ nhất</p>
+        </div>
+
+        <div class="content">
+            <a href="../index.html" class="btn"
+                style="display: inline-block; text-decoration: none; margin-bottom: 20px;">
+                ⬅️ Quay lại Lộ trình
+            </a>
+
+            <!-- Section 1: Grid là gì? -->
+            <div class="section">
+                <div class="section-title">1. CSS Grid là gì?</div>
+                <p>CSS Grid là hệ thống layout 2 chiều (cột và hàng) mạnh mẽ nhất trong CSS. Khác với Flexbox (1 chiều),
+                    Grid cho phép bạn kiểm soát cả chiều ngang và dọc cùng lúc.</p>
+
+                <div class="info-box">
+                    <strong>💡 Khi nào dùng Grid?</strong><br>
+                    • Khi cần layout phức tạp với nhiều cột và hàng<br>
+                    • Tạo gallery ảnh, dashboard, magazine layout<br>
+                    • Khi cần căn chỉnh chính xác vị trí các phần tử
+                </div>
+
+                <!-- <div class="code-block">/* Kích hoạt Grid Layout */
+                    .container {
+                    display: grid;
+                    grid-template-columns: 1fr 1fr 1fr; /* 3 cột bằng nhau */
+                    grid-template-rows: 100px 200px; /* 2 hàng */
+                    gap: 20px; /* Khoảng cách giữa các ô */
+                    }</div> -->
+                <div class="code-block">
+                    <pre>
+                        <code>
+/* Kích hoạt Grid Layout */
+.container {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr; /* 3 cột bằng nhau */
+    grid-template-rows: 100px 200px;    /* 2 hàng */
+    gap: 20px;                          /* Khoảng cách giữa các ô */
+}
+                        </code>
+                    </pre>
+                </div>
+            </div>
+
+            <!-- Section 2: Grid vs Flexbox -->
+            <div class="section">
+                <div class="section-title">2. Grid vs Flexbox - Khi nào dùng cái nào?</div>
+
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Tiêu chí</th>
+                            <th>Flexbox</th>
+                            <th>Grid</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Hướng Layout</strong></td>
+                            <td>1 chiều (dòng HOẶC cột)</td>
+                            <td>2 chiều (dòng VÀ cột)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Dùng cho</strong></td>
+                            <td>Navigation bar, button groups</td>
+                            <td>Page layouts, galleries, grids</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Độ phức tạp</strong></td>
+                            <td>Đơn giản hơn</td>
+                            <td>Mạnh mẽ hơn</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Ví dụ thực tế</strong></td>
+                            <td>Menu ngang, card items</td>
+                            <td>Dashboard, magazine layout</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="warning-box">
+                    <strong>⚠️ Lưu ý:</strong> Bạn có thể kết hợp cả Grid và Flexbox trong cùng một dự án! Ví dụ: Dùng
+                    Grid cho layout tổng thể, Flexbox cho các component nhỏ bên trong.
+                </div>
+            </div>
+
+            <!-- Section 3: Grid Template Areas -->
+            <div class="section">
+                <div class="section-title">3. Grid Template Areas - Layout trực quan</div>
+                <p>Một trong những tính năng tuyệt vời nhất của Grid là <span
+                        class="highlight">grid-template-areas</span> - cho phép bạn vẽ layout bằng text!</p>
+
+                <div class="code-block">
+                    <pre><code>/* Layout website cơ bản */
+.container {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    grid-template-rows: auto 1fr auto;
+    grid-template-areas:
+        "header header"
+        "sidebar main"
+        "footer footer";
+    gap: 10px;
+    min-height: 100vh;
+}
+
+.header  { grid-area: header; }
+.sidebar { grid-area: sidebar; }
+.main    { grid-area: main; }
+.footer  { grid-area: footer; }
+</code></pre>
+                </div>
+
+                <div class="template-demo">
+                    <p style="margin-bottom: 10px; font-weight: 600;">Kết quả hiển thị:</p>
+                    <div class="template-visual">
+                        <div class="area-header">HEADER</div>
+                        <div class="area-sidebar">SIDEBAR</div>
+                        <div class="area-main">MAIN CONTENT</div>
+                        <div class="area-footer">FOOTER</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 4: Interactive Demo -->
+            <div class="section">
+                <div class="section-title">4. Thử nghiệm với Grid</div>
+                <p>Điều chỉnh các thuộc tính để xem Grid hoạt động như thế nào:</p>
+
+                <div class="demo-wrapper">
+                    <div class="controls">
+                        <div class="control-group">
+                            <label for="grid-cols">Số cột (Columns):</label>
+                            <input type="number" id="grid-cols" value="3" min="1" max="6" onchange="updateGrid()">
+                        </div>
+
+                        <div class="control-group">
+                            <label for="grid-rows">Số hàng (Rows):</label>
+                            <input type="number" id="grid-rows" value="2" min="1" max="4" onchange="updateGrid()">
+                        </div>
+
+                        <div class="control-group">
+                            <label for="grid-gap">Gap (Khoảng cách):</label>
+                            <input type="range" id="grid-gap" value="10" min="0" max="40" onchange="updateGrid()">
+                            <span id="gap-value">10px</span>
+                        </div>
+
+                        <div class="control-group">
+                            <label for="grid-align">Align Items:</label>
+                            <select id="grid-align" onchange="updateGrid()">
+                                <option value="stretch">stretch</option>
+                                <option value="start">start</option>
+                                <option value="center">center</option>
+                                <option value="end">end</option>
+                            </select>
+                        </div>
+
+                        <div class="control-group">
+                            <label for="grid-justify">Justify Items:</label>
+                            <select id="grid-justify" onchange="updateGrid()">
+                                <option value="stretch">stretch</option>
+                                <option value="start">start</option>
+                                <option value="center">center</option>
+                                <option value="end">end</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="preview-area">
+                        <span class="preview-label">Kết quả (Preview)</span>
+                        <div id="grid-preview">
+                            <div class="grid-item">1</div>
+                            <div class="grid-item">2</div>
+                            <div class="grid-item">3</div>
+                            <div class="grid-item">4</div>
+                            <div class="grid-item">5</div>
+                            <div class="grid-item">6</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 5: Common Properties -->
+            <div class="section">
+                <div class="section-title">5. Các thuộc tính Grid quan trọng</div>
+                <div class="concept-card">
+                    <ul class="topic-list">
+                        <li class="topic-item">
+                            <div class="topic-text">
+                                <span class="highlight">grid-template-columns</span> - Định nghĩa số cột và kích thước
+                                (VD: <code>200px 1fr 1fr</code>)
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <div class="topic-text">
+                                <span class="highlight">grid-template-rows</span> - Định nghĩa số hàng và chiều cao
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <div class="topic-text">
+                                <span class="highlight">gap / grid-gap</span> - Khoảng cách giữa các ô (VD:
+                                <code>gap: 20px;</code>)
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <div class="topic-text">
+                                <span class="highlight">fr (fraction unit)</span> - Đơn vị linh hoạt (<code>1fr</code> =
+                                1 phần không gian còn lại)
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <div class="topic-text">
+                                <span class="highlight">repeat()</span> - Lặp lại giá trị (VD:
+                                <code>repeat(4, 1fr)</code> = 4 cột bằng nhau)
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <div class="topic-text">
+                                <span class="highlight">minmax()</span> - Đặt min/max size (VD:
+                                <code>minmax(100px, 1fr)</code>)
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="code-block">
+                    <pre><code>/* Ví dụ thực tế */
+.gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 15px;
+}
+
+/* Responsive tự động! Khi màn hình nhỏ, số cột sẽ giảm */
+</code></pre>
+                </div>
+            </div>
+
+            <!-- Homework -->
+            <div class="section">
+                <div class="section-title">🎯 Bài tập về nhà</div>
+                <div class="project-card">
+                    <div class="project-header">
+                        <div class="project-title">Tạo "Photo Gallery" với Grid</div>
+                    </div>
+                    <p style="margin-top: 10px; line-height: 1.6;">
+                        Tạo một gallery ảnh responsive với các yêu cầu:
+                    </p>
+                    <ul style="margin: 10px 0 10px 20px; color: #4b5563;">
+                        <li>Sử dụng <code>display: grid</code></li>
+                        <li>Tối thiểu 9 ảnh (có thể dùng placeholder)</li>
+                        <li>Dùng <code>repeat(auto-fit, minmax(200px, 1fr))</code> để responsive tự động</li>
+                        <li>Thêm <code>gap</code> giữa các ảnh</li>
+                        <li>Bonus: Thêm hover effect cho ảnh</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Quiz Section -->
+            <div class="section">
+                <div class="section-title">🧠 Kiểm tra kiến thức</div>
+                <div class="quiz-container">
+                    <form id="quizForm">
+                        <div class="question-item">
+                            <div class="question-text">Câu 1: Sự khác biệt chính giữa Flexbox và Grid là gì?</div>
+                            <div class="options-list">
+                                <label class="option-label">
+                                    <input type="radio" name="q1" value="wrong"> Flexbox nhanh hơn Grid
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q1" value="correct"> Flexbox là 1 chiều, Grid là 2 chiều
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q1" value="wrong"> Grid không responsive được
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-item">
+                            <div class="question-text">Câu 2: Thuộc tính nào dùng để tạo khoảng cách giữa các ô trong
+                                Grid?</div>
+                            <div class="options-list">
+                                <label class="option-label">
+                                    <input type="radio" name="q2" value="wrong"> margin
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q2" value="correct"> gap
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q2" value="wrong"> space
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-item">
+                            <div class="question-text">Câu 3: <code>grid-template-columns: repeat(3, 1fr)</code> có
+                                nghĩa là gì?</div>
+                            <div class="options-list">
+                                <label class="option-label">
+                                    <input type="radio" name="q3" value="wrong"> 3 cột, mỗi cột rộng 1px
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q3" value="correct"> 3 cột bằng nhau, mỗi cột chiếm 1 phần
+                                    không gian
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q3" value="wrong"> 1 cột lặp lại 3 lần
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-item">
+                            <div class="question-text">Câu 4: Khi nào nên dùng Grid thay vì Flexbox?</div>
+                            <div class="options-list">
+                                <label class="option-label">
+                                    <input type="radio" name="q4" value="wrong"> Khi làm navigation bar
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q4" value="correct"> Khi cần layout phức tạp với nhiều cột
+                                    và hàng
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q4" value="wrong"> Grid luôn tốt hơn Flexbox
+                                </label>
+                            </div>
+                        </div>
+
+                        <button type="button" class="btn" onclick="checkQuiz()">Kiểm tra đáp án</button>
+                    </form>
+
+                    <div id="quiz-feedback"></div>
+                </div>
+            </div>
+
+            <!-- Footer Actions -->
+            <div class="actions">
+                <button class="btn" onclick="window.location.href='day3.html'">⬅️ Quay lại ngày 3</button>
+                <button id="completeBtn" class="btn" onclick="completeLesson()">✅ Hoàn thành bài học</button>
+                <p style="font-size: 0.9em; color: #666; margin-top: 5px;">(Hãy làm đúng Quiz để mở khóa nút này)</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize grid demo
+        function updateGrid() {
+            const cols = document.getElementById('grid-cols').value;
+            const rows = document.getElementById('grid-rows').value;
+            const gap = document.getElementById('grid-gap').value;
+            const align = document.getElementById('grid-align').value;
+            const justify = document.getElementById('grid-justify').value;
+
+            const preview = document.getElementById('grid-preview');
+
+            preview.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
+            preview.style.gridTemplateRows = `repeat(${rows}, 1fr)`;
+            preview.style.gap = `${gap}px`;
+            preview.style.alignItems = align;
+            preview.style.justifyItems = justify;
+
+            document.getElementById('gap-value').textContent = `${gap}px`;
+
+            // Update number of items
+            const totalItems = cols * rows;
+            const currentItems = preview.children.length;
+
+            if (totalItems > currentItems) {
+                for (let i = currentItems; i < totalItems; i++) {
+                    const item = document.createElement('div');
+                    item.className = 'grid-item';
+                    item.textContent = i + 1;
+                    preview.appendChild(item);
+                }
+            } else if (totalItems < currentItems) {
+                while (preview.children.length > totalItems) {
+                    preview.removeChild(preview.lastChild);
+                }
+            }
+        }
+
+        // Initialize on load
+        updateGrid();
+
+        // Quiz functions
+        function checkQuiz() {
+            const form = document.getElementById('quizForm');
+            const feedback = document.getElementById('quiz-feedback');
+            const completeBtn = document.getElementById('completeBtn');
+            let score = 0;
+            const total = 4;
+
+            document.querySelectorAll('.option-label').forEach(label => {
+                label.classList.remove('correct', 'wrong');
+            });
+
+            const answers = { q1: 'correct', q2: 'correct', q3: 'correct', q4: 'correct' };
+            let allAnswered = true;
+
+            for (let q in answers) {
+                const selected = form.querySelector(`input[name="${q}"]:checked`);
+                if (!selected) {
+                    allAnswered = false;
+                    continue;
+                }
+
+                const parent = selected.parentElement;
+                if (selected.value === answers[q]) {
+                    parent.classList.add('correct');
+                    score++;
+                } else {
+                    parent.classList.add('wrong');
+                }
+            }
+
+            if (!allAnswered) {
+                feedback.style.display = 'block';
+                feedback.style.background = '#fef3c7';
+                feedback.style.color = '#92400e';
+                feedback.textContent = '⚠️ Vui lòng trả lời hết các câu hỏi!';
+                return;
+            }
+
+            feedback.style.display = 'block';
+            if (score === total) {
+                feedback.style.background = '#dcfce7';
+                feedback.style.color = '#166534';
+                feedback.innerHTML = '🎉 Xuất sắc! Bạn đã nắm vững CSS Grid!';
+
+                completeBtn.style.opacity = '1';
+                completeBtn.style.pointerEvents = 'auto';
+                completeBtn.textContent = '✅ Đã hiểu & Hoàn thành!';
+            } else {
+                feedback.style.background = '#fee2e2';
+                feedback.style.color = '#991b1b';
+                feedback.textContent = `❌ Bạn đúng ${score}/${total} câu. Hãy đọc lại bài học và thử lại nhé!`;
+
+                completeBtn.style.opacity = '0.5';
+                completeBtn.style.pointerEvents = 'none';
+            }
+        }
+
+        function completeLesson() {
+            alert("🎉 Chúc mừng! Bạn đã hoàn thành bài học Ngày 4.\n\nBạn đã học được:\n✅ CSS Grid Layout cơ bản\n✅ Sự khác biệt giữa Grid và Flexbox\n✅ Grid Template Areas\n✅ Các thuộc tính Grid quan trọng");
+            window.location.href = "../index.html";
+        }
+    </script>
+</body>
+
+</html>
+```
 
 ## File: public/css/style.css
 ```css
@@ -818,312 +1582,6 @@ function exportData() {
 setInterval(() => saveAllProgress(true), 30000);
 ```
 
-## File: public/lessons/day1.html
-```html
-<!DOCTYPE html>
-<html lang="vi">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ngày 1: HTML Cơ Bản</title>
-    <link rel="stylesheet" href="../css/style.css">
-    <style>
-        /* CSS riêng cho bài học này */
-        .code-block {
-            background: #1f2937;
-            color: #e5e7eb;
-            padding: 15px;
-            border-radius: 8px;
-            font-family: 'Consolas', monospace;
-            margin: 10px 0 20px 0;
-            overflow-x: auto;
-            border-left: 4px solid #667eea;
-            white-space: pre-wrap;
-        }
-
-        .concept-card {
-            background: #f3f4f6;
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-        }
-
-        .highlight {
-            color: #7c3aed;
-            font-weight: bold;
-        }
-    </style>
-</head>
-
-<body>
-    <div class="container">
-        <div class="header">
-            <h1>📅 Tháng 1 - Ngày 1</h1>
-            <p>Học cấu trúc và semantic tags trong HTML5</p>
-        </div>
-
-        <div class="content">
-            <a href="../index.html" class="btn"
-                style="display: inline-block; text-decoration: none; margin-bottom: 20px;">
-                ⬅️ Quay lại Lộ trình
-            </a>
-
-            <div class="section">
-                <div class="section-title">1. Cấu trúc cơ bản của HTML</div>
-                <p>HTML (HyperText Markup Language) là ngôn ngữ đánh dấu siêu văn bản.</p>
-                <pre class="code-block">&lt;!DOCTYPE html&gt;
-&lt;html lang="vi"&gt;
-&lt;head&gt;
-    &lt;meta charset="UTF-8"&gt;
-    &lt;title&gt;Trang web đầu tiên&lt;/title&gt;
-&lt;/head&gt;
-&lt;body&gt;
-    &lt;!-- Nội dung trang web --&gt;
-&lt;/body&gt;
-&lt;/html&gt;</pre>
-            </div>
-
-            <div class="section">
-                <div class="section-title">2. Các semantic tags quan trọng</div>
-                <div class="concept-card">
-                    <ul class="topic-list">
-                        <li class="topic-item">
-                            <div class="topic-text">
-                                <span class="highlight">&lt;header&gt;</span> - Phần đầu trang
-                            </div>
-                        </li>
-                        <li class="topic-item">
-                            <div class="topic-text">
-                                <span class="highlight">&lt;nav&gt;</span> - Menu điều hướng
-                            </div>
-                        </li>
-                        <li class="topic-item">
-                            <div class="topic-text">
-                                <span class="highlight">&lt;main&gt;</span> - Nội dung chính
-                            </div>
-                        </li>
-                        <li class="topic-item">
-                            <div class="topic-text">
-                                <span class="highlight">&lt;article&gt;</span> - Bài viết
-                            </div>
-                        </li>
-                        <li class="topic-item">
-                            <div class="topic-text">
-                                <span class="highlight">&lt;footer&gt;</span> - Phần chân trang
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="section">
-                <div class="section-title">🎯 Bài tập về nhà</div>
-                <div class="project-card">
-                    <div class="project-header">
-                        <div class="project-title">Tạo trang HTML đơn giản</div>
-                    </div>
-                    <p style="margin-top: 10px; line-height: 1.6;">
-                        Tạo một file <code>index.html</code> với:
-                    </p>
-                    <ul style="margin: 10px 0 10px 20px; color: #4b5563;">
-                        <li>Header với logo và menu</li>
-                        <li>Main content với một bài viết</li>
-                        <li>Footer với thông tin liên hệ</li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="actions">
-                <button id="completeBtn" class="btn" onclick="completeLesson()">✅ Hoàn thành bài học</button>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        function completeLesson() {
-            alert("Chúc mừng! Bạn đã hoàn thành bài học Ngày 1.");
-            window.location.href = "../index.html";
-        }
-    </script>
-</body>
-
-</html>
-```
-
-## File: public/lessons/day2.html
-```html
-<!DOCTYPE html>
-<html lang="vi">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ngày 2 - CSS Cơ Bản & Flexbox</title>
-    <link rel="stylesheet" href="../css/style.css">
-    <style>
-        /* CSS riêng cho bài học này */
-        .code-block {
-            background: #1f2937;
-            color: #e5e7eb;
-            padding: 15px;
-            border-radius: 8px;
-            font-family: 'Consolas', monospace;
-            margin: 10px 0 20px 0;
-            overflow-x: auto;
-            border-left: 4px solid #667eea;
-        }
-
-        .concept-card {
-            background: #f3f4f6;
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-        }
-
-        .highlight {
-            color: #7c3aed;
-            font-weight: bold;
-        }
-    </style>
-</head>
-
-<body>
-    <div class="container">
-        <div class="header">
-            <h1>📅 Tháng 1 - Ngày 2</h1>
-            <p>Học cách style với CSS và layout với Flexbox</p>
-        </div>
-
-        <div class="content">
-            <a href="../index.html" class="btn"
-                style="display: inline-block; text-decoration: none; margin-bottom: 20px;">
-                ⬅️ Quay lại Lộ trình
-            </a>
-
-            <div class="section">
-                <div class="section-title">1. CSS Cơ Bản</div>
-                <p>CSS (Cascading Style Sheets) là ngôn ngữ định dạng trang web.</p>
-                <div class="code-block">
-                    /* Cách viết CSS */<br>
-                    selector {<br>
-                    &nbsp;&nbsp;property: value;<br>
-                    }
-                </div>
-                <p>Ví dụ:</p>
-                <div class="code-block">
-                    .button {<br>
-                    &nbsp;&nbsp;background: blue;<br>
-                    &nbsp;&nbsp;color: white;<br>
-                    &nbsp;&nbsp;padding: 10px 20px;<br>
-                    &nbsp;&nbsp;border-radius: 5px;<br>
-                    }
-                </div>
-            </div>
-
-            <div class="section">
-                <div class="section-title">2. Flexbox Layout</div>
-                <p>Flexbox giúp layout dễ dàng hơn:</p>
-                <div class="code-block">
-                    .container {<br>
-                    &nbsp;&nbsp;display: flex;<br>
-                    &nbsp;&nbsp;justify-content: space-between;<br>
-                    &nbsp;&nbsp;align-items: center;<br>
-                    }
-                </div>
-                <p>Các thuộc tính quan trọng:</p>
-                <div class="concept-card">
-                    <ul class="topic-list">
-                        <li class="topic-item">
-                            <div class="topic-text">
-                                <span class="highlight">display: flex</span> - Bật flex mode
-                            </div>
-                        </li>
-                        <li class="topic-item">
-                            <div class="topic-text">
-                                <span class="highlight">flex-direction</span> - Hướng layout
-                            </div>
-                        </li>
-                        <li class="topic-item">
-                            <div class="topic-text">
-                                <span class="highlight">justify-content</span> - Căn chỉnh ngang
-                            </div>
-                        </li>
-                        <li class="topic-item">
-                            <div class="topic-text">
-                                <span class="highlight">align-items</span> - Căn chỉnh dọc
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-                <p>Thử nghiệm với Flexbox:</p>
-                <div style="display: flex; gap: 20px;">
-                    <div>
-                        <label for="justify-content">justify-content:</label>
-                        <select id="justify-content" onchange="updateFlexboxPreview()">
-                            <option value="flex-start">flex-start</option>
-                            <option value="center">center</option>
-                            <option value="flex-end">flex-end</option>
-                            <option value="space-between">space-between</option>
-                            <option value="space-around">space-around</option>
-                        </select>
-                        <br><br>
-                        <label for="align-items">align-items:</label>
-                        <select id="align-items" onchange="updateFlexboxPreview()">
-                            <option value="stretch">stretch</option>
-                            <option value="flex-start">flex-start</option>
-                            <option value="center">center</option>
-                            <option value="flex-end">flex-end</option>
-                        </select>
-                    </div>
-                    <div id="flexbox-preview"
-                        style="width: 300px; height: 200px; border: 1px solid #ccc; display: flex;">
-                        <div style="background: #667eea; padding: 20px; color: white;">Item 1</div>
-                        <div style="background: #7c3aed; padding: 20px; color: white;">Item 2</div>
-                        <div style="background: #10b981; padding: 20px; color: white;">Item 3</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="section">
-                <div class="section-title">🎯 Bài tập về nhà</div>
-                <div class="project-card">
-                    <div class="project-header">
-                        <div class="project-title">Tạo navigation bar responsive</div>
-                    </div>
-                    <p style="margin-top: 10px; line-height: 1.6;">
-                        Tạo một file <code>navbar.html</code> với:
-                    </p>
-                    <ul style="margin: 10px 0 10px 20px; color: #4b5563;">
-                        <li>Logo bên trái</li>
-                        <li>Menu items bên phải</li>
-                        <li>Responsive cho mobile</li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="actions">
-                <button class="btn" onclick="window.location.href='day1.html'">⬅️ Quay lại ngày 1</button>
-                <button class="btn" onclick="window.location.href='day3.html'">Tiếp tục ngày 3 ➡️</button>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        function updateFlexboxPreview() {
-            const justifyContent = document.getElementById('justify-content').value;
-            const alignItems = document.getElementById('align-items').value;
-            const preview = document.getElementById('flexbox-preview');
-
-            preview.style.justifyContent = justifyContent;
-            preview.style.alignItems = alignItems;
-        }
-    </script>
-</body>
-
-</html>
-```
-
 ## File: public/lessons/day3.html
 ```html
 <!DOCTYPE html>
@@ -1686,6 +2144,444 @@ node_modules/
     "encoding": "o200k_base"
   }
 }
+```
+
+## File: public/lessons/day1.html
+```html
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ngày 1: HTML Cơ Bản</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        /* CSS riêng cho bài học này */
+        .code-block {
+            background: #1f2937;
+            color: #e5e7eb;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Consolas', monospace;
+            margin: 10px 0 20px 0;
+            overflow-x: auto;
+            border-left: 4px solid #667eea;
+            white-space: pre-wrap;
+        }
+
+        .concept-card {
+            background: #f3f4f6;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .highlight {
+            color: #7c3aed;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📅 Tháng 1 - Ngày 1</h1>
+            <p>Học cấu trúc và semantic tags trong HTML5</p>
+        </div>
+
+        <div class="content">
+            <a href="../index.html" class="btn"
+                style="display: inline-block; text-decoration: none; margin-bottom: 20px;">
+                ⬅️ Quay lại Lộ trình
+            </a>
+
+            <div class="section">
+                <div class="section-title">1. Cấu trúc cơ bản của HTML</div>
+                <p>HTML (HyperText Markup Language) là ngôn ngữ đánh dấu siêu văn bản.</p>
+                <pre class="code-block">&lt;!DOCTYPE html&gt;
+&lt;html lang="vi"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;Trang web đầu tiên&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;!-- Nội dung trang web --&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+            </div>
+
+            <div class="section">
+                <div class="section-title">2. Các semantic tags quan trọng</div>
+                <div class="concept-card">
+                    <ul class="topic-list">
+                        <li class="topic-item">
+                            <div class="topic-text">
+                                <span class="highlight">&lt;header&gt;</span> - Phần đầu trang
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <div class="topic-text">
+                                <span class="highlight">&lt;nav&gt;</span> - Menu điều hướng
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <div class="topic-text">
+                                <span class="highlight">&lt;main&gt;</span> - Nội dung chính
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <div class="topic-text">
+                                <span class="highlight">&lt;article&gt;</span> - Bài viết
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <div class="topic-text">
+                                <span class="highlight">&lt;footer&gt;</span> - Phần chân trang
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">🎯 Bài tập về nhà</div>
+                <div class="project-card">
+                    <div class="project-header">
+                        <div class="project-title">Tạo trang HTML đơn giản</div>
+                    </div>
+                    <p style="margin-top: 10px; line-height: 1.6;">
+                        Tạo một file <code>index.html</code> với:
+                    </p>
+                    <ul style="margin: 10px 0 10px 20px; color: #4b5563;">
+                        <li>Header với logo và menu</li>
+                        <li>Main content với một bài viết</li>
+                        <li>Footer với thông tin liên hệ</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="actions">
+                <button id="completeBtn" class="btn" onclick="completeLesson()">✅ Hoàn thành bài học</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function completeLesson() {
+            alert("Chúc mừng! Bạn đã hoàn thành bài học Ngày 1.");
+            window.location.href = "../index.html";
+        }
+    </script>
+</body>
+
+</html>
+```
+
+## File: public/lessons/day2.html
+```html
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ngày 2 - CSS Cơ Bản & Flexbox</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        /* CSS riêng cho bài học này */
+        .code-block {
+            background: #1f2937;
+            color: #e5e7eb;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Consolas', monospace;
+            margin: 10px 0 20px 0;
+            overflow-x: auto;
+            border-left: 4px solid #667eea;
+        }
+
+        .concept-card {
+            background: #f3f4f6;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .highlight {
+            color: #7c3aed;
+            font-weight: bold;
+        }
+
+        .layout-wrapper {
+            display: flex;
+            gap: 40px;
+            flex-wrap: wrap;
+            /* Tự xuống dòng trên mobile */
+        }
+
+        .controls {
+            flex: 1;
+            min-width: 250px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        label {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: #4b5563;
+        }
+
+        /* Style cho Dropdown đẹp hơn */
+        select {
+            width: 100%;
+            padding: 10px 12px;
+            font-size: 1rem;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            background-color: #f9fafb;
+            cursor: pointer;
+            transition: all 0.2s;
+            outline: none;
+        }
+
+        select:hover {
+            border-color: #9ca3af;
+        }
+
+        select:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+        }
+
+        /* Cột bên phải: Khung hiển thị */
+        .preview-area {
+            flex: 1;
+            min-width: 300px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .preview-label {
+            font-size: 0.85rem;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-weight: 700;
+        }
+
+        #flexbox-preview {
+            width: 100%;
+            height: 300px;
+            /* Tăng chiều cao lên xíu cho thoáng */
+            border: 2px dashed #cbd5e1;
+            border-radius: 12px;
+            background-color: #f8fafc;
+            /* Các thuộc tính flex sẽ được JS thêm vào đây */
+            display: flex;
+            transition: all 0.3s ease;
+        }
+
+        /* Style cho các Item bên trong (Item 1, 2, 3) */
+        .flex-item {
+            padding: 20px;
+            color: white;
+            font-weight: bold;
+            font-size: 1.1rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 80px;
+            /* Để không bị co quá nhỏ */
+            min-height: 50px;
+        }
+
+        .item-1 {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .item-2 {
+            background: linear-gradient(135deg, #7c3aed 0%, #a78bfa 100%);
+        }
+
+        .item-3 {
+            background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📅 Tháng 1 - Ngày 2</h1>
+            <p>Học cách style với CSS và layout với Flexbox</p>
+        </div>
+
+        <div class="content">
+            <a href="../index.html" class="btn"
+                style="display: inline-block; text-decoration: none; margin-bottom: 20px;">
+                ⬅️ Quay lại Lộ trình
+            </a>
+
+            <div class="section">
+                <div class="section-title">1. CSS Cơ Bản</div>
+                <p>CSS (Cascading Style Sheets) là ngôn ngữ định dạng trang web.</p>
+                <div class="code-block">
+                    /* Cách viết CSS */<br>
+                    selector {<br>
+                    &nbsp;&nbsp;property: value;<br>
+                    }
+                </div>
+                <p>Ví dụ:</p>
+                <div class="code-block">
+                    .button {<br>
+                    &nbsp;&nbsp;background: blue;<br>
+                    &nbsp;&nbsp;color: white;<br>
+                    &nbsp;&nbsp;padding: 10px 20px;<br>
+                    &nbsp;&nbsp;border-radius: 5px;<br>
+                    }
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">2. Flexbox Layout</div>
+                <p>Flexbox giúp layout dễ dàng hơn:</p>
+                <div class="code-block">
+                    .container {<br>
+                    &nbsp;&nbsp;display: flex;<br>
+                    &nbsp;&nbsp;justify-content: space-between;<br>
+                    &nbsp;&nbsp;align-items: center;<br>
+                    }
+                </div>
+                <p>Các thuộc tính quan trọng:</p>
+                <div class="concept-card">
+                    <ul class="topic-list">
+                        <li class="topic-item">
+                            <div class="topic-text">
+                                <span class="highlight">display: flex</span> - Bật flex mode
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <div class="topic-text">
+                                <span class="highlight">flex-direction</span> - Hướng layout
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <div class="topic-text">
+                                <span class="highlight">justify-content</span> - Căn chỉnh ngang
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <div class="topic-text">
+                                <span class="highlight">align-items</span> - Căn chỉnh dọc
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <p>Thử nghiệm với Flexbox:</p>
+                <div class="layout-wrapper">
+                    <!-- Cột điều khiển -->
+                    <div class="controls">
+                        <div class="control-group">
+                            <label for="flex-direction">flex-direction:</label>
+                            <select id="flex-direction" onchange="updateFlexboxPreview()">
+                                <option value="row">row</option>
+                                <option value="row-reverse">row-reverse</option>
+                                <option value="column" selected>column</option> <!-- Default theo ảnh của bạn -->
+                                <option value="column-reverse">column-reverse</option>
+                            </select>
+                        </div>
+
+                        <div class="control-group">
+                            <label for="justify-content">justify-content:</label>
+                            <select id="justify-content" onchange="updateFlexboxPreview()">
+                                <option value="flex-start" selected>flex-start</option>
+                                <option value="center">center</option>
+                                <option value="flex-end">flex-end</option>
+                                <option value="space-between">space-between</option>
+                                <option value="space-around">space-around</option>
+                                <option value="space-evenly">space-evenly</option>
+                            </select>
+                        </div>
+
+                        <div class="control-group">
+                            <label for="align-items">align-items:</label>
+                            <select id="align-items" onchange="updateFlexboxPreview()">
+                                <option value="stretch" selected>stretch</option>
+                                <option value="flex-start">flex-start</option>
+                                <option value="center">center</option>
+                                <option value="flex-end">flex-end</option>
+                                <option value="baseline">baseline</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Cột hiển thị -->
+                    <div class="preview-area">
+                        <span class="preview-label">Kết quả (Preview)</span>
+                        <!-- Lưu ý: Mình set style mặc định khớp với các option selected ở trên -->
+                        <div id="flexbox-preview"
+                            style="flex-direction: column; justify-content: flex-start; align-items: stretch; gap: 20px;">
+                            <div class="flex-item item-1">Item 1</div>
+                            <div class="flex-item item-2">Item 2</div>
+                            <div class="flex-item item-3">Item 3</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">🎯 Bài tập về nhà</div>
+                <div class="project-card">
+                    <div class="project-header">
+                        <div class="project-title">Tạo navigation bar responsive</div>
+                    </div>
+                    <p style="margin-top: 10px; line-height: 1.6;">
+                        Tạo một file <code>navbar.html</code> với:
+                    </p>
+                    <ul style="margin: 10px 0 10px 20px; color: #4b5563;">
+                        <li>Logo bên trái</li>
+                        <li>Menu items bên phải</li>
+                        <li>Responsive cho mobile</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="actions">
+                <button class="btn" onclick="window.location.href='day1.html'">⬅️ Quay lại ngày 1</button>
+                <button class="btn" onclick="window.location.href='day3.html'">Tiếp tục ngày 3 ➡️</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function updateFlexboxPreview() {
+            const flexDirection = document.getElementById('flex-direction').value;
+            const justifyContent = document.getElementById('justify-content').value;
+            const alignItems = document.getElementById('align-items').value;
+
+            const preview = document.getElementById('flexbox-preview');
+
+            preview.style.flexDirection = flexDirection;
+            preview.style.justifyContent = justifyContent;
+            preview.style.alignItems = alignItems;
+        }
+    </script>
+</body>
+
+</html>
 ```
 
 ## File: public/index.html
