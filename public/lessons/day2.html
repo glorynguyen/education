@@ -6,137 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ngày 2 - CSS Cơ Bản & Flexbox</title>
     <link rel="stylesheet" href="../css/style.css">
-    <style>
-        /* CSS riêng cho bài học này */
-        .code-block {
-            background: #1f2937;
-            color: #e5e7eb;
-            padding: 15px;
-            border-radius: 8px;
-            font-family: 'Consolas', monospace;
-            margin: 10px 0 20px 0;
-            overflow-x: auto;
-            border-left: 4px solid #667eea;
-        }
-
-        .concept-card {
-            background: #f3f4f6;
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-        }
-
-        .highlight {
-            color: #7c3aed;
-            font-weight: bold;
-        }
-
-        .layout-wrapper {
-            display: flex;
-            gap: 40px;
-            flex-wrap: wrap;
-            /* Tự xuống dòng trên mobile */
-        }
-
-        .controls {
-            flex: 1;
-            min-width: 250px;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .control-group {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        label {
-            font-weight: 600;
-            font-size: 0.9rem;
-            color: #4b5563;
-        }
-
-        /* Style cho Dropdown đẹp hơn */
-        select {
-            width: 100%;
-            padding: 10px 12px;
-            font-size: 1rem;
-            border: 1px solid #d1d5db;
-            border-radius: 8px;
-            background-color: #f9fafb;
-            cursor: pointer;
-            transition: all 0.2s;
-            outline: none;
-        }
-
-        select:hover {
-            border-color: #9ca3af;
-        }
-
-        select:focus {
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
-        }
-
-        /* Cột bên phải: Khung hiển thị */
-        .preview-area {
-            flex: 1;
-            min-width: 300px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .preview-label {
-            font-size: 0.85rem;
-            color: #6b7280;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            font-weight: 700;
-        }
-
-        #flexbox-preview {
-            width: 100%;
-            height: 300px;
-            /* Tăng chiều cao lên xíu cho thoáng */
-            border: 2px dashed #cbd5e1;
-            border-radius: 12px;
-            background-color: #f8fafc;
-            /* Các thuộc tính flex sẽ được JS thêm vào đây */
-            display: flex;
-            transition: all 0.3s ease;
-        }
-
-        /* Style cho các Item bên trong (Item 1, 2, 3) */
-        .flex-item {
-            padding: 20px;
-            color: white;
-            font-weight: bold;
-            font-size: 1.1rem;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-width: 80px;
-            /* Để không bị co quá nhỏ */
-            min-height: 50px;
-        }
-
-        .item-1 {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        }
-
-        .item-2 {
-            background: linear-gradient(135deg, #7c3aed 0%, #a78bfa 100%);
-        }
-
-        .item-3 {
-            background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
-        }
-    </style>
+    <link rel="stylesheet" href="../css/lesson-style.css">
 </head>
 
 <body>
@@ -208,7 +78,7 @@
                     </ul>
                 </div>
                 <p>Thử nghiệm với Flexbox:</p>
-                <div class="layout-wrapper">
+                <div class="demo-wrapper">
                     <!-- Cột điều khiển -->
                     <div class="controls">
                         <div class="control-group">

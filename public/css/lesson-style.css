@@ -1,0 +1,435 @@
+/* ===========================
+   LESSON PAGE - SHARED STYLES
+   Dùng chung cho tất cả các bài giảng
+   =========================== */
+
+/* Code Block */
+.code-block {
+    background: #1f2937;
+    color: #e5e7eb;
+    padding: 15px;
+    border-radius: 8px;
+    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+    margin: 10px 0 20px 0;
+    overflow-x: auto;
+    border-left: 4px solid #667eea;
+    white-space: pre-wrap;
+}
+
+.code-block pre {
+    margin: 0;
+    white-space: pre;
+}
+
+.code-block code {
+    font-family: inherit;
+}
+
+/* Concept Cards */
+.concept-card {
+    background: #f3f4f6;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.highlight {
+    color: #7c3aed;
+    font-weight: bold;
+}
+
+/* Info & Warning Boxes */
+.info-box {
+    background: #eff6ff;
+    border-left: 4px solid #3b82f6;
+    padding: 15px;
+    margin: 15px 0;
+    border-radius: 6px;
+}
+
+.warning-box {
+    background: #fef3c7;
+    border-left: 4px solid #f59e0b;
+    padding: 15px;
+    margin: 15px 0;
+    border-radius: 6px;
+}
+
+/* Quiz Container */
+.quiz-container {
+    background: #fff;
+    border: 2px solid #e5e7eb;
+    border-radius: 15px;
+    padding: 25px;
+    margin-top: 30px;
+}
+
+.question-item {
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #eee;
+}
+
+.question-item:last-child {
+    border-bottom: none;
+}
+
+.question-text {
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #374151;
+}
+
+.options-list {
+    list-style: none;
+    padding: 0;
+}
+
+.option-label {
+    display: block;
+    padding: 10px 15px;
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.option-label:hover {
+    background: #edf2f7;
+    border-color: #cbd5e1;
+}
+
+.option-label input {
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+.option-label.correct {
+    background: #dcfce7;
+    border-color: #22c55e;
+    color: #166534;
+}
+
+.option-label.wrong {
+    background: #fee2e2;
+    border-color: #ef4444;
+    color: #991b1b;
+}
+
+#quiz-feedback {
+    margin-top: 15px;
+    font-weight: bold;
+    text-align: center;
+    padding: 10px;
+    border-radius: 8px;
+    display: none;
+}
+
+/* Complete Button - Initially Disabled */
+#completeBtn {
+    opacity: 0.5;
+    pointer-events: none;
+    transition: all 0.3s ease;
+}
+
+#completeBtn.enabled {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* Comparison Table */
+.comparison-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.comparison-table th {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 15px;
+    text-align: left;
+    font-weight: 600;
+}
+
+.comparison-table td {
+    padding: 15px;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.comparison-table tr:last-child td {
+    border-bottom: none;
+}
+
+.comparison-table tr:hover {
+    background: #f9fafb;
+}
+
+/* Demo Wrapper for Interactive Components */
+.demo-wrapper {
+    display: flex;
+    gap: 30px;
+    margin: 30px 0;
+    flex-wrap: wrap;
+}
+
+.controls {
+    flex: 1;
+    min-width: 250px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.control-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.control-group label {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: #4b5563;
+}
+
+.control-group input,
+.control-group select {
+    padding: 10px 12px;
+    font-size: 1rem;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    background-color: #f9fafb;
+    cursor: pointer;
+    transition: all 0.2s;
+    outline: none;
+}
+
+.control-group input:hover,
+.control-group select:hover {
+    border-color: #9ca3af;
+}
+
+.control-group input:focus,
+.control-group select:focus {
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+}
+
+.preview-area {
+    flex: 1.5;
+    min-width: 300px;
+}
+
+.preview-label {
+    font-size: 0.85rem;
+    color: #6b7280;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 700;
+    margin-bottom: 10px;
+    display: block;
+}
+
+/* Box Model Demo (Day 3) */
+.box-demo-container {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+.box-margin {
+    background-color: #fca5a5;
+    padding: 20px;
+    border: 2px dashed #ef4444;
+    position: relative;
+    transition: all 0.3s;
+}
+
+.box-border {
+    background-color: #fcd34d;
+    padding: 5px;
+    border: 1px solid #d97706;
+}
+
+.box-padding {
+    background-color: #86efac;
+    padding: 20px;
+    border: 1px dashed #22c55e;
+}
+
+.box-content {
+    background-color: #93c5fd;
+    padding: 20px;
+    color: #1e3a8a;
+    font-weight: bold;
+    text-align: center;
+    width: 150px;
+}
+
+.label {
+    font-size: 0.8em;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 5px;
+    display: block;
+    text-align: center;
+}
+
+/* Flexbox Demo (Day 2) */
+#flexbox-preview {
+    width: 100%;
+    height: 300px;
+    border: 2px dashed #cbd5e1;
+    border-radius: 12px;
+    background-color: #f8fafc;
+    display: flex;
+    transition: all 0.3s ease;
+}
+
+.flex-item {
+    padding: 20px;
+    color: white;
+    font-weight: bold;
+    font-size: 1.1rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 80px;
+    min-height: 50px;
+}
+
+.item-1 {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.item-2 {
+    background: linear-gradient(135deg, #7c3aed 0%, #a78bfa 100%);
+}
+
+.item-3 {
+    background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+}
+
+/* Grid Demo (Day 4) */
+#grid-preview {
+    width: 100%;
+    min-height: 350px;
+    border: 2px dashed #cbd5e1;
+    border-radius: 12px;
+    background-color: #f8fafc;
+    display: grid;
+    gap: 10px;
+    padding: 15px;
+    transition: all 0.3s ease;
+}
+
+.grid-item {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    font-weight: bold;
+    font-size: 1.1rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 80px;
+    transition: all 0.3s ease;
+}
+
+.grid-item:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Template Visual Demo (Day 4) */
+.template-demo {
+    background: #f3f4f6;
+    padding: 20px;
+    border-radius: 10px;
+    margin: 20px 0;
+}
+
+.template-visual {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: auto 1fr auto;
+    gap: 10px;
+    min-height: 300px;
+    background: white;
+    padding: 10px;
+    border-radius: 8px;
+}
+
+.area-header {
+    grid-column: 1 / -1;
+    background: #667eea;
+    color: white;
+    padding: 20px;
+    border-radius: 6px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.area-sidebar {
+    background: #a78bfa;
+    color: white;
+    padding: 20px;
+    border-radius: 6px;
+    font-weight: bold;
+}
+
+.area-main {
+    grid-column: 2 / -1;
+    background: #86efac;
+    color: #166534;
+    padding: 20px;
+    border-radius: 6px;
+    font-weight: bold;
+}
+
+.area-footer {
+    grid-column: 1 / -1;
+    background: #fbbf24;
+    color: #78350f;
+    padding: 20px;
+    border-radius: 6px;
+    text-align: center;
+    font-weight: bold;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .demo-wrapper {
+        flex-direction: column;
+    }
+    
+    .controls,
+    .preview-area {
+        min-width: 100%;
+    }
+    
+    #flexbox-preview,
+    #grid-preview {
+        height: 250px;
+        min-height: 250px;
+    }
+    
+    .template-visual {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto 1fr auto;
+    }
+    
+    .area-main {
+        grid-column: 1;
+    }
+}

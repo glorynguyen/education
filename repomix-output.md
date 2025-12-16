@@ -36,6 +36,7 @@ The content is organized as follows:
 ```
 public/
   css/
+    lesson-style.css
     style.css
   js/
     auth.js
@@ -57,767 +58,443 @@ repomix.config.json
 
 # Files
 
-## File: public/lessons/day4.html
-```html
-<!DOCTYPE html>
-<html lang="vi">
+## File: public/css/lesson-style.css
+```css
+/* ===========================
+   LESSON PAGE - SHARED STYLES
+   Dùng chung cho tất cả các bài giảng
+   =========================== */
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ngày 4: CSS Grid Layout</title>
-    <link rel="stylesheet" href="../css/style.css">
-    <style>
-        .code-block {
-            background: #1f2937;
-            color: #e5e7eb;
-            padding: 15px;
-            border-radius: 8px;
-            font-family: Consolas, monospace;
-            margin: 10px 0 20px;
-            overflow-x: auto;
-            border-left: 4px solid #667eea;
-        }
-
-        .code-block pre {
-            margin: 0;
-            white-space: pre;
-            /* giữ indent chuẩn */
-        }
-
-        .concept-card {
-            background: #f3f4f6;
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-        }
-
-        .highlight {
-            color: #7c3aed;
-            font-weight: bold;
-        }
-
-        /* Grid Interactive Demo */
-        .demo-wrapper {
-            display: flex;
-            gap: 30px;
-            margin: 30px 0;
-            flex-wrap: wrap;
-        }
-
-        .controls {
-            flex: 1;
-            min-width: 280px;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .control-group {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .control-group label {
-            font-weight: 600;
-            font-size: 0.9rem;
-            color: #4b5563;
-        }
-
-        .control-group input,
-        .control-group select {
-            padding: 10px 12px;
-            font-size: 1rem;
-            border: 1px solid #d1d5db;
-            border-radius: 8px;
-            background-color: #f9fafb;
-            cursor: pointer;
-            transition: all 0.2s;
-            outline: none;
-        }
-
-        .control-group input:focus,
-        .control-group select:focus {
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
-        }
-
-        .preview-area {
-            flex: 1.5;
-            min-width: 350px;
-        }
-
-        .preview-label {
-            font-size: 0.85rem;
-            color: #6b7280;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            font-weight: 700;
-            margin-bottom: 10px;
-        }
-
-        #grid-preview {
-            width: 100%;
-            min-height: 350px;
-            border: 2px dashed #cbd5e1;
-            border-radius: 12px;
-            background-color: #f8fafc;
-            display: grid;
-            gap: 10px;
-            padding: 15px;
-            transition: all 0.3s ease;
-        }
-
-        .grid-item {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            font-weight: bold;
-            font-size: 1.1rem;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 80px;
-            transition: all 0.3s ease;
-        }
-
-        .grid-item:hover {
-            transform: scale(1.05);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
-        }
-
-        /* Comparison Table */
-        .comparison-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 20px 0;
-            background: white;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        .comparison-table th {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 15px;
-            text-align: left;
-            font-weight: 600;
-        }
-
-        .comparison-table td {
-            padding: 15px;
-            border-bottom: 1px solid #e5e7eb;
-        }
-
-        .comparison-table tr:last-child td {
-            border-bottom: none;
-        }
-
-        .comparison-table tr:hover {
-            background: #f9fafb;
-        }
-
-        /* Quiz Styles */
-        .quiz-container {
-            background: #fff;
-            border: 2px solid #e5e7eb;
-            border-radius: 15px;
-            padding: 25px;
-            margin-top: 30px;
-        }
-
-        .question-item {
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid #eee;
-        }
-
-        .question-text {
-            font-weight: bold;
-            margin-bottom: 10px;
-            color: #374151;
-        }
-
-        .options-list {
-            list-style: none;
-        }
-
-        .option-label {
-            display: block;
-            padding: 10px 15px;
-            background: #f9fafb;
-            border: 1px solid #e5e7eb;
-            border-radius: 8px;
-            margin-bottom: 8px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .option-label:hover {
-            background: #edf2f7;
-            border-color: #cbd5e1;
-        }
-
-        .option-label input {
-            margin-right: 10px;
-        }
-
-        .option-label.correct {
-            background: #dcfce7;
-            border-color: #22c55e;
-            color: #166534;
-        }
-
-        .option-label.wrong {
-            background: #fee2e2;
-            border-color: #ef4444;
-            color: #991b1b;
-        }
-
-        #quiz-feedback {
-            margin-top: 15px;
-            font-weight: bold;
-            text-align: center;
-            padding: 10px;
-            border-radius: 8px;
-            display: none;
-        }
-
-        #completeBtn {
-            opacity: 0.5;
-            pointer-events: none;
-        }
-
-        /* Template Visual Demo */
-        .template-demo {
-            background: #f3f4f6;
-            padding: 20px;
-            border-radius: 10px;
-            margin: 20px 0;
-        }
-
-        .template-visual {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            grid-template-rows: auto 1fr auto;
-            gap: 10px;
-            min-height: 300px;
-            background: white;
-            padding: 10px;
-            border-radius: 8px;
-        }
-
-        .area-header {
-            grid-column: 1 / -1;
-            background: #667eea;
-            color: white;
-            padding: 20px;
-            border-radius: 6px;
-            text-align: center;
-            font-weight: bold;
-        }
-
-        .area-sidebar {
-            background: #a78bfa;
-            color: white;
-            padding: 20px;
-            border-radius: 6px;
-            font-weight: bold;
-        }
-
-        .area-main {
-            grid-column: 2 / -1;
-            background: #86efac;
-            color: #166534;
-            padding: 20px;
-            border-radius: 6px;
-            font-weight: bold;
-        }
-
-        .area-footer {
-            grid-column: 1 / -1;
-            background: #fbbf24;
-            color: #78350f;
-            padding: 20px;
-            border-radius: 6px;
-            text-align: center;
-            font-weight: bold;
-        }
-
-        .info-box {
-            background: #eff6ff;
-            border-left: 4px solid #3b82f6;
-            padding: 15px;
-            margin: 15px 0;
-            border-radius: 6px;
-        }
-
-        .warning-box {
-            background: #fef3c7;
-            border-left: 4px solid #f59e0b;
-            padding: 15px;
-            margin: 15px 0;
-            border-radius: 6px;
-        }
-    </style>
-</head>
-
-<body>
-    <div class="container">
-        <div class="header">
-            <h1>📅 Tháng 1 - Ngày 4</h1>
-            <p>Làm chủ CSS Grid Layout - Công cụ layout mạnh mẽ nhất</p>
-        </div>
-
-        <div class="content">
-            <a href="../index.html" class="btn"
-                style="display: inline-block; text-decoration: none; margin-bottom: 20px;">
-                ⬅️ Quay lại Lộ trình
-            </a>
-
-            <!-- Section 1: Grid là gì? -->
-            <div class="section">
-                <div class="section-title">1. CSS Grid là gì?</div>
-                <p>CSS Grid là hệ thống layout 2 chiều (cột và hàng) mạnh mẽ nhất trong CSS. Khác với Flexbox (1 chiều),
-                    Grid cho phép bạn kiểm soát cả chiều ngang và dọc cùng lúc.</p>
-
-                <div class="info-box">
-                    <strong>💡 Khi nào dùng Grid?</strong><br>
-                    • Khi cần layout phức tạp với nhiều cột và hàng<br>
-                    • Tạo gallery ảnh, dashboard, magazine layout<br>
-                    • Khi cần căn chỉnh chính xác vị trí các phần tử
-                </div>
-
-                <!-- <div class="code-block">/* Kích hoạt Grid Layout */
-                    .container {
-                    display: grid;
-                    grid-template-columns: 1fr 1fr 1fr; /* 3 cột bằng nhau */
-                    grid-template-rows: 100px 200px; /* 2 hàng */
-                    gap: 20px; /* Khoảng cách giữa các ô */
-                    }</div> -->
-                <div class="code-block">
-                    <pre>
-                        <code>
-/* Kích hoạt Grid Layout */
-.container {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr; /* 3 cột bằng nhau */
-    grid-template-rows: 100px 200px;    /* 2 hàng */
-    gap: 20px;                          /* Khoảng cách giữa các ô */
+/* Code Block */
+.code-block {
+    background: #1f2937;
+    color: #e5e7eb;
+    padding: 15px;
+    border-radius: 8px;
+    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+    margin: 10px 0 20px 0;
+    overflow-x: auto;
+    border-left: 4px solid #667eea;
+    white-space: pre-wrap;
 }
-                        </code>
-                    </pre>
-                </div>
-            </div>
 
-            <!-- Section 2: Grid vs Flexbox -->
-            <div class="section">
-                <div class="section-title">2. Grid vs Flexbox - Khi nào dùng cái nào?</div>
+.code-block pre {
+    margin: 0;
+    white-space: pre;
+}
 
-                <table class="comparison-table">
-                    <thead>
-                        <tr>
-                            <th>Tiêu chí</th>
-                            <th>Flexbox</th>
-                            <th>Grid</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><strong>Hướng Layout</strong></td>
-                            <td>1 chiều (dòng HOẶC cột)</td>
-                            <td>2 chiều (dòng VÀ cột)</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Dùng cho</strong></td>
-                            <td>Navigation bar, button groups</td>
-                            <td>Page layouts, galleries, grids</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Độ phức tạp</strong></td>
-                            <td>Đơn giản hơn</td>
-                            <td>Mạnh mẽ hơn</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Ví dụ thực tế</strong></td>
-                            <td>Menu ngang, card items</td>
-                            <td>Dashboard, magazine layout</td>
-                        </tr>
-                    </tbody>
-                </table>
+.code-block code {
+    font-family: inherit;
+}
 
-                <div class="warning-box">
-                    <strong>⚠️ Lưu ý:</strong> Bạn có thể kết hợp cả Grid và Flexbox trong cùng một dự án! Ví dụ: Dùng
-                    Grid cho layout tổng thể, Flexbox cho các component nhỏ bên trong.
-                </div>
-            </div>
+/* Concept Cards */
+.concept-card {
+    background: #f3f4f6;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
 
-            <!-- Section 3: Grid Template Areas -->
-            <div class="section">
-                <div class="section-title">3. Grid Template Areas - Layout trực quan</div>
-                <p>Một trong những tính năng tuyệt vời nhất của Grid là <span
-                        class="highlight">grid-template-areas</span> - cho phép bạn vẽ layout bằng text!</p>
+.highlight {
+    color: #7c3aed;
+    font-weight: bold;
+}
 
-                <div class="code-block">
-                    <pre><code>/* Layout website cơ bản */
-.container {
+/* Info & Warning Boxes */
+.info-box {
+    background: #eff6ff;
+    border-left: 4px solid #3b82f6;
+    padding: 15px;
+    margin: 15px 0;
+    border-radius: 6px;
+}
+
+.warning-box {
+    background: #fef3c7;
+    border-left: 4px solid #f59e0b;
+    padding: 15px;
+    margin: 15px 0;
+    border-radius: 6px;
+}
+
+/* Quiz Container */
+.quiz-container {
+    background: #fff;
+    border: 2px solid #e5e7eb;
+    border-radius: 15px;
+    padding: 25px;
+    margin-top: 30px;
+}
+
+.question-item {
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #eee;
+}
+
+.question-item:last-child {
+    border-bottom: none;
+}
+
+.question-text {
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #374151;
+}
+
+.options-list {
+    list-style: none;
+    padding: 0;
+}
+
+.option-label {
+    display: block;
+    padding: 10px 15px;
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.option-label:hover {
+    background: #edf2f7;
+    border-color: #cbd5e1;
+}
+
+.option-label input {
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+.option-label.correct {
+    background: #dcfce7;
+    border-color: #22c55e;
+    color: #166534;
+}
+
+.option-label.wrong {
+    background: #fee2e2;
+    border-color: #ef4444;
+    color: #991b1b;
+}
+
+#quiz-feedback {
+    margin-top: 15px;
+    font-weight: bold;
+    text-align: center;
+    padding: 10px;
+    border-radius: 8px;
+    display: none;
+}
+
+/* Complete Button - Initially Disabled */
+#completeBtn {
+    opacity: 0.5;
+    pointer-events: none;
+    transition: all 0.3s ease;
+}
+
+#completeBtn.enabled {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* Comparison Table */
+.comparison-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.comparison-table th {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 15px;
+    text-align: left;
+    font-weight: 600;
+}
+
+.comparison-table td {
+    padding: 15px;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.comparison-table tr:last-child td {
+    border-bottom: none;
+}
+
+.comparison-table tr:hover {
+    background: #f9fafb;
+}
+
+/* Demo Wrapper for Interactive Components */
+.demo-wrapper {
+    display: flex;
+    gap: 30px;
+    margin: 30px 0;
+    flex-wrap: wrap;
+}
+
+.controls {
+    flex: 1;
+    min-width: 250px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.control-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.control-group label {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: #4b5563;
+}
+
+.control-group input,
+.control-group select {
+    padding: 10px 12px;
+    font-size: 1rem;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    background-color: #f9fafb;
+    cursor: pointer;
+    transition: all 0.2s;
+    outline: none;
+}
+
+.control-group input:hover,
+.control-group select:hover {
+    border-color: #9ca3af;
+}
+
+.control-group input:focus,
+.control-group select:focus {
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+}
+
+.preview-area {
+    flex: 1.5;
+    min-width: 300px;
+}
+
+.preview-label {
+    font-size: 0.85rem;
+    color: #6b7280;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 700;
+    margin-bottom: 10px;
+    display: block;
+}
+
+/* Box Model Demo (Day 3) */
+.box-demo-container {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+.box-margin {
+    background-color: #fca5a5;
+    padding: 20px;
+    border: 2px dashed #ef4444;
+    position: relative;
+    transition: all 0.3s;
+}
+
+.box-border {
+    background-color: #fcd34d;
+    padding: 5px;
+    border: 1px solid #d97706;
+}
+
+.box-padding {
+    background-color: #86efac;
+    padding: 20px;
+    border: 1px dashed #22c55e;
+}
+
+.box-content {
+    background-color: #93c5fd;
+    padding: 20px;
+    color: #1e3a8a;
+    font-weight: bold;
+    text-align: center;
+    width: 150px;
+}
+
+.label {
+    font-size: 0.8em;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 5px;
+    display: block;
+    text-align: center;
+}
+
+/* Flexbox Demo (Day 2) */
+#flexbox-preview {
+    width: 100%;
+    height: 300px;
+    border: 2px dashed #cbd5e1;
+    border-radius: 12px;
+    background-color: #f8fafc;
+    display: flex;
+    transition: all 0.3s ease;
+}
+
+.flex-item {
+    padding: 20px;
+    color: white;
+    font-weight: bold;
+    font-size: 1.1rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 80px;
+    min-height: 50px;
+}
+
+.item-1 {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.item-2 {
+    background: linear-gradient(135deg, #7c3aed 0%, #a78bfa 100%);
+}
+
+.item-3 {
+    background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+}
+
+/* Grid Demo (Day 4) */
+#grid-preview {
+    width: 100%;
+    min-height: 350px;
+    border: 2px dashed #cbd5e1;
+    border-radius: 12px;
+    background-color: #f8fafc;
     display: grid;
-    grid-template-columns: 200px 1fr;
-    grid-template-rows: auto 1fr auto;
-    grid-template-areas:
-        "header header"
-        "sidebar main"
-        "footer footer";
     gap: 10px;
-    min-height: 100vh;
+    padding: 15px;
+    transition: all 0.3s ease;
 }
 
-.header  { grid-area: header; }
-.sidebar { grid-area: sidebar; }
-.main    { grid-area: main; }
-.footer  { grid-area: footer; }
-</code></pre>
-                </div>
+.grid-item {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    font-weight: bold;
+    font-size: 1.1rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 80px;
+    transition: all 0.3s ease;
+}
 
-                <div class="template-demo">
-                    <p style="margin-bottom: 10px; font-weight: 600;">Kết quả hiển thị:</p>
-                    <div class="template-visual">
-                        <div class="area-header">HEADER</div>
-                        <div class="area-sidebar">SIDEBAR</div>
-                        <div class="area-main">MAIN CONTENT</div>
-                        <div class="area-footer">FOOTER</div>
-                    </div>
-                </div>
-            </div>
+.grid-item:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
 
-            <!-- Section 4: Interactive Demo -->
-            <div class="section">
-                <div class="section-title">4. Thử nghiệm với Grid</div>
-                <p>Điều chỉnh các thuộc tính để xem Grid hoạt động như thế nào:</p>
+/* Template Visual Demo (Day 4) */
+.template-demo {
+    background: #f3f4f6;
+    padding: 20px;
+    border-radius: 10px;
+    margin: 20px 0;
+}
 
-                <div class="demo-wrapper">
-                    <div class="controls">
-                        <div class="control-group">
-                            <label for="grid-cols">Số cột (Columns):</label>
-                            <input type="number" id="grid-cols" value="3" min="1" max="6" onchange="updateGrid()">
-                        </div>
-
-                        <div class="control-group">
-                            <label for="grid-rows">Số hàng (Rows):</label>
-                            <input type="number" id="grid-rows" value="2" min="1" max="4" onchange="updateGrid()">
-                        </div>
-
-                        <div class="control-group">
-                            <label for="grid-gap">Gap (Khoảng cách):</label>
-                            <input type="range" id="grid-gap" value="10" min="0" max="40" onchange="updateGrid()">
-                            <span id="gap-value">10px</span>
-                        </div>
-
-                        <div class="control-group">
-                            <label for="grid-align">Align Items:</label>
-                            <select id="grid-align" onchange="updateGrid()">
-                                <option value="stretch">stretch</option>
-                                <option value="start">start</option>
-                                <option value="center">center</option>
-                                <option value="end">end</option>
-                            </select>
-                        </div>
-
-                        <div class="control-group">
-                            <label for="grid-justify">Justify Items:</label>
-                            <select id="grid-justify" onchange="updateGrid()">
-                                <option value="stretch">stretch</option>
-                                <option value="start">start</option>
-                                <option value="center">center</option>
-                                <option value="end">end</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="preview-area">
-                        <span class="preview-label">Kết quả (Preview)</span>
-                        <div id="grid-preview">
-                            <div class="grid-item">1</div>
-                            <div class="grid-item">2</div>
-                            <div class="grid-item">3</div>
-                            <div class="grid-item">4</div>
-                            <div class="grid-item">5</div>
-                            <div class="grid-item">6</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Section 5: Common Properties -->
-            <div class="section">
-                <div class="section-title">5. Các thuộc tính Grid quan trọng</div>
-                <div class="concept-card">
-                    <ul class="topic-list">
-                        <li class="topic-item">
-                            <div class="topic-text">
-                                <span class="highlight">grid-template-columns</span> - Định nghĩa số cột và kích thước
-                                (VD: <code>200px 1fr 1fr</code>)
-                            </div>
-                        </li>
-                        <li class="topic-item">
-                            <div class="topic-text">
-                                <span class="highlight">grid-template-rows</span> - Định nghĩa số hàng và chiều cao
-                            </div>
-                        </li>
-                        <li class="topic-item">
-                            <div class="topic-text">
-                                <span class="highlight">gap / grid-gap</span> - Khoảng cách giữa các ô (VD:
-                                <code>gap: 20px;</code>)
-                            </div>
-                        </li>
-                        <li class="topic-item">
-                            <div class="topic-text">
-                                <span class="highlight">fr (fraction unit)</span> - Đơn vị linh hoạt (<code>1fr</code> =
-                                1 phần không gian còn lại)
-                            </div>
-                        </li>
-                        <li class="topic-item">
-                            <div class="topic-text">
-                                <span class="highlight">repeat()</span> - Lặp lại giá trị (VD:
-                                <code>repeat(4, 1fr)</code> = 4 cột bằng nhau)
-                            </div>
-                        </li>
-                        <li class="topic-item">
-                            <div class="topic-text">
-                                <span class="highlight">minmax()</span> - Đặt min/max size (VD:
-                                <code>minmax(100px, 1fr)</code>)
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-
-                <div class="code-block">
-                    <pre><code>/* Ví dụ thực tế */
-.gallery {
+.template-visual {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 15px;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: auto 1fr auto;
+    gap: 10px;
+    min-height: 300px;
+    background: white;
+    padding: 10px;
+    border-radius: 8px;
 }
 
-/* Responsive tự động! Khi màn hình nhỏ, số cột sẽ giảm */
-</code></pre>
-                </div>
-            </div>
+.area-header {
+    grid-column: 1 / -1;
+    background: #667eea;
+    color: white;
+    padding: 20px;
+    border-radius: 6px;
+    text-align: center;
+    font-weight: bold;
+}
 
-            <!-- Homework -->
-            <div class="section">
-                <div class="section-title">🎯 Bài tập về nhà</div>
-                <div class="project-card">
-                    <div class="project-header">
-                        <div class="project-title">Tạo "Photo Gallery" với Grid</div>
-                    </div>
-                    <p style="margin-top: 10px; line-height: 1.6;">
-                        Tạo một gallery ảnh responsive với các yêu cầu:
-                    </p>
-                    <ul style="margin: 10px 0 10px 20px; color: #4b5563;">
-                        <li>Sử dụng <code>display: grid</code></li>
-                        <li>Tối thiểu 9 ảnh (có thể dùng placeholder)</li>
-                        <li>Dùng <code>repeat(auto-fit, minmax(200px, 1fr))</code> để responsive tự động</li>
-                        <li>Thêm <code>gap</code> giữa các ảnh</li>
-                        <li>Bonus: Thêm hover effect cho ảnh</li>
-                    </ul>
-                </div>
-            </div>
+.area-sidebar {
+    background: #a78bfa;
+    color: white;
+    padding: 20px;
+    border-radius: 6px;
+    font-weight: bold;
+}
 
-            <!-- Quiz Section -->
-            <div class="section">
-                <div class="section-title">🧠 Kiểm tra kiến thức</div>
-                <div class="quiz-container">
-                    <form id="quizForm">
-                        <div class="question-item">
-                            <div class="question-text">Câu 1: Sự khác biệt chính giữa Flexbox và Grid là gì?</div>
-                            <div class="options-list">
-                                <label class="option-label">
-                                    <input type="radio" name="q1" value="wrong"> Flexbox nhanh hơn Grid
-                                </label>
-                                <label class="option-label">
-                                    <input type="radio" name="q1" value="correct"> Flexbox là 1 chiều, Grid là 2 chiều
-                                </label>
-                                <label class="option-label">
-                                    <input type="radio" name="q1" value="wrong"> Grid không responsive được
-                                </label>
-                            </div>
-                        </div>
+.area-main {
+    grid-column: 2 / -1;
+    background: #86efac;
+    color: #166534;
+    padding: 20px;
+    border-radius: 6px;
+    font-weight: bold;
+}
 
-                        <div class="question-item">
-                            <div class="question-text">Câu 2: Thuộc tính nào dùng để tạo khoảng cách giữa các ô trong
-                                Grid?</div>
-                            <div class="options-list">
-                                <label class="option-label">
-                                    <input type="radio" name="q2" value="wrong"> margin
-                                </label>
-                                <label class="option-label">
-                                    <input type="radio" name="q2" value="correct"> gap
-                                </label>
-                                <label class="option-label">
-                                    <input type="radio" name="q2" value="wrong"> space
-                                </label>
-                            </div>
-                        </div>
+.area-footer {
+    grid-column: 1 / -1;
+    background: #fbbf24;
+    color: #78350f;
+    padding: 20px;
+    border-radius: 6px;
+    text-align: center;
+    font-weight: bold;
+}
 
-                        <div class="question-item">
-                            <div class="question-text">Câu 3: <code>grid-template-columns: repeat(3, 1fr)</code> có
-                                nghĩa là gì?</div>
-                            <div class="options-list">
-                                <label class="option-label">
-                                    <input type="radio" name="q3" value="wrong"> 3 cột, mỗi cột rộng 1px
-                                </label>
-                                <label class="option-label">
-                                    <input type="radio" name="q3" value="correct"> 3 cột bằng nhau, mỗi cột chiếm 1 phần
-                                    không gian
-                                </label>
-                                <label class="option-label">
-                                    <input type="radio" name="q3" value="wrong"> 1 cột lặp lại 3 lần
-                                </label>
-                            </div>
-                        </div>
-
-                        <div class="question-item">
-                            <div class="question-text">Câu 4: Khi nào nên dùng Grid thay vì Flexbox?</div>
-                            <div class="options-list">
-                                <label class="option-label">
-                                    <input type="radio" name="q4" value="wrong"> Khi làm navigation bar
-                                </label>
-                                <label class="option-label">
-                                    <input type="radio" name="q4" value="correct"> Khi cần layout phức tạp với nhiều cột
-                                    và hàng
-                                </label>
-                                <label class="option-label">
-                                    <input type="radio" name="q4" value="wrong"> Grid luôn tốt hơn Flexbox
-                                </label>
-                            </div>
-                        </div>
-
-                        <button type="button" class="btn" onclick="checkQuiz()">Kiểm tra đáp án</button>
-                    </form>
-
-                    <div id="quiz-feedback"></div>
-                </div>
-            </div>
-
-            <!-- Footer Actions -->
-            <div class="actions">
-                <button class="btn" onclick="window.location.href='day3.html'">⬅️ Quay lại ngày 3</button>
-                <button id="completeBtn" class="btn" onclick="completeLesson()">✅ Hoàn thành bài học</button>
-                <p style="font-size: 0.9em; color: #666; margin-top: 5px;">(Hãy làm đúng Quiz để mở khóa nút này)</p>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        // Initialize grid demo
-        function updateGrid() {
-            const cols = document.getElementById('grid-cols').value;
-            const rows = document.getElementById('grid-rows').value;
-            const gap = document.getElementById('grid-gap').value;
-            const align = document.getElementById('grid-align').value;
-            const justify = document.getElementById('grid-justify').value;
-
-            const preview = document.getElementById('grid-preview');
-
-            preview.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
-            preview.style.gridTemplateRows = `repeat(${rows}, 1fr)`;
-            preview.style.gap = `${gap}px`;
-            preview.style.alignItems = align;
-            preview.style.justifyItems = justify;
-
-            document.getElementById('gap-value').textContent = `${gap}px`;
-
-            // Update number of items
-            const totalItems = cols * rows;
-            const currentItems = preview.children.length;
-
-            if (totalItems > currentItems) {
-                for (let i = currentItems; i < totalItems; i++) {
-                    const item = document.createElement('div');
-                    item.className = 'grid-item';
-                    item.textContent = i + 1;
-                    preview.appendChild(item);
-                }
-            } else if (totalItems < currentItems) {
-                while (preview.children.length > totalItems) {
-                    preview.removeChild(preview.lastChild);
-                }
-            }
-        }
-
-        // Initialize on load
-        updateGrid();
-
-        // Quiz functions
-        function checkQuiz() {
-            const form = document.getElementById('quizForm');
-            const feedback = document.getElementById('quiz-feedback');
-            const completeBtn = document.getElementById('completeBtn');
-            let score = 0;
-            const total = 4;
-
-            document.querySelectorAll('.option-label').forEach(label => {
-                label.classList.remove('correct', 'wrong');
-            });
-
-            const answers = { q1: 'correct', q2: 'correct', q3: 'correct', q4: 'correct' };
-            let allAnswered = true;
-
-            for (let q in answers) {
-                const selected = form.querySelector(`input[name="${q}"]:checked`);
-                if (!selected) {
-                    allAnswered = false;
-                    continue;
-                }
-
-                const parent = selected.parentElement;
-                if (selected.value === answers[q]) {
-                    parent.classList.add('correct');
-                    score++;
-                } else {
-                    parent.classList.add('wrong');
-                }
-            }
-
-            if (!allAnswered) {
-                feedback.style.display = 'block';
-                feedback.style.background = '#fef3c7';
-                feedback.style.color = '#92400e';
-                feedback.textContent = '⚠️ Vui lòng trả lời hết các câu hỏi!';
-                return;
-            }
-
-            feedback.style.display = 'block';
-            if (score === total) {
-                feedback.style.background = '#dcfce7';
-                feedback.style.color = '#166534';
-                feedback.innerHTML = '🎉 Xuất sắc! Bạn đã nắm vững CSS Grid!';
-
-                completeBtn.style.opacity = '1';
-                completeBtn.style.pointerEvents = 'auto';
-                completeBtn.textContent = '✅ Đã hiểu & Hoàn thành!';
-            } else {
-                feedback.style.background = '#fee2e2';
-                feedback.style.color = '#991b1b';
-                feedback.textContent = `❌ Bạn đúng ${score}/${total} câu. Hãy đọc lại bài học và thử lại nhé!`;
-
-                completeBtn.style.opacity = '0.5';
-                completeBtn.style.pointerEvents = 'none';
-            }
-        }
-
-        function completeLesson() {
-            alert("🎉 Chúc mừng! Bạn đã hoàn thành bài học Ngày 4.\n\nBạn đã học được:\n✅ CSS Grid Layout cơ bản\n✅ Sự khác biệt giữa Grid và Flexbox\n✅ Grid Template Areas\n✅ Các thuộc tính Grid quan trọng");
-            window.location.href = "../index.html";
-        }
-    </script>
-</body>
-
-</html>
+/* Responsive */
+@media (max-width: 768px) {
+    .demo-wrapper {
+        flex-direction: column;
+    }
+    
+    .controls,
+    .preview-area {
+        min-width: 100%;
+    }
+    
+    #flexbox-preview,
+    #grid-preview {
+        height: 250px;
+        min-height: 250px;
+    }
+    
+    .template-visual {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto 1fr auto;
+    }
+    
+    .area-main {
+        grid-column: 1;
+    }
+}
 ```
 
 ## File: public/css/style.css
@@ -1586,153 +1263,16 @@ setInterval(() => saveAllProgress(true), 30000);
 ```html
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ngày 3: CSS Cơ Bản & Box Model</title>
     <!-- Điều chỉnh đường dẫn CSS tùy thuộc vào nơi bạn lưu file này -->
-    <link rel="stylesheet" href="../css/style.css"> 
-    <style>
-        /* CSS riêng cho bài học này */
-        .code-block {
-            background: #1f2937;
-            color: #e5e7eb;
-            padding: 15px;
-            border-radius: 8px;
-            font-family: 'Consolas', monospace;
-            margin: 10px 0 20px 0;
-            overflow-x: auto;
-            border-left: 4px solid #667eea;
-        }
-        
-        .concept-card {
-            background: #f3f4f6;
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-        }
-
-        .highlight {
-            color: #7c3aed;
-            font-weight: bold;
-        }
-
-        /* Box Model Visualization */
-        .box-demo-container {
-            display: flex;
-            justify-content: center;
-            margin: 20px 0;
-        }
-
-        .box-margin {
-            background-color: #fca5a5; /* Red - Margin */
-            padding: 20px;
-            border: 2px dashed #ef4444;
-            position: relative;
-            transition: all 0.3s;
-        }
-        .box-border {
-            background-color: #fcd34d; /* Yellow - Border */
-            padding: 5px; /* Representing border width */
-            border: 1px solid #d97706;
-        }
-        .box-padding {
-            background-color: #86efac; /* Green - Padding */
-            padding: 20px;
-            border: 1px dashed #22c55e;
-        }
-        .box-content {
-            background-color: #93c5fd; /* Blue - Content */
-            padding: 20px;
-            color: #1e3a8a;
-            font-weight: bold;
-            text-align: center;
-            width: 150px;
-        }
-        
-        .label {
-            font-size: 0.8em;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 5px;
-            display: block;
-            text-align: center;
-        }
-
-        /* QUIZ STYLES */
-        .quiz-container {
-            background: #fff;
-            border: 2px solid #e5e7eb;
-            border-radius: 15px;
-            padding: 25px;
-            margin-top: 30px;
-        }
-        
-        .question-item {
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid #eee;
-        }
-
-        .question-text {
-            font-weight: bold;
-            margin-bottom: 10px;
-            color: #374151;
-        }
-
-        .options-list {
-            list-style: none;
-        }
-
-        .option-label {
-            display: block;
-            padding: 10px 15px;
-            background: #f9fafb;
-            border: 1px solid #e5e7eb;
-            border-radius: 8px;
-            margin-bottom: 8px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .option-label:hover {
-            background: #edf2f7;
-            border-color: #cbd5e1;
-        }
-
-        .option-label input {
-            margin-right: 10px;
-        }
-
-        /* Kết quả đúng sai */
-        .option-label.correct {
-            background: #dcfce7;
-            border-color: #22c55e;
-            color: #166534;
-        }
-
-        .option-label.wrong {
-            background: #fee2e2;
-            border-color: #ef4444;
-            color: #991b1b;
-        }
-
-        #quiz-feedback {
-            margin-top: 15px;
-            font-weight: bold;
-            text-align: center;
-            padding: 10px;
-            border-radius: 8px;
-            display: none;
-        }
-        
-        /* Ẩn nút hoàn thành ban đầu */
-        #completeBtn {
-            opacity: 0.5;
-            pointer-events: none;
-        }
-    </style>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/lesson-style.css">
 </head>
+
 <body>
     <div class="container">
         <!-- Header giống trang chủ -->
@@ -1743,23 +1283,25 @@ setInterval(() => saveAllProgress(true), 30000);
 
         <div class="content">
             <!-- Navigation -->
-            <a href="../index.html" class="btn" style="display: inline-block; text-decoration: none; margin-bottom: 20px;">
+            <a href="../index.html" class="btn"
+                style="display: inline-block; text-decoration: none; margin-bottom: 20px;">
                 ⬅️ Quay lại Lộ trình
             </a>
 
             <!-- Phần 1: Cú pháp CSS -->
             <div class="section">
                 <div class="section-title">1. Cú pháp CSS (Syntax)</div>
-                <p>CSS (Cascading Style Sheets) dùng để trang trí HTML. Cấu trúc cơ bản bao gồm <strong>Selector</strong> (bộ chọn) và <strong>Declaration block</strong> (khối khai báo).</p>
-                
-                <div class="code-block">
-/* Selector { Property: Value; } */
+                <p>CSS (Cascading Style Sheets) dùng để trang trí HTML. Cấu trúc cơ bản bao gồm
+                    <strong>Selector</strong> (bộ chọn) và <strong>Declaration block</strong> (khối khai báo).</p>
 
-h1 {
-    color: blue;        /* Đổi màu chữ */
-    font-size: 24px;    /* Cỡ chữ */
-    text-align: center; /* Căn giữa */
-}
+                <div class="code-block">
+                    /* Selector { Property: Value; } */
+
+                    h1 {
+                    color: blue; /* Đổi màu chữ */
+                    font-size: 24px; /* Cỡ chữ */
+                    text-align: center; /* Căn giữa */
+                    }
                 </div>
             </div>
 
@@ -1770,17 +1312,20 @@ h1 {
                     <ul class="topic-list">
                         <li class="topic-item">
                             <div class="topic-text">
-                                <span class="highlight">Element Selector:</span> Chọn tất cả thẻ HTML (VD: <code>p {}</code>, <code>div {}</code>).
+                                <span class="highlight">Element Selector:</span> Chọn tất cả thẻ HTML (VD:
+                                <code>p {}</code>, <code>div {}</code>).
                             </div>
                         </li>
                         <li class="topic-item">
                             <div class="topic-text">
-                                <span class="highlight">Class Selector (.):</span> Dùng cho nhóm phần tử (VD: <code>.button {}</code>). Được dùng nhiều nhất.
+                                <span class="highlight">Class Selector (.):</span> Dùng cho nhóm phần tử (VD:
+                                <code>.button {}</code>). Được dùng nhiều nhất.
                             </div>
                         </li>
                         <li class="topic-item">
                             <div class="topic-text">
-                                <span class="highlight">ID Selector (#):</span> Dùng cho 1 phần tử duy nhất (VD: <code>#header {}</code>). Độ ưu tiên cao nhất.
+                                <span class="highlight">ID Selector (#):</span> Dùng cho 1 phần tử duy nhất (VD:
+                                <code>#header {}</code>). Độ ưu tiên cao nhất.
                             </div>
                         </li>
                     </ul>
@@ -1791,7 +1336,7 @@ h1 {
             <div class="section">
                 <div class="section-title">3. The Box Model (Mô hình hộp)</div>
                 <p>Mọi phần tử HTML đều là một cái hộp chữ nhật. Box Model gồm 4 thành phần từ trong ra ngoài:</p>
-                
+
                 <!-- Visual Demo -->
                 <div class="box-demo-container">
                     <div class="box-margin">
@@ -1814,7 +1359,8 @@ h1 {
                         <li><strong>Content:</strong> Nội dung thực (text, ảnh).</li>
                         <li><strong>Padding:</strong> Khoảng cách từ Content đến Border (Làm mập cái hộp lên).</li>
                         <li><strong>Border:</strong> Đường viền bao quanh.</li>
-                        <li><strong>Margin:</strong> Khoảng cách giữa cái hộp này với các hộp khác (Đẩy người khác ra xa).</li>
+                        <li><strong>Margin:</strong> Khoảng cách giữa cái hộp này với các hộp khác (Đẩy người khác ra
+                            xa).</li>
                     </ul>
                 </div>
             </div>
@@ -1846,7 +1392,8 @@ h1 {
                     <form id="quizForm">
                         <!-- Câu 1 -->
                         <div class="question-item">
-                            <div class="question-text">Câu 1: Để chọn một phần tử có id="myBox" trong CSS, ta dùng cú pháp nào?</div>
+                            <div class="question-text">Câu 1: Để chọn một phần tử có id="myBox" trong CSS, ta dùng cú
+                                pháp nào?</div>
                             <div class="options-list">
                                 <label class="option-label">
                                     <input type="radio" name="q1" value="wrong"> .myBox
@@ -1862,7 +1409,8 @@ h1 {
 
                         <!-- Câu 2 -->
                         <div class="question-item">
-                            <div class="question-text">Câu 2: Trong Box Model, khoảng cách giữa Content và Border gọi là gì?</div>
+                            <div class="question-text">Câu 2: Trong Box Model, khoảng cách giữa Content và Border gọi là
+                                gì?</div>
                             <div class="options-list">
                                 <label class="option-label">
                                     <input type="radio" name="q2" value="wrong"> Margin
@@ -1894,7 +1442,7 @@ h1 {
 
                         <button type="button" class="btn" onclick="checkQuiz()">Kiểm tra đáp án</button>
                     </form>
-                    
+
                     <div id="quiz-feedback"></div>
                 </div>
             </div>
@@ -1958,7 +1506,7 @@ h1 {
                 feedback.style.background = '#dcfce7';
                 feedback.style.color = '#166534';
                 feedback.innerHTML = '🎉 Xuất sắc! Bạn đã trả lời đúng tất cả.';
-                
+
                 // Unlock complete button
                 completeBtn.style.opacity = '1';
                 completeBtn.style.pointerEvents = 'auto';
@@ -1967,7 +1515,7 @@ h1 {
                 feedback.style.background = '#fee2e2';
                 feedback.style.color = '#991b1b';
                 feedback.textContent = `❌ Bạn đúng ${score}/${total} câu. Hãy thử lại nhé!`;
-                
+
                 completeBtn.style.opacity = '0.5';
                 completeBtn.style.pointerEvents = 'none';
             }
@@ -1977,14 +1525,483 @@ h1 {
             // Logic lưu trạng thái
             // Có thể mở rộng để lưu vào localStorage key riêng cho bài này
             alert("Chúc mừng! Bạn đã hoàn thành bài học Ngày 3.");
-            
+
             // Tự động đánh dấu checkbox ở trang chủ (giả lập)
             // Trong thực tế, bạn cần lưu vào localStorage ở đây rồi trang index.html đọc ra
-            
+
             window.location.href = "../index.html";
         }
     </script>
 </body>
+
+</html>
+```
+
+## File: public/lessons/day4.html
+```html
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ngày 4: CSS Grid Layout</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/lesson-style.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📅 Tháng 1 - Ngày 4</h1>
+            <p>Làm chủ CSS Grid Layout - Công cụ layout mạnh mẽ nhất</p>
+        </div>
+
+        <div class="content">
+            <a href="../index.html" class="btn"
+                style="display: inline-block; text-decoration: none; margin-bottom: 20px;">
+                ⬅️ Quay lại Lộ trình
+            </a>
+
+            <!-- Section 1: Grid là gì? -->
+            <div class="section">
+                <div class="section-title">1. CSS Grid là gì?</div>
+                <p>CSS Grid là hệ thống layout 2 chiều (cột và hàng) mạnh mẽ nhất trong CSS. Khác với Flexbox (1 chiều),
+                    Grid cho phép bạn kiểm soát cả chiều ngang và dọc cùng lúc.</p>
+
+                <div class="info-box">
+                    <strong>💡 Khi nào dùng Grid?</strong><br>
+                    • Khi cần layout phức tạp với nhiều cột và hàng<br>
+                    • Tạo gallery ảnh, dashboard, magazine layout<br>
+                    • Khi cần căn chỉnh chính xác vị trí các phần tử
+                </div>
+
+                <!-- <div class="code-block">/* Kích hoạt Grid Layout */
+                    .container {
+                    display: grid;
+                    grid-template-columns: 1fr 1fr 1fr; /* 3 cột bằng nhau */
+                    grid-template-rows: 100px 200px; /* 2 hàng */
+                    gap: 20px; /* Khoảng cách giữa các ô */
+                    }</div> -->
+                <div class="code-block">
+                    <pre>
+                        <code>
+/* Kích hoạt Grid Layout */
+.container {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr; /* 3 cột bằng nhau */
+    grid-template-rows: 100px 200px;    /* 2 hàng */
+    gap: 20px;                          /* Khoảng cách giữa các ô */
+}
+                        </code>
+                    </pre>
+                </div>
+            </div>
+
+            <!-- Section 2: Grid vs Flexbox -->
+            <div class="section">
+                <div class="section-title">2. Grid vs Flexbox - Khi nào dùng cái nào?</div>
+
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Tiêu chí</th>
+                            <th>Flexbox</th>
+                            <th>Grid</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Hướng Layout</strong></td>
+                            <td>1 chiều (dòng HOẶC cột)</td>
+                            <td>2 chiều (dòng VÀ cột)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Dùng cho</strong></td>
+                            <td>Navigation bar, button groups</td>
+                            <td>Page layouts, galleries, grids</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Độ phức tạp</strong></td>
+                            <td>Đơn giản hơn</td>
+                            <td>Mạnh mẽ hơn</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Ví dụ thực tế</strong></td>
+                            <td>Menu ngang, card items</td>
+                            <td>Dashboard, magazine layout</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="warning-box">
+                    <strong>⚠️ Lưu ý:</strong> Bạn có thể kết hợp cả Grid và Flexbox trong cùng một dự án! Ví dụ: Dùng
+                    Grid cho layout tổng thể, Flexbox cho các component nhỏ bên trong.
+                </div>
+            </div>
+
+            <!-- Section 3: Grid Template Areas -->
+            <div class="section">
+                <div class="section-title">3. Grid Template Areas - Layout trực quan</div>
+                <p>Một trong những tính năng tuyệt vời nhất của Grid là <span
+                        class="highlight">grid-template-areas</span> - cho phép bạn vẽ layout bằng text!</p>
+
+                <div class="code-block">
+                    <pre><code>/* Layout website cơ bản */
+.container {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    grid-template-rows: auto 1fr auto;
+    grid-template-areas:
+        "header header"
+        "sidebar main"
+        "footer footer";
+    gap: 10px;
+    min-height: 100vh;
+}
+
+.header  { grid-area: header; }
+.sidebar { grid-area: sidebar; }
+.main    { grid-area: main; }
+.footer  { grid-area: footer; }
+</code></pre>
+                </div>
+
+                <div class="template-demo">
+                    <p style="margin-bottom: 10px; font-weight: 600;">Kết quả hiển thị:</p>
+                    <div class="template-visual">
+                        <div class="area-header">HEADER</div>
+                        <div class="area-sidebar">SIDEBAR</div>
+                        <div class="area-main">MAIN CONTENT</div>
+                        <div class="area-footer">FOOTER</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 4: Interactive Demo -->
+            <div class="section">
+                <div class="section-title">4. Thử nghiệm với Grid</div>
+                <p>Điều chỉnh các thuộc tính để xem Grid hoạt động như thế nào:</p>
+
+                <div class="demo-wrapper">
+                    <div class="controls">
+                        <div class="control-group">
+                            <label for="grid-cols">Số cột (Columns):</label>
+                            <input type="number" id="grid-cols" value="3" min="1" max="6" onchange="updateGrid()">
+                        </div>
+
+                        <div class="control-group">
+                            <label for="grid-rows">Số hàng (Rows):</label>
+                            <input type="number" id="grid-rows" value="2" min="1" max="4" onchange="updateGrid()">
+                        </div>
+
+                        <div class="control-group">
+                            <label for="grid-gap">Gap (Khoảng cách):</label>
+                            <input type="range" id="grid-gap" value="10" min="0" max="40" onchange="updateGrid()">
+                            <span id="gap-value">10px</span>
+                        </div>
+
+                        <div class="control-group">
+                            <label for="grid-align">Align Items:</label>
+                            <select id="grid-align" onchange="updateGrid()">
+                                <option value="stretch">stretch</option>
+                                <option value="start">start</option>
+                                <option value="center">center</option>
+                                <option value="end">end</option>
+                            </select>
+                        </div>
+
+                        <div class="control-group">
+                            <label for="grid-justify">Justify Items:</label>
+                            <select id="grid-justify" onchange="updateGrid()">
+                                <option value="stretch">stretch</option>
+                                <option value="start">start</option>
+                                <option value="center">center</option>
+                                <option value="end">end</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="preview-area">
+                        <span class="preview-label">Kết quả (Preview)</span>
+                        <div id="grid-preview">
+                            <div class="grid-item">1</div>
+                            <div class="grid-item">2</div>
+                            <div class="grid-item">3</div>
+                            <div class="grid-item">4</div>
+                            <div class="grid-item">5</div>
+                            <div class="grid-item">6</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 5: Common Properties -->
+            <div class="section">
+                <div class="section-title">5. Các thuộc tính Grid quan trọng</div>
+                <div class="concept-card">
+                    <ul class="topic-list">
+                        <li class="topic-item">
+                            <div class="topic-text">
+                                <span class="highlight">grid-template-columns</span> - Định nghĩa số cột và kích thước
+                                (VD: <code>200px 1fr 1fr</code>)
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <div class="topic-text">
+                                <span class="highlight">grid-template-rows</span> - Định nghĩa số hàng và chiều cao
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <div class="topic-text">
+                                <span class="highlight">gap / grid-gap</span> - Khoảng cách giữa các ô (VD:
+                                <code>gap: 20px;</code>)
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <div class="topic-text">
+                                <span class="highlight">fr (fraction unit)</span> - Đơn vị linh hoạt (<code>1fr</code> =
+                                1 phần không gian còn lại)
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <div class="topic-text">
+                                <span class="highlight">repeat()</span> - Lặp lại giá trị (VD:
+                                <code>repeat(4, 1fr)</code> = 4 cột bằng nhau)
+                            </div>
+                        </li>
+                        <li class="topic-item">
+                            <div class="topic-text">
+                                <span class="highlight">minmax()</span> - Đặt min/max size (VD:
+                                <code>minmax(100px, 1fr)</code>)
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="code-block">
+                    <pre><code>/* Ví dụ thực tế */
+.gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 15px;
+}
+
+/* Responsive tự động! Khi màn hình nhỏ, số cột sẽ giảm */
+</code></pre>
+                </div>
+            </div>
+
+            <!-- Homework -->
+            <div class="section">
+                <div class="section-title">🎯 Bài tập về nhà</div>
+                <div class="project-card">
+                    <div class="project-header">
+                        <div class="project-title">Tạo "Photo Gallery" với Grid</div>
+                    </div>
+                    <p style="margin-top: 10px; line-height: 1.6;">
+                        Tạo một gallery ảnh responsive với các yêu cầu:
+                    </p>
+                    <ul style="margin: 10px 0 10px 20px; color: #4b5563;">
+                        <li>Sử dụng <code>display: grid</code></li>
+                        <li>Tối thiểu 9 ảnh (có thể dùng placeholder)</li>
+                        <li>Dùng <code>repeat(auto-fit, minmax(200px, 1fr))</code> để responsive tự động</li>
+                        <li>Thêm <code>gap</code> giữa các ảnh</li>
+                        <li>Bonus: Thêm hover effect cho ảnh</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Quiz Section -->
+            <div class="section">
+                <div class="section-title">🧠 Kiểm tra kiến thức</div>
+                <div class="quiz-container">
+                    <form id="quizForm">
+                        <div class="question-item">
+                            <div class="question-text">Câu 1: Sự khác biệt chính giữa Flexbox và Grid là gì?</div>
+                            <div class="options-list">
+                                <label class="option-label">
+                                    <input type="radio" name="q1" value="wrong"> Flexbox nhanh hơn Grid
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q1" value="correct"> Flexbox là 1 chiều, Grid là 2 chiều
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q1" value="wrong"> Grid không responsive được
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-item">
+                            <div class="question-text">Câu 2: Thuộc tính nào dùng để tạo khoảng cách giữa các ô trong
+                                Grid?</div>
+                            <div class="options-list">
+                                <label class="option-label">
+                                    <input type="radio" name="q2" value="wrong"> margin
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q2" value="correct"> gap
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q2" value="wrong"> space
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-item">
+                            <div class="question-text">Câu 3: <code>grid-template-columns: repeat(3, 1fr)</code> có
+                                nghĩa là gì?</div>
+                            <div class="options-list">
+                                <label class="option-label">
+                                    <input type="radio" name="q3" value="wrong"> 3 cột, mỗi cột rộng 1px
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q3" value="correct"> 3 cột bằng nhau, mỗi cột chiếm 1 phần
+                                    không gian
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q3" value="wrong"> 1 cột lặp lại 3 lần
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-item">
+                            <div class="question-text">Câu 4: Khi nào nên dùng Grid thay vì Flexbox?</div>
+                            <div class="options-list">
+                                <label class="option-label">
+                                    <input type="radio" name="q4" value="wrong"> Khi làm navigation bar
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q4" value="correct"> Khi cần layout phức tạp với nhiều cột
+                                    và hàng
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q4" value="wrong"> Grid luôn tốt hơn Flexbox
+                                </label>
+                            </div>
+                        </div>
+
+                        <button type="button" class="btn" onclick="checkQuiz()">Kiểm tra đáp án</button>
+                    </form>
+
+                    <div id="quiz-feedback"></div>
+                </div>
+            </div>
+
+            <!-- Footer Actions -->
+            <div class="actions">
+                <button class="btn" onclick="window.location.href='day3.html'">⬅️ Quay lại ngày 3</button>
+                <button id="completeBtn" class="btn" onclick="completeLesson()">✅ Hoàn thành bài học</button>
+                <p style="font-size: 0.9em; color: #666; margin-top: 5px;">(Hãy làm đúng Quiz để mở khóa nút này)</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize grid demo
+        function updateGrid() {
+            const cols = document.getElementById('grid-cols').value;
+            const rows = document.getElementById('grid-rows').value;
+            const gap = document.getElementById('grid-gap').value;
+            const align = document.getElementById('grid-align').value;
+            const justify = document.getElementById('grid-justify').value;
+
+            const preview = document.getElementById('grid-preview');
+
+            preview.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
+            preview.style.gridTemplateRows = `repeat(${rows}, 1fr)`;
+            preview.style.gap = `${gap}px`;
+            preview.style.alignItems = align;
+            preview.style.justifyItems = justify;
+
+            document.getElementById('gap-value').textContent = `${gap}px`;
+
+            // Update number of items
+            const totalItems = cols * rows;
+            const currentItems = preview.children.length;
+
+            if (totalItems > currentItems) {
+                for (let i = currentItems; i < totalItems; i++) {
+                    const item = document.createElement('div');
+                    item.className = 'grid-item';
+                    item.textContent = i + 1;
+                    preview.appendChild(item);
+                }
+            } else if (totalItems < currentItems) {
+                while (preview.children.length > totalItems) {
+                    preview.removeChild(preview.lastChild);
+                }
+            }
+        }
+
+        // Initialize on load
+        updateGrid();
+
+        // Quiz functions
+        function checkQuiz() {
+            const form = document.getElementById('quizForm');
+            const feedback = document.getElementById('quiz-feedback');
+            const completeBtn = document.getElementById('completeBtn');
+            let score = 0;
+            const total = 4;
+
+            document.querySelectorAll('.option-label').forEach(label => {
+                label.classList.remove('correct', 'wrong');
+            });
+
+            const answers = { q1: 'correct', q2: 'correct', q3: 'correct', q4: 'correct' };
+            let allAnswered = true;
+
+            for (let q in answers) {
+                const selected = form.querySelector(`input[name="${q}"]:checked`);
+                if (!selected) {
+                    allAnswered = false;
+                    continue;
+                }
+
+                const parent = selected.parentElement;
+                if (selected.value === answers[q]) {
+                    parent.classList.add('correct');
+                    score++;
+                } else {
+                    parent.classList.add('wrong');
+                }
+            }
+
+            if (!allAnswered) {
+                feedback.style.display = 'block';
+                feedback.style.background = '#fef3c7';
+                feedback.style.color = '#92400e';
+                feedback.textContent = '⚠️ Vui lòng trả lời hết các câu hỏi!';
+                return;
+            }
+
+            feedback.style.display = 'block';
+            if (score === total) {
+                feedback.style.background = '#dcfce7';
+                feedback.style.color = '#166534';
+                feedback.innerHTML = '🎉 Xuất sắc! Bạn đã nắm vững CSS Grid!';
+
+                completeBtn.style.opacity = '1';
+                completeBtn.style.pointerEvents = 'auto';
+                completeBtn.textContent = '✅ Đã hiểu & Hoàn thành!';
+            } else {
+                feedback.style.background = '#fee2e2';
+                feedback.style.color = '#991b1b';
+                feedback.textContent = `❌ Bạn đúng ${score}/${total} câu. Hãy đọc lại bài học và thử lại nhé!`;
+
+                completeBtn.style.opacity = '0.5';
+                completeBtn.style.pointerEvents = 'none';
+            }
+        }
+
+        function completeLesson() {
+            alert("🎉 Chúc mừng! Bạn đã hoàn thành bài học Ngày 4.\n\nBạn đã học được:\n✅ CSS Grid Layout cơ bản\n✅ Sự khác biệt giữa Grid và Flexbox\n✅ Grid Template Areas\n✅ Các thuộc tính Grid quan trọng");
+            window.location.href = "../index.html";
+        }
+    </script>
+</body>
+
 </html>
 ```
 
@@ -2156,32 +2173,7 @@ node_modules/
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ngày 1: HTML Cơ Bản</title>
     <link rel="stylesheet" href="../css/style.css">
-    <style>
-        /* CSS riêng cho bài học này */
-        .code-block {
-            background: #1f2937;
-            color: #e5e7eb;
-            padding: 15px;
-            border-radius: 8px;
-            font-family: 'Consolas', monospace;
-            margin: 10px 0 20px 0;
-            overflow-x: auto;
-            border-left: 4px solid #667eea;
-            white-space: pre-wrap;
-        }
-
-        .concept-card {
-            background: #f3f4f6;
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-        }
-
-        .highlight {
-            color: #7c3aed;
-            font-weight: bold;
-        }
-    </style>
+    <link rel="stylesheet" href="../css/lesson-style.css">
 </head>
 
 <body>
@@ -2289,137 +2281,7 @@ node_modules/
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ngày 2 - CSS Cơ Bản & Flexbox</title>
     <link rel="stylesheet" href="../css/style.css">
-    <style>
-        /* CSS riêng cho bài học này */
-        .code-block {
-            background: #1f2937;
-            color: #e5e7eb;
-            padding: 15px;
-            border-radius: 8px;
-            font-family: 'Consolas', monospace;
-            margin: 10px 0 20px 0;
-            overflow-x: auto;
-            border-left: 4px solid #667eea;
-        }
-
-        .concept-card {
-            background: #f3f4f6;
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-        }
-
-        .highlight {
-            color: #7c3aed;
-            font-weight: bold;
-        }
-
-        .layout-wrapper {
-            display: flex;
-            gap: 40px;
-            flex-wrap: wrap;
-            /* Tự xuống dòng trên mobile */
-        }
-
-        .controls {
-            flex: 1;
-            min-width: 250px;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .control-group {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        label {
-            font-weight: 600;
-            font-size: 0.9rem;
-            color: #4b5563;
-        }
-
-        /* Style cho Dropdown đẹp hơn */
-        select {
-            width: 100%;
-            padding: 10px 12px;
-            font-size: 1rem;
-            border: 1px solid #d1d5db;
-            border-radius: 8px;
-            background-color: #f9fafb;
-            cursor: pointer;
-            transition: all 0.2s;
-            outline: none;
-        }
-
-        select:hover {
-            border-color: #9ca3af;
-        }
-
-        select:focus {
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
-        }
-
-        /* Cột bên phải: Khung hiển thị */
-        .preview-area {
-            flex: 1;
-            min-width: 300px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .preview-label {
-            font-size: 0.85rem;
-            color: #6b7280;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            font-weight: 700;
-        }
-
-        #flexbox-preview {
-            width: 100%;
-            height: 300px;
-            /* Tăng chiều cao lên xíu cho thoáng */
-            border: 2px dashed #cbd5e1;
-            border-radius: 12px;
-            background-color: #f8fafc;
-            /* Các thuộc tính flex sẽ được JS thêm vào đây */
-            display: flex;
-            transition: all 0.3s ease;
-        }
-
-        /* Style cho các Item bên trong (Item 1, 2, 3) */
-        .flex-item {
-            padding: 20px;
-            color: white;
-            font-weight: bold;
-            font-size: 1.1rem;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-width: 80px;
-            /* Để không bị co quá nhỏ */
-            min-height: 50px;
-        }
-
-        .item-1 {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        }
-
-        .item-2 {
-            background: linear-gradient(135deg, #7c3aed 0%, #a78bfa 100%);
-        }
-
-        .item-3 {
-            background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
-        }
-    </style>
+    <link rel="stylesheet" href="../css/lesson-style.css">
 </head>
 
 <body>
@@ -2491,7 +2353,7 @@ node_modules/
                     </ul>
                 </div>
                 <p>Thử nghiệm với Flexbox:</p>
-                <div class="layout-wrapper">
+                <div class="demo-wrapper">
                     <!-- Cột điều khiển -->
                     <div class="controls">
                         <div class="control-group">
@@ -3122,11 +2984,11 @@ node_modules/
         <div class="today-lesson">
             <h2>📖 Bài học hôm nay</h2>
             <div class="lesson-card">
-                <div class="lesson-number">Ngày 3</div>
+                <div class="lesson-number">Ngày 4</div>
                 <div class="lesson-info">
-                    <h3>CSS Cơ bản & Box Model</h3>
-                    <p>Học về cú pháp CSS, selectors và mô hình hộp</p>
-                    <a href="lessons/day3.html" class="lesson-link">
+                    <h3>CSS Grid Layout</h3>
+                    <p>Làm chủ CSS Grid - Công cụ layout mạnh mẽ nhất</p>
+                    <a href="lessons/day4.html" class="lesson-link">
                         Bắt đầu học
                         <span>→</span>
                     </a>
@@ -3166,7 +3028,10 @@ node_modules/
                     </li>
                     <li class="topic-item" onclick="toggleTopic(this)">
                         <div class="checkbox"></div>
-                        <span class="topic-text">Ngày 4: CSS3 - Grid Layout</span>
+                        <span class="topic-text">
+                            📝 Ngày 4: CSS Grid Layout
+                            <a href="lessons/day4.html" class="inline-lesson-link">Xem bài học</a>
+                        </span>
                     </li>
                     <li class="topic-item" onclick="toggleTopic(this)">
                         <div class="checkbox"></div>

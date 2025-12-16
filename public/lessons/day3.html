@@ -1,152 +1,15 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ngày 3: CSS Cơ Bản & Box Model</title>
     <!-- Điều chỉnh đường dẫn CSS tùy thuộc vào nơi bạn lưu file này -->
-    <link rel="stylesheet" href="../css/style.css"> 
-    <style>
-        /* CSS riêng cho bài học này */
-        .code-block {
-            background: #1f2937;
-            color: #e5e7eb;
-            padding: 15px;
-            border-radius: 8px;
-            font-family: 'Consolas', monospace;
-            margin: 10px 0 20px 0;
-            overflow-x: auto;
-            border-left: 4px solid #667eea;
-        }
-        
-        .concept-card {
-            background: #f3f4f6;
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-        }
-
-        .highlight {
-            color: #7c3aed;
-            font-weight: bold;
-        }
-
-        /* Box Model Visualization */
-        .box-demo-container {
-            display: flex;
-            justify-content: center;
-            margin: 20px 0;
-        }
-
-        .box-margin {
-            background-color: #fca5a5; /* Red - Margin */
-            padding: 20px;
-            border: 2px dashed #ef4444;
-            position: relative;
-            transition: all 0.3s;
-        }
-        .box-border {
-            background-color: #fcd34d; /* Yellow - Border */
-            padding: 5px; /* Representing border width */
-            border: 1px solid #d97706;
-        }
-        .box-padding {
-            background-color: #86efac; /* Green - Padding */
-            padding: 20px;
-            border: 1px dashed #22c55e;
-        }
-        .box-content {
-            background-color: #93c5fd; /* Blue - Content */
-            padding: 20px;
-            color: #1e3a8a;
-            font-weight: bold;
-            text-align: center;
-            width: 150px;
-        }
-        
-        .label {
-            font-size: 0.8em;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 5px;
-            display: block;
-            text-align: center;
-        }
-
-        /* QUIZ STYLES */
-        .quiz-container {
-            background: #fff;
-            border: 2px solid #e5e7eb;
-            border-radius: 15px;
-            padding: 25px;
-            margin-top: 30px;
-        }
-        
-        .question-item {
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid #eee;
-        }
-
-        .question-text {
-            font-weight: bold;
-            margin-bottom: 10px;
-            color: #374151;
-        }
-
-        .options-list {
-            list-style: none;
-        }
-
-        .option-label {
-            display: block;
-            padding: 10px 15px;
-            background: #f9fafb;
-            border: 1px solid #e5e7eb;
-            border-radius: 8px;
-            margin-bottom: 8px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .option-label:hover {
-            background: #edf2f7;
-            border-color: #cbd5e1;
-        }
-
-        .option-label input {
-            margin-right: 10px;
-        }
-
-        /* Kết quả đúng sai */
-        .option-label.correct {
-            background: #dcfce7;
-            border-color: #22c55e;
-            color: #166534;
-        }
-
-        .option-label.wrong {
-            background: #fee2e2;
-            border-color: #ef4444;
-            color: #991b1b;
-        }
-
-        #quiz-feedback {
-            margin-top: 15px;
-            font-weight: bold;
-            text-align: center;
-            padding: 10px;
-            border-radius: 8px;
-            display: none;
-        }
-        
-        /* Ẩn nút hoàn thành ban đầu */
-        #completeBtn {
-            opacity: 0.5;
-            pointer-events: none;
-        }
-    </style>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/lesson-style.css">
 </head>
+
 <body>
     <div class="container">
         <!-- Header giống trang chủ -->
@@ -157,23 +20,25 @@
 
         <div class="content">
             <!-- Navigation -->
-            <a href="../index.html" class="btn" style="display: inline-block; text-decoration: none; margin-bottom: 20px;">
+            <a href="../index.html" class="btn"
+                style="display: inline-block; text-decoration: none; margin-bottom: 20px;">
                 ⬅️ Quay lại Lộ trình
             </a>
 
             <!-- Phần 1: Cú pháp CSS -->
             <div class="section">
                 <div class="section-title">1. Cú pháp CSS (Syntax)</div>
-                <p>CSS (Cascading Style Sheets) dùng để trang trí HTML. Cấu trúc cơ bản bao gồm <strong>Selector</strong> (bộ chọn) và <strong>Declaration block</strong> (khối khai báo).</p>
-                
-                <div class="code-block">
-/* Selector { Property: Value; } */
+                <p>CSS (Cascading Style Sheets) dùng để trang trí HTML. Cấu trúc cơ bản bao gồm
+                    <strong>Selector</strong> (bộ chọn) và <strong>Declaration block</strong> (khối khai báo).</p>
 
-h1 {
-    color: blue;        /* Đổi màu chữ */
-    font-size: 24px;    /* Cỡ chữ */
-    text-align: center; /* Căn giữa */
-}
+                <div class="code-block">
+                    /* Selector { Property: Value; } */
+
+                    h1 {
+                    color: blue; /* Đổi màu chữ */
+                    font-size: 24px; /* Cỡ chữ */
+                    text-align: center; /* Căn giữa */
+                    }
                 </div>
             </div>
 
@@ -184,17 +49,20 @@ h1 {
                     <ul class="topic-list">
                         <li class="topic-item">
                             <div class="topic-text">
-                                <span class="highlight">Element Selector:</span> Chọn tất cả thẻ HTML (VD: <code>p {}</code>, <code>div {}</code>).
+                                <span class="highlight">Element Selector:</span> Chọn tất cả thẻ HTML (VD:
+                                <code>p {}</code>, <code>div {}</code>).
                             </div>
                         </li>
                         <li class="topic-item">
                             <div class="topic-text">
-                                <span class="highlight">Class Selector (.):</span> Dùng cho nhóm phần tử (VD: <code>.button {}</code>). Được dùng nhiều nhất.
+                                <span class="highlight">Class Selector (.):</span> Dùng cho nhóm phần tử (VD:
+                                <code>.button {}</code>). Được dùng nhiều nhất.
                             </div>
                         </li>
                         <li class="topic-item">
                             <div class="topic-text">
-                                <span class="highlight">ID Selector (#):</span> Dùng cho 1 phần tử duy nhất (VD: <code>#header {}</code>). Độ ưu tiên cao nhất.
+                                <span class="highlight">ID Selector (#):</span> Dùng cho 1 phần tử duy nhất (VD:
+                                <code>#header {}</code>). Độ ưu tiên cao nhất.
                             </div>
                         </li>
                     </ul>
@@ -205,7 +73,7 @@ h1 {
             <div class="section">
                 <div class="section-title">3. The Box Model (Mô hình hộp)</div>
                 <p>Mọi phần tử HTML đều là một cái hộp chữ nhật. Box Model gồm 4 thành phần từ trong ra ngoài:</p>
-                
+
                 <!-- Visual Demo -->
                 <div class="box-demo-container">
                     <div class="box-margin">
@@ -228,7 +96,8 @@ h1 {
                         <li><strong>Content:</strong> Nội dung thực (text, ảnh).</li>
                         <li><strong>Padding:</strong> Khoảng cách từ Content đến Border (Làm mập cái hộp lên).</li>
                         <li><strong>Border:</strong> Đường viền bao quanh.</li>
-                        <li><strong>Margin:</strong> Khoảng cách giữa cái hộp này với các hộp khác (Đẩy người khác ra xa).</li>
+                        <li><strong>Margin:</strong> Khoảng cách giữa cái hộp này với các hộp khác (Đẩy người khác ra
+                            xa).</li>
                     </ul>
                 </div>
             </div>
@@ -260,7 +129,8 @@ h1 {
                     <form id="quizForm">
                         <!-- Câu 1 -->
                         <div class="question-item">
-                            <div class="question-text">Câu 1: Để chọn một phần tử có id="myBox" trong CSS, ta dùng cú pháp nào?</div>
+                            <div class="question-text">Câu 1: Để chọn một phần tử có id="myBox" trong CSS, ta dùng cú
+                                pháp nào?</div>
                             <div class="options-list">
                                 <label class="option-label">
                                     <input type="radio" name="q1" value="wrong"> .myBox
@@ -276,7 +146,8 @@ h1 {
 
                         <!-- Câu 2 -->
                         <div class="question-item">
-                            <div class="question-text">Câu 2: Trong Box Model, khoảng cách giữa Content và Border gọi là gì?</div>
+                            <div class="question-text">Câu 2: Trong Box Model, khoảng cách giữa Content và Border gọi là
+                                gì?</div>
                             <div class="options-list">
                                 <label class="option-label">
                                     <input type="radio" name="q2" value="wrong"> Margin
@@ -308,7 +179,7 @@ h1 {
 
                         <button type="button" class="btn" onclick="checkQuiz()">Kiểm tra đáp án</button>
                     </form>
-                    
+
                     <div id="quiz-feedback"></div>
                 </div>
             </div>
@@ -372,7 +243,7 @@ h1 {
                 feedback.style.background = '#dcfce7';
                 feedback.style.color = '#166534';
                 feedback.innerHTML = '🎉 Xuất sắc! Bạn đã trả lời đúng tất cả.';
-                
+
                 // Unlock complete button
                 completeBtn.style.opacity = '1';
                 completeBtn.style.pointerEvents = 'auto';
@@ -381,7 +252,7 @@ h1 {
                 feedback.style.background = '#fee2e2';
                 feedback.style.color = '#991b1b';
                 feedback.textContent = `❌ Bạn đúng ${score}/${total} câu. Hãy thử lại nhé!`;
-                
+
                 completeBtn.style.opacity = '0.5';
                 completeBtn.style.pointerEvents = 'none';
             }
@@ -391,12 +262,13 @@ h1 {
             // Logic lưu trạng thái
             // Có thể mở rộng để lưu vào localStorage key riêng cho bài này
             alert("Chúc mừng! Bạn đã hoàn thành bài học Ngày 3.");
-            
+
             // Tự động đánh dấu checkbox ở trang chủ (giả lập)
             // Trong thực tế, bạn cần lưu vào localStorage ở đây rồi trang index.html đọc ra
-            
+
             window.location.href = "../index.html";
         }
     </script>
 </body>
+
 </html>
