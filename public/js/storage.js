@@ -88,15 +88,84 @@ const POINTS = {
 function getPointsData() {
     const saved = localStorage.getItem('webDevPoints');
     if (saved) {
-        return JSON.parse(saved);
+        const data = JSON.parse(saved);
+        // Ensure answeredQuestions exists for backwards compatibility
+        if (!data.answeredQuestions) data.answeredQuestions = {};
+        return data;
     }
     return {
         totalPoints: 0,
         level: 1,
         levelTitle: 'Beginner',
         levelEmoji: '🌱',
-        history: []
+        history: [],
+        answeredQuestions: {} // Track: { "day5_q1": true, "day5_q2": true }
     };
+}
+
+/**
+ * Check if a question was already answered correctly
+ * @param {string} lessonId - e.g., "day5"
+ * @param {string} questionId - e.g., "q1"
+ */
+function isQuestionAnswered(lessonId, questionId) {
+    const data = getPointsData();
+    const key = `${lessonId}_${questionId}`;
+    return data.answeredQuestions[key] === true;
+}
+
+/**
+ * Mark a question as answered correctly
+ * @param {string} lessonId 
+ * @param {string} questionId 
+ */
+async function markQuestionAnswered(lessonId, questionId) {
+    const data = getPointsData();
+    const key = `${lessonId}_${questionId}`;
+    data.answeredQuestions[key] = true;
+    await savePointsData(data);
+}
+
+/**
+ * Check if a lesson quiz was completed with perfect score
+ * @param {string} lessonId
+ */
+function isQuizCompleted(lessonId) {
+    const data = getPointsData();
+    const key = `${lessonId}_completed`;
+    return data.answeredQuestions[key] === true;
+}
+
+/**
+ * Mark a lesson quiz as completed with perfect score
+ * @param {string} lessonId
+ */
+async function markQuizCompleted(lessonId) {
+    const data = getPointsData();
+    const key = `${lessonId}_completed`;
+    data.answeredQuestions[key] = true;
+    await savePointsData(data);
+}
+
+/**
+ * Check if a lesson was completed
+ * @param {string} lessonId
+ */
+function isLessonCompleted(lessonId) {
+    const data = getPointsData();
+    const key = `${lessonId}_lesson_completed`;
+    return data.answeredQuestions[key] === true;
+}
+
+/**
+ * Mark a lesson as completed
+ * @param {string} lessonId
+ */
+async function markLessonCompleted(lessonId) {
+    const data = getPointsData();
+    const key = `${lessonId}_lesson_completed`;
+    data.answeredQuestions[key] = true;
+    await savePointsData(data);
 }
 
 /**
@@ -263,10 +332,11 @@ async function loadPoints() {
                     level: cloudData.level || 1,
                     levelTitle: cloudData.levelTitle || 'Beginner',
                     levelEmoji: cloudData.levelEmoji || '🌱',
-                    history: cloudData.history || []
+                    history: cloudData.history || [],
+                    answeredQuestions: cloudData.answeredQuestions || {} // Include anti-cheat tracking
                 };
                 localStorage.setItem('webDevPoints', JSON.stringify(pointsData));
-                console.log('☁️ Points loaded from cloud');
+                console.log('☁️ Points loaded from cloud, answeredQuestions:', Object.keys(pointsData.answeredQuestions).length);
             }
         } catch (error) {
             console.error('❌ Points cloud load error:', error);
