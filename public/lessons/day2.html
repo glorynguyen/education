@@ -146,9 +146,78 @@
                 </div>
             </div>
 
+            <!-- QUIZ SECTION -->
+            <div class="section">
+                <div class="section-title">🧠 Kiểm tra kiến thức</div>
+                <div class="quiz-container">
+                    <form id="quizForm">
+                        <!-- Câu 1 -->
+                        <div class="question-item">
+                            <div class="question-text">Câu 1: Cú pháp đúng để viết CSS là gì?</div>
+                            <div class="options-list">
+                                <label class="option-label">
+                                    <input type="radio" name="q1" value="wrong"> selector: { property = value }
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q1" value="correct"> selector { property: value; }
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q1" value="wrong"> selector ( property: value )
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Câu 2 -->
+                        <div class="question-item">
+                            <div class="question-text">Câu 2: Để kích hoạt Flexbox cho một container, ta dùng thuộc tính
+                                nào?</div>
+                            <div class="options-list">
+                                <label class="option-label">
+                                    <input type="radio" name="q2" value="wrong"> flexbox: enable;
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q2" value="wrong"> layout: flex;
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q2" value="correct"> display: flex;
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Câu 3 -->
+                        <div class="question-item">
+                            <div class="question-text">Câu 3: Thuộc tính <code>justify-content</code> dùng để làm gì?
+                            </div>
+                            <div class="options-list">
+                                <label class="option-label">
+                                    <input type="radio" name="q3" value="correct"> Căn chỉnh các item theo trục chính
+                                    (main axis)
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q3" value="wrong"> Căn chỉnh các item theo trục phụ (cross
+                                    axis)
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q3" value="wrong"> Đổi hướng layout của container
+                                </label>
+                            </div>
+                        </div>
+
+                        <button type="button" class="btn" onclick="checkQuiz()">Kiểm tra đáp án</button>
+                    </form>
+
+                    <div id="quiz-feedback"></div>
+                </div>
+            </div>
+
+            <!-- Footer Actions -->
             <div class="actions">
                 <button class="btn" onclick="window.location.href='day1.html'">⬅️ Quay lại ngày 1</button>
+                <button id="completeBtn" class="btn" style="opacity: 0.5; pointer-events: none;"
+                    onclick="completeLesson()">✅ Hoàn thành bài học</button>
                 <button class="btn" onclick="window.location.href='day3.html'">Tiếp tục ngày 3 ➡️</button>
+                <p style="font-size: 0.9em; color: #666; margin-top: 5px;">(Hãy làm đúng Quiz để mở khóa nút hoàn thành)
+                </p>
             </div>
         </div>
     </div>
@@ -164,6 +233,69 @@
             preview.style.flexDirection = flexDirection;
             preview.style.justifyContent = justifyContent;
             preview.style.alignItems = alignItems;
+        }
+
+        function checkQuiz() {
+            const form = document.getElementById('quizForm');
+            const feedback = document.getElementById('quiz-feedback');
+            const completeBtn = document.getElementById('completeBtn');
+            let score = 0;
+            const total = 3;
+
+            // Reset styles
+            document.querySelectorAll('.option-label').forEach(label => {
+                label.classList.remove('correct', 'wrong');
+            });
+
+            const answers = { q1: 'correct', q2: 'correct', q3: 'correct' };
+            let allAnswered = true;
+
+            for (let q in answers) {
+                const selected = form.querySelector(`input[name="${q}"]:checked`);
+                if (!selected) {
+                    allAnswered = false;
+                    continue;
+                }
+
+                const parent = selected.parentElement;
+                if (selected.value === answers[q]) {
+                    parent.classList.add('correct');
+                    score++;
+                } else {
+                    parent.classList.add('wrong');
+                }
+            }
+
+            if (!allAnswered) {
+                feedback.style.display = 'block';
+                feedback.style.background = '#fef3c7';
+                feedback.style.color = '#92400e';
+                feedback.textContent = '⚠️ Vui lòng trả lời hết các câu hỏi!';
+                return;
+            }
+
+            feedback.style.display = 'block';
+            if (score === total) {
+                feedback.style.background = '#dcfce7';
+                feedback.style.color = '#166534';
+                feedback.innerHTML = '🎉 Xuất sắc! Bạn đã nắm vững CSS và Flexbox cơ bản!';
+
+                completeBtn.style.opacity = '1';
+                completeBtn.style.pointerEvents = 'auto';
+                completeBtn.textContent = '✅ Đã hiểu & Hoàn thành!';
+            } else {
+                feedback.style.background = '#fee2e2';
+                feedback.style.color = '#991b1b';
+                feedback.textContent = `❌ Bạn đúng ${score}/${total} câu. Hãy đọc lại bài học và thử lại nhé!`;
+
+                completeBtn.style.opacity = '0.5';
+                completeBtn.style.pointerEvents = 'none';
+            }
+        }
+
+        function completeLesson() {
+            alert("🎉 Chúc mừng! Bạn đã hoàn thành bài học Ngày 2.\n\nBạn đã học được:\n✅ Cú pháp CSS cơ bản\n✅ Flexbox Layout\n✅ Các thuộc tính quan trọng của Flexbox");
+            window.location.href = "../index.html";
         }
     </script>
 </body>

@@ -152,7 +152,7 @@ var name = "Nam";
                 </ul>
             </div>
 
-            <!-- Bài tập -->
+            <!-- Thử nghiệm ngay -->
             <div class="section">
                 <div class="section-title">💻 Thử nghiệm ngay</div>
                 <p>Mở <strong>Console</strong> của trình duyệt (Nhấn F12 -> chọn tab Console) và gõ thử các lệnh sau:
@@ -166,7 +166,34 @@ console.log("Xin chào " + ten);
 console.log("Tuổi của bạn là: " + tuoi);
                 </div>
                 <div class="notes-section">
-                    <p>👉 Kết quả sẽ hiện ra ngay bên dưới dòng lệnh bạn gõ!</p>
+                    <div class="notes-title">💡 Mẹo:</div>
+                    <ul style="margin-left: 20px;">
+                        <li>Nhấn <strong>F12</strong> hoặc <strong>Ctrl+Shift+I</strong> (Windows) /
+                            <strong>Cmd+Option+I</strong> (Mac) để mở DevTools</li>
+                        <li>Chọn tab <strong>Console</strong> và gõ code trực tiếp</li>
+                        <li>Nhấn <strong>Enter</strong> để chạy từng dòng lệnh</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Bài tập về nhà -->
+            <div class="section">
+                <div class="section-title">🎯 Bài tập về nhà</div>
+                <div class="project-card">
+                    <div class="project-header">
+                        <div class="project-title">Tạo "Thẻ Giới Thiệu" với JavaScript</div>
+                    </div>
+                    <p style="margin-top: 10px; line-height: 1.6;">
+                        Tạo một file <code>intro.html</code> với script JavaScript:
+                    </p>
+                    <ul style="margin: 10px 0 10px 20px; color: #4b5563;">
+                        <li>Khai báo các biến: <code>hoTen</code>, <code>tuoi</code>, <code>ngheNghiep</code>,
+                            <code>daDiLam</code> (boolean)</li>
+                        <li>Sử dụng <code>console.log()</code> để in ra thông tin</li>
+                        <li>Thử dùng <code>typeof</code> để kiểm tra kiểu dữ liệu của từng biến</li>
+                        <li><strong>Bonus:</strong> Sử dụng template literal:
+                            <code>`Tên: ${hoTen}, Tuổi: ${tuoi}`</code></li>
+                    </ul>
                 </div>
             </div>
 
@@ -205,15 +232,29 @@ console.log("Tuổi của bạn là: " + tuoi);
                             </div>
                         </div>
 
+                        <div class="question-item">
+                            <div class="question-text">Câu 4: Kiểu dữ liệu nào chỉ có 2 giá trị: true hoặc false?</div>
+                            <div class="options-list">
+                                <label class="option-label"><input type="radio" name="q4" value="wrong"> String</label>
+                                <label class="option-label"><input type="radio" name="q4" value="correct">
+                                    Boolean</label>
+                                <label class="option-label"><input type="radio" name="q4" value="wrong"> Number</label>
+                            </div>
+                        </div>
+
                         <button type="button" class="btn" onclick="checkQuiz()">Kiểm tra đáp án</button>
                     </form>
                     <div id="quiz-feedback"></div>
                 </div>
             </div>
 
+            <!-- Footer Actions -->
             <div class="actions">
-                <button id="completeBtn" class="btn" onclick="completeLesson()">✅ Hoàn thành bài học</button>
-                <p style="font-size: 0.9em; color: #666; margin-top: 5px;">(Hãy làm đúng Quiz để mở khóa nút này)</p>
+                <button class="btn" onclick="window.location.href='day4.html'">⬅️ Quay lại ngày 4</button>
+                <button id="completeBtn" class="btn" style="opacity: 0.5; pointer-events: none;"
+                    onclick="completeLesson()">✅ Hoàn thành bài học</button>
+                <p style="font-size: 0.9em; color: #666; margin-top: 5px;">(Hãy làm đúng Quiz để mở khóa nút hoàn thành)
+                </p>
             </div>
         </div>
     </div>
@@ -224,11 +265,11 @@ console.log("Tuổi của bạn là: " + tuoi);
             const feedback = document.getElementById('quiz-feedback');
             const completeBtn = document.getElementById('completeBtn');
             let score = 0;
-            let total = 3;
+            const total = 4;
 
             document.querySelectorAll('.option-label').forEach(label => label.classList.remove('correct', 'wrong'));
 
-            const answers = { q1: 'correct', q2: 'correct', q3: 'correct' };
+            const answers = { q1: 'correct', q2: 'correct', q3: 'correct', q4: 'correct' };
             let allAnswered = true;
 
             for (let q in answers) {
@@ -256,20 +297,21 @@ console.log("Tuổi của bạn là: " + tuoi);
             if (score === total) {
                 feedback.style.background = '#dcfce7';
                 feedback.style.color = '#166534';
-                feedback.innerHTML = '🎉 Xuất sắc! Bạn đã trả lời đúng tất cả.';
+                feedback.innerHTML = '🎉 Xuất sắc! Bạn đã nắm vững JavaScript cơ bản!';
                 completeBtn.style.opacity = '1';
                 completeBtn.style.pointerEvents = 'auto';
+                completeBtn.textContent = '✅ Đã hiểu & Hoàn thành!';
             } else {
                 feedback.style.background = '#fee2e2';
                 feedback.style.color = '#991b1b';
-                feedback.textContent = `❌ Bạn đúng ${score}/${total} câu. Hãy thử lại nhé!`;
+                feedback.textContent = `❌ Bạn đúng ${score}/${total} câu. Hãy đọc lại bài học và thử lại nhé!`;
                 completeBtn.style.opacity = '0.5';
                 completeBtn.style.pointerEvents = 'none';
             }
         }
 
         function completeLesson() {
-            alert("Chúc mừng! Bạn đã hoàn thành bài học Ngày 5.");
+            alert("🎉 Chúc mừng! Bạn đã hoàn thành bài học Ngày 5.\n\nBạn đã học được:\n✅ JavaScript là gì và cách sử dụng\n✅ Khai báo biến với let và const\n✅ Các kiểu dữ liệu cơ bản: String, Number, Boolean\n✅ Sử dụng console.log() để debug");
             window.location.href = "../index.html";
         }
     </script>

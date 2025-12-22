@@ -87,15 +87,138 @@
                 </div>
             </div>
 
+            <!-- QUIZ SECTION -->
+            <div class="section">
+                <div class="section-title">🧠 Kiểm tra kiến thức</div>
+                <div class="quiz-container">
+                    <form id="quizForm">
+                        <!-- Câu 1 -->
+                        <div class="question-item">
+                            <div class="question-text">Câu 1: HTML là viết tắt của gì?</div>
+                            <div class="options-list">
+                                <label class="option-label">
+                                    <input type="radio" name="q1" value="wrong"> Hyper Text Making Language
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q1" value="correct"> HyperText Markup Language
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q1" value="wrong"> Home Tool Markup Language
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Câu 2 -->
+                        <div class="question-item">
+                            <div class="question-text">Câu 2: Thẻ semantic nào dùng cho phần header của trang web?</div>
+                            <div class="options-list">
+                                <label class="option-label">
+                                    <input type="radio" name="q2" value="wrong"> &lt;div class="header"&gt;
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q2" value="correct"> &lt;header&gt;
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q2" value="wrong"> &lt;head&gt;
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Câu 3 -->
+                        <div class="question-item">
+                            <div class="question-text">Câu 3: Thẻ nào được dùng để chứa nội dung chính của trang?</div>
+                            <div class="options-list">
+                                <label class="option-label">
+                                    <input type="radio" name="q3" value="wrong"> &lt;body&gt;
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q3" value="wrong"> &lt;content&gt;
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q3" value="correct"> &lt;main&gt;
+                                </label>
+                            </div>
+                        </div>
+
+                        <button type="button" class="btn" onclick="checkQuiz()">Kiểm tra đáp án</button>
+                    </form>
+
+                    <div id="quiz-feedback"></div>
+                </div>
+            </div>
+
+            <!-- Footer Actions -->
             <div class="actions">
-                <button id="completeBtn" class="btn" onclick="completeLesson()">✅ Hoàn thành bài học</button>
+                <button id="completeBtn" class="btn" style="opacity: 0.5; pointer-events: none;"
+                    onclick="completeLesson()">✅ Hoàn thành bài học</button>
+                <button class="btn" onclick="window.location.href='day2.html'">Tiếp tục ngày 2 ➡️</button>
+                <p style="font-size: 0.9em; color: #666; margin-top: 5px;">(Hãy làm đúng Quiz để mở khóa nút hoàn thành)
+                </p>
             </div>
         </div>
     </div>
 
     <script>
+        function checkQuiz() {
+            const form = document.getElementById('quizForm');
+            const feedback = document.getElementById('quiz-feedback');
+            const completeBtn = document.getElementById('completeBtn');
+            let score = 0;
+            const total = 3;
+
+            // Reset styles
+            document.querySelectorAll('.option-label').forEach(label => {
+                label.classList.remove('correct', 'wrong');
+            });
+
+            const answers = { q1: 'correct', q2: 'correct', q3: 'correct' };
+            let allAnswered = true;
+
+            for (let q in answers) {
+                const selected = form.querySelector(`input[name="${q}"]:checked`);
+                if (!selected) {
+                    allAnswered = false;
+                    continue;
+                }
+
+                const parent = selected.parentElement;
+                if (selected.value === answers[q]) {
+                    parent.classList.add('correct');
+                    score++;
+                } else {
+                    parent.classList.add('wrong');
+                }
+            }
+
+            if (!allAnswered) {
+                feedback.style.display = 'block';
+                feedback.style.background = '#fef3c7';
+                feedback.style.color = '#92400e';
+                feedback.textContent = '⚠️ Vui lòng trả lời hết các câu hỏi!';
+                return;
+            }
+
+            feedback.style.display = 'block';
+            if (score === total) {
+                feedback.style.background = '#dcfce7';
+                feedback.style.color = '#166534';
+                feedback.innerHTML = '🎉 Xuất sắc! Bạn đã nắm vững HTML cơ bản!';
+
+                completeBtn.style.opacity = '1';
+                completeBtn.style.pointerEvents = 'auto';
+                completeBtn.textContent = '✅ Đã hiểu & Hoàn thành!';
+            } else {
+                feedback.style.background = '#fee2e2';
+                feedback.style.color = '#991b1b';
+                feedback.textContent = `❌ Bạn đúng ${score}/${total} câu. Hãy đọc lại bài học và thử lại nhé!`;
+
+                completeBtn.style.opacity = '0.5';
+                completeBtn.style.pointerEvents = 'none';
+            }
+        }
+
         function completeLesson() {
-            alert("Chúc mừng! Bạn đã hoàn thành bài học Ngày 1.");
+            alert("🎉 Chúc mừng! Bạn đã hoàn thành bài học Ngày 1.\n\nBạn đã học được:\n✅ Cấu trúc cơ bản của HTML\n✅ Các thẻ semantic quan trọng\n✅ Cách tổ chức nội dung trang web");
             window.location.href = "../index.html";
         }
     </script>
