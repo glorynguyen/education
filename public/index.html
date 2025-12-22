@@ -401,6 +401,7 @@
             font-weight: 800;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             -webkit-background-clip: text;
+            background-clip: text;
             -webkit-text-fill-color: transparent;
             margin-bottom: 10px;
         }
@@ -454,6 +455,118 @@
             margin: 0 8px;
         }
 
+        /* Streak Styles */
+        .streak-section {
+            background: white;
+            border-radius: 20px;
+            padding: 25px 35px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 0.6s ease 0.25s both;
+        }
+
+        .streak-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .streak-badge {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .streak-fire {
+            font-size: 3rem;
+            animation: fireGlow 1.5s ease-in-out infinite alternate;
+        }
+
+        @keyframes fireGlow {
+            from {
+                filter: drop-shadow(0 0 5px #ff6b35);
+                transform: scale(1);
+            }
+
+            to {
+                filter: drop-shadow(0 0 15px #ff6b35);
+                transform: scale(1.1);
+            }
+        }
+
+        .streak-info h3 {
+            font-size: 2.5rem;
+            background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin: 0;
+        }
+
+        .streak-info p {
+            color: #6b7280;
+            font-size: 1rem;
+            margin: 0;
+        }
+
+        .streak-stats {
+            display: flex;
+            gap: 30px;
+        }
+
+        .streak-stat {
+            text-align: center;
+        }
+
+        .streak-stat .value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1f2937;
+        }
+
+        .streak-stat .label {
+            font-size: 0.85rem;
+            color: #6b7280;
+        }
+
+        .streak-calendar {
+            display: flex;
+            gap: 8px;
+            margin-top: 20px;
+            justify-content: center;
+        }
+
+        .streak-day {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 600;
+            background: #f3f4f6;
+            color: #9ca3af;
+            transition: all 0.3s;
+        }
+
+        .streak-day.active {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        }
+
+        .streak-day.today {
+            border: 3px solid #667eea;
+        }
+
+        .streak-day.future {
+            background: #e5e7eb;
+            opacity: 0.5;
+        }
+
         /* Animations */
         @keyframes fadeIn {
             from {
@@ -494,6 +607,19 @@
                 margin: 0 auto;
             }
 
+            .streak-header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .streak-badge {
+                justify-content: center;
+            }
+
+            .streak-calendar {
+                flex-wrap: wrap;
+            }
+
             .auth-section {
                 flex-direction: column;
                 gap: 15px;
@@ -519,6 +645,68 @@
                 <div class="progress-bar">
                     <div class="progress-fill" id="overallProgress" style="width: 0%">0%</div>
                 </div>
+            </div>
+        </div>
+
+        <!-- Streak Section -->
+        <div class="streak-section">
+            <div class="streak-header">
+                <div class="streak-badge">
+                    <span class="streak-fire">🔥</span>
+                    <div class="streak-info">
+                        <h3 id="currentStreak">0 ngày</h3>
+                        <p>liên tiếp học tập</p>
+                    </div>
+                </div>
+                <div class="streak-stats">
+                    <div class="streak-stat">
+                        <div class="value" id="longestStreak">0</div>
+                        <div class="label">Kỷ lục</div>
+                    </div>
+                    <div class="streak-stat">
+                        <div class="value" id="totalDaysLearned">0</div>
+                        <div class="label">Tổng ngày</div>
+                    </div>
+                    <button class="btn" onclick="resetStreak()"
+                        style="padding: 8px 16px; font-size: 0.85rem; background: #ef4444; margin-left: 10px;"
+                        title="Reset streak về 0">🔄</button>
+                </div>
+            </div>
+            <div class="streak-calendar" id="streakCalendar">
+                <!-- Generated by JS -->
+            </div>
+        </div>
+
+        <!-- Points & Level Section -->
+        <div class="streak-section" style="background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);">
+            <div class="streak-header">
+                <div class="streak-badge">
+                    <span id="userLevel" style="font-size: 2.5rem;">🌱 Lv.1</span>
+                    <div class="streak-info">
+                        <h3 id="totalPoints"
+                            style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;">
+                            0</h3>
+                        <p id="levelTitle">Beginner</p>
+                    </div>
+                </div>
+                <div class="streak-stats">
+                    <div style="flex: 1; min-width: 200px;">
+                        <div style="font-size: 0.85rem; color: #92400e; margin-bottom: 5px;" id="xpToNext">100 XP to
+                            next level</div>
+                        <div style="background: rgba(0,0,0,0.1); height: 10px; border-radius: 5px; overflow: hidden;">
+                            <div id="levelProgress"
+                                style="height: 100%; background: linear-gradient(90deg, #f59e0b, #d97706); border-radius: 5px; width: 0%; transition: width 0.5s;">
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn" onclick="resetPoints()"
+                        style="padding: 8px 16px; font-size: 0.85rem; background: #ef4444; margin-left: 15px;"
+                        title="Reset điểm về 0">🔄</button>
+                </div>
+            </div>
+            <div style="margin-top: 15px; text-align: center; color: #78350f; font-size: 0.9rem;">
+                ✅ +10 điểm/câu đúng &nbsp;|&nbsp; ❌ -5 điểm/câu sai &nbsp;|&nbsp; 🎯 +50 bonus hoàn thành quiz
+                &nbsp;|&nbsp; 📚 +20 hoàn thành bài học
             </div>
         </div>
 
@@ -792,9 +980,9 @@
 
         <!-- Actions -->
         <div class="actions">
-            <button class="btn" onclick="alert('Lưu tiến độ')">💾 Lưu tiến độ</button>
-            <button class="btn" onclick="alert('Reset')">🔄 Reset tất cả</button>
-            <button class="btn" onclick="alert('Xuất dữ liệu')">📤 Xuất dữ liệu</button>
+            <button class="btn" onclick="manualSave()">💾 Lưu tiến độ</button>
+            <button class="btn" onclick="resetProgress()">🔄 Reset tất cả</button>
+            <button class="btn" onclick="exportData()">📤 Xuất dữ liệu</button>
         </div>
     </div>
     <!-- Firebase SDK -->
