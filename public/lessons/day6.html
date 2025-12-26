@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ngày 6: JavaScript Functions</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/lesson-style.css">
+    <style>
+        .function-demo {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+
+        .function-demo h4 {
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+
+        .demo-input-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+        }
+
+        .demo-input-group input {
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            flex: 1;
+            min-width: 150px;
+        }
+
+        .demo-input-group button {
+            padding: 10px 20px;
+            background: white;
+            color: #667eea;
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .demo-input-group button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        .demo-output {
+            background: rgba(255,255,255,0.2);
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 10px;
+            min-height: 40px;
+            font-family: monospace;
+            font-size: 1.1em;
+        }
+
+        .function-syntax {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .syntax-card {
+            background: #f3f4f6;
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+
+        .syntax-card h5 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .arrow-flow {
+            text-align: center;
+            margin: 20px 0;
+            padding: 20px;
+            background: #f9fafb;
+            border-radius: 10px;
+        }
+
+        .arrow-flow .step {
+            display: inline-block;
+            padding: 10px 20px;
+            background: white;
+            border-radius: 8px;
+            margin: 0 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .arrow-flow .arrow {
+            display: inline-block;
+            margin: 0 10px;
+            font-size: 1.5em;
+            color: #667eea;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📅 Tháng 1 - Ngày 6</h1>
+            <p>Làm quen với Functions - Khối code có thể tái sử dụng</p>
+        </div>
+
+        <div class="content">
+            <a href="../index.html" class="btn"
+                style="display: inline-block; text-decoration: none; margin-bottom: 20px;">
+                ⬅️ Quay lại Lộ trình
+            </a>
+
+            <!-- Phần 1: Function là gì? -->
+            <div class="section">
+                <div class="section-title">1. Function (Hàm) là gì?</div>
+                <p>Function là một <strong>khối code có thể tái sử dụng</strong> để thực hiện một nhiệm vụ cụ thể. Thay vì viết lại code nhiều lần, bạn chỉ cần gọi function.</p>
+
+                <div class="arrow-flow">
+                    <div class="step">Input (Tham số)</div>
+                    <span class="arrow">→</span>
+                    <div class="step">Function xử lý</div>
+                    <span class="arrow">→</span>
+                    <div class="step">Output (Kết quả)</div>
+                </div>
+
+                <div class="info-box">
+                    <strong>🎯 Tại sao dùng Functions?</strong><br>
+                    • Tránh lặp code (DRY - Don't Repeat Yourself)<br>
+                    • Code dễ đọc, dễ bảo trì hơn<br>
+                    • Có thể tái sử dụng nhiều lần<br>
+                    • Chia nhỏ vấn đề phức tạp thành các phần đơn giản
+                </div>
+            </div>
+
+            <!-- Phần 2: Cú pháp khai báo -->
+            <div class="section">
+                <div class="section-title">2. Cách khai báo Function</div>
+                
+                <div class="function-syntax">
+                    <div class="syntax-card">
+                        <h5>✅ Function Declaration (Khuyến khích)</h5>
+                        <div class="code-block">
+function sayHello(name) {
+    return "Xin chào " + name;
+}
+
+sayHello("Minh"); // "Xin chào Minh"
+                        </div>
+                    </div>
+
+                    <div class="syntax-card">
+                        <h5>🆕 Arrow Function (ES6+)</h5>
+                        <div class="code-block">
+const sayHello = (name) => {
+    return "Xin chào " + name;
+};
+
+// Ngắn gọn hơn:
+const greet = name => "Xin chào " + name;
+                        </div>
+                    </div>
+                </div>
+
+                <div class="concept-card">
+                    <h4 style="margin-bottom: 15px;">📝 Cấu trúc của Function:</h4>
+                    <div class="code-block">
+function <span style="color: #10b981;">tenHam</span>(<span style="color: #f59e0b;">thamSo1, thamSo2</span>) {
+    // Thân hàm - code thực thi
+    let ketQua = thamSo1 + thamSo2;
+    <span style="color: #ef4444;">return</span> ketQua; // Trả về kết quả
+}
+
+// Gọi function
+let tong = <span style="color: #10b981;">tenHam</span>(<span style="color: #f59e0b;">5, 3</span>); // tong = 8
+                    </div>
+                </div>
+            </div>
+
+            <!-- Phần 3: Parameters & Return -->
+            <div class="section">
+                <div class="section-title">3. Parameters (Tham số) & Return (Trả về)</div>
+                
+                <div class="code-comparison" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div>
+                        <h4 style="color: #667eea;">Có tham số, có return</h4>
+                        <div class="code-block">
+function cong(a, b) {
+    return a + b;
+}
+
+let tong = cong(5, 3);
+console.log(tong); // 8
+                        </div>
+                    </div>
+
+                    <div>
+                        <h4 style="color: #667eea;">Không tham số, không return</h4>
+                        <div class="code-block">
+function chaoMoiNguoi() {
+    console.log("Xin chào!");
+}
+
+chaoMoiNguoi(); // In ra: Xin chào!
+                        </div>
+                    </div>
+                </div>
+
+                <div class="warning-box">
+                    <strong>⚠️ Lưu ý quan trọng:</strong><br>
+                    • Khi function gặp <code>return</code>, nó sẽ DỪNG ngay lập tức<br>
+                    • Code sau <code>return</code> sẽ KHÔNG được thực thi<br>
+                    • Function không có <code>return</code> sẽ trả về <code>undefined</code>
+                </div>
+            </div>
+
+            <!-- Phần 4: Thử nghiệm thực tế -->
+            <div class="section">
+                <div class="section-title">💻 Thử nghiệm Functions</div>
+                
+                <div class="function-demo">
+                    <h4>🧮 Máy tính cộng trừ nhân chia</h4>
+                    <div class="demo-input-group">
+                        <input type="number" id="num1" placeholder="Số thứ nhất" value="10">
+                        <input type="number" id="num2" placeholder="Số thứ hai" value="5">
+                        <button onclick="calculate('add')">➕ Cộng</button>
+                        <button onclick="calculate('subtract')">➖ Trừ</button>
+                        <button onclick="calculate('multiply')">✖️ Nhân</button>
+                        <button onclick="calculate('divide')">➗ Chia</button>
+                    </div>
+                    <div class="demo-output" id="calcResult">Kết quả sẽ hiển thị ở đây</div>
+                </div>
+
+                <div class="function-demo">
+                    <h4>📏 Tính diện tích hình chữ nhật</h4>
+                    <div class="demo-input-group">
+                        <input type="number" id="width" placeholder="Chiều dài" value="5">
+                        <input type="number" id="height" placeholder="Chiều rộng" value="3">
+                        <button onclick="calculateArea()">Tính diện tích</button>
+                    </div>
+                    <div class="demo-output" id="areaResult">Nhấn nút để tính</div>
+                </div>
+
+                <details style="margin-top: 15px; background: #f9fafb; padding: 15px; border-radius: 8px;">
+                    <summary style="cursor: pointer; font-weight: bold; color: #667eea;">📖 Xem code của demo</summary>
+                    <div class="code-block" style="margin-top: 10px;">
+// Máy tính
+function add(a, b) {
+    return a + b;
+}
+
+function subtract(a, b) {
+    return a - b;
+}
+
+function multiply(a, b) {
+    return a * b;
+}
+
+function divide(a, b) {
+    if (b === 0) return "Không thể chia cho 0!";
+    return a / b;
+}
+
+// Tính diện tích
+function calculateRectangleArea(width, height) {
+    return width * height;
+}
+                    </div>
+                </details>
+            </div>
+
+            <!-- Phần 5: Default Parameters -->
+            <div class="section">
+                <div class="section-title">5. Default Parameters (Tham số mặc định)</div>
+                <p>Bạn có thể đặt giá trị mặc định cho tham số, nếu không truyền vào thì sẽ dùng giá trị này:</p>
+
+                <div class="code-block">
+function chao(ten = "Bạn") {
+    return "Xin chào " + ten + "!";
+}
+
+console.log(chao("Minh"));  // "Xin chào Minh!"
+console.log(chao());        // "Xin chào Bạn!" (dùng giá trị mặc định)
+                </div>
+
+                <div class="code-block">
+function tinhTong(a, b = 0) {
+    return a + b;
+}
+
+console.log(tinhTong(5, 3));  // 8
+console.log(tinhTong(5));     // 5 (b = 0)
+                </div>
+            </div>
+
+            <!-- Bài tập về nhà -->
+            <div class="section">
+                <div class="section-title">🎯 Bài tập về nhà</div>
+                <div class="project-card">
+                    <div class="project-header">
+                        <div class="project-title">Tạo "Bộ công cụ tính toán" với Functions</div>
+                    </div>
+                    <p style="margin-top: 10px; line-height: 1.6;">
+                        Tạo một file <code>calculator.html</code> với các function sau:
+                    </p>
+                    <ul style="margin: 10px 0 10px 20px; color: #4b5563;">
+                        <li><code>tinhBinhPhuong(n)</code> - Tính bình phương của n</li>
+                        <li><code>laMauChan(n)</code> - Kiểm tra n có phải số chẵn không (return true/false)</li>
+                        <li><code>chuyenDoiNhietDo(celsius)</code> - Chuyển độ C sang độ F (công thức: F = C × 9/5 + 32)</li>
+                        <li><code>tinhTienTip(tienAn, phanTram = 10)</code> - Tính tiền tip (mặc định 10%)</li>
+                    </ul>
+                    <p style="margin-top: 10px; color: #6b7280;">
+                        <strong>Bonus:</strong> Tạo giao diện HTML với input và button để test các function!
+                    </p>
+                </div>
+            </div>
+
+            <!-- Quiz -->
+            <div class="section">
+                <div class="section-title">🧠 Kiểm tra kiến thức</div>
+                <div class="quiz-container">
+                    <form id="quizForm">
+                        <div class="question-item">
+                            <div class="question-text">Câu 1: Function dùng để làm gì?</div>
+                            <div class="options-list">
+                                <label class="option-label">
+                                    <input type="radio" name="q1" value="correct"> Tạo khối code có thể tái sử dụng
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q1" value="wrong"> Chỉ để trang trí code
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q1" value="wrong"> Không có tác dụng gì
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-item">
+                            <div class="question-text">Câu 2: Từ khóa nào dùng để trả về giá trị từ function?</div>
+                            <div class="options-list">
+                                <label class="option-label">
+                                    <input type="radio" name="q2" value="wrong"> give
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q2" value="correct"> return
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q2" value="wrong"> result
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-item">
+                            <div class="question-text">Câu 3: Code sau <code>return</code> trong function sẽ như thế nào?</div>
+                            <div class="options-list">
+                                <label class="option-label">
+                                    <input type="radio" name="q3" value="correct"> Không được thực thi (bị bỏ qua)
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q3" value="wrong"> Vẫn chạy bình thường
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q3" value="wrong"> Gây lỗi
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-item">
+                            <div class="question-text">Câu 4: Cú pháp nào đúng để khai báo function?</div>
+                            <div class="options-list">
+                                <label class="option-label">
+                                    <input type="radio" name="q4" value="correct"> function tenHam() { }
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q4" value="wrong"> func tenHam() { }
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q4" value="wrong"> def tenHam() { }
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-item">
+                            <div class="question-text">Câu 5: <code>function add(a, b = 5) { return a + b; }</code> - Khi gọi <code>add(10)</code>, kết quả là?</div>
+                            <div class="options-list">
+                                <label class="option-label">
+                                    <input type="radio" name="q5" value="wrong"> 10
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q5" value="correct"> 15
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q5" value="wrong"> Lỗi vì thiếu tham số
+                                </label>
+                            </div>
+                        </div>
+
+                        <button type="button" class="btn" onclick="checkQuiz()">Kiểm tra đáp án</button>
+                    </form>
+                    <div id="quiz-feedback"></div>
+                </div>
+            </div>
+
+            <!-- Footer Actions -->
+            <div class="actions">
+                <button class="btn" onclick="window.location.href='day5.html'">⬅️ Quay lại ngày 5</button>
+                <button id="completeBtn" class="btn" style="opacity: 0.5; pointer-events: none;"
+                    onclick="completeLesson()">✅ Hoàn thành bài học</button>
+                <p style="font-size: 0.9em; color: #666; margin-top: 5px;">(Hãy làm đúng Quiz để mở khóa nút hoàn thành)</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Load external scripts first -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+    <script src="../js/config.js"></script>
+    <script src="../js/storage.js"></script>
+    <script src="../js/auth.js"></script>
+
+    <script>
+        const LESSON_ID = 'day6';
+
+        // Demo functions
+        function calculate(operation) {
+            const num1 = parseFloat(document.getElementById('num1').value);
+            const num2 = parseFloat(document.getElementById('num2').value);
+            const resultDiv = document.getElementById('calcResult');
+
+            if (isNaN(num1) || isNaN(num2)) {
+                resultDiv.textContent = "⚠️ Vui lòng nhập số hợp lệ!";
+                return;
+            }
+
+            let result;
+            let symbol;
+
+            switch(operation) {
+                case 'add':
+                    result = num1 + num2;
+                    symbol = '+';
+                    break;
+                case 'subtract':
+                    result = num1 - num2;
+                    symbol = '-';
+                    break;
+                case 'multiply':
+                    result = num1 * num2;
+                    symbol = '×';
+                    break;
+                case 'divide':
+                    if (num2 === 0) {
+                        resultDiv.textContent = "❌ Không thể chia cho 0!";
+                        return;
+                    }
+                    result = num1 / num2;
+                    symbol = '÷';
+                    break;
+            }
+
+            resultDiv.textContent = `${num1} ${symbol} ${num2} = ${result}`;
+        }
+
+        function calculateArea() {
+            const width = parseFloat(document.getElementById('width').value);
+            const height = parseFloat(document.getElementById('height').value);
+            const resultDiv = document.getElementById('areaResult');
+
+            if (isNaN(width) || isNaN(height)) {
+                resultDiv.textContent = "⚠️ Vui lòng nhập số hợp lệ!";
+                return;
+            }
+
+            if (width <= 0 || height <= 0) {
+                resultDiv.textContent = "❌ Chiều dài và chiều rộng phải > 0!";
+                return;
+            }
+
+            const area = width * height;
+            const perimeter = 2 * (width + height);
+            
+            resultDiv.innerHTML = `
+                📐 Diện tích: <strong>${area} đvdt</strong><br>
+                📏 Chu vi: <strong>${perimeter} đvdt</strong>
+            `;
+        }
+
+        function checkQuiz() {
+            const form = document.getElementById('quizForm');
+            const feedback = document.getElementById('quiz-feedback');
+            const completeBtn = document.getElementById('completeBtn');
+            let score = 0;
+            const total = 5;
+
+            let pointsEarned = 0;
+            let pointsLost = 0;
+            let newCorrect = 0;
+            let alreadyCorrect = 0;
+
+            document.querySelectorAll('.option-label').forEach(label => label.classList.remove('correct', 'wrong'));
+
+            const answers = { q1: 'correct', q2: 'correct', q3: 'correct', q4: 'correct', q5: 'correct' };
+            let allAnswered = true;
+
+            for (let q in answers) {
+                const selected = form.querySelector(`input[name="${q}"]:checked`);
+                if (!selected) { allAnswered = false; continue; }
+
+                const parent = selected.parentElement;
+                const wasAlreadyAnswered = typeof isQuestionAnswered === 'function' && isQuestionAnswered(LESSON_ID, q);
+
+                if (selected.value === answers[q]) {
+                    parent.classList.add('correct');
+                    score++;
+
+                    if (wasAlreadyAnswered) {
+                        alreadyCorrect++;
+                    } else {
+                        newCorrect++;
+                        pointsEarned += 10;
+                        if (typeof markQuestionAnswered === 'function') {
+                            markQuestionAnswered(LESSON_ID, q);
+                        }
+                    }
+                } else {
+                    parent.classList.add('wrong');
+                    pointsLost += 5;
+                }
+            }
+
+            if (!allAnswered) {
+                feedback.style.display = 'block';
+                feedback.style.background = '#fef3c7';
+                feedback.style.color = '#92400e';
+                feedback.textContent = '⚠️ Vui lòng trả lời hết các câu hỏi!';
+                return;
+            }
+
+            if (typeof addPoints === 'function') {
+                if (pointsEarned > 0) addPoints(pointsEarned, 'quiz_correct');
+                if (pointsLost > 0) subtractPoints(pointsLost, 'quiz_wrong');
+            }
+
+            feedback.style.display = 'block';
+
+            if (score === total) {
+                const wasQuizCompleted = typeof isQuizCompleted === 'function' && isQuizCompleted(LESSON_ID);
+                let bonusPoints = 0;
+
+                if (!wasQuizCompleted) {
+                    bonusPoints = 50;
+                    if (typeof addPoints === 'function') {
+                        addPoints(50, 'perfect_quiz');
+                    }
+                    if (typeof markQuizCompleted === 'function') {
+                        markQuizCompleted(LESSON_ID);
+                    }
+                }
+
+                feedback.style.background = '#dcfce7';
+                feedback.style.color = '#166534';
+
+                let resultMsg = '🎉 Xuất sắc! Bạn đã nắm vững Functions!<br>';
+                if (pointsEarned > 0 || bonusPoints > 0) {
+                    resultMsg += `<span style="font-size: 0.9em;">`;
+                    if (newCorrect > 0) resultMsg += `+${pointsEarned} điểm mới`;
+                    if (alreadyCorrect > 0) resultMsg += ` (${alreadyCorrect} câu đã đúng trước)`;
+                    if (bonusPoints > 0) resultMsg += ` + ${bonusPoints} bonus`;
+                    resultMsg += `</span>`;
+                } else {
+                    resultMsg += `<span style="font-size: 0.9em;">Bạn đã làm bài này trước đó!</span>`;
+                }
+
+                feedback.innerHTML = resultMsg;
+                completeBtn.style.opacity = '1';
+                completeBtn.style.pointerEvents = 'auto';
+                completeBtn.textContent = '✅ Đã hiểu & Hoàn thành!';
+            } else {
+                feedback.style.background = '#fee2e2';
+                feedback.style.color = '#991b1b';
+
+                let resultMsg = `❌ Bạn đúng ${score}/${total} câu.`;
+                resultMsg += `<span style="font-size: 0.9em;"> (`;
+                if (newCorrect > 0) resultMsg += `+${pointsEarned} mới`;
+                if (alreadyCorrect > 0) resultMsg += ` ${alreadyCorrect} đã đúng`;
+                if (pointsLost > 0) resultMsg += ` -${pointsLost} sai`;
+                resultMsg += `)</span><br>Hãy đọc lại bài học và thử lại nhé!`;
+
+                feedback.innerHTML = resultMsg;
+                completeBtn.style.opacity = '0.5';
+                completeBtn.style.pointerEvents = 'none';
+            }
+        }
+
+        function completeLesson() {
+            const wasCompleted = typeof isLessonCompleted === 'function' && isLessonCompleted(LESSON_ID);
+
+            let message = "🎉 Chúc mừng! Bạn đã hoàn thành bài học Ngày 6.\n\n";
+
+            if (!wasCompleted) {
+                if (typeof addPoints === 'function') {
+                    addPoints(20, 'complete_lesson');
+                }
+                if (typeof markLessonCompleted === 'function') {
+                    markLessonCompleted(LESSON_ID);
+                }
+                message += "+20 điểm hoàn thành bài học!\n\n";
+            } else {
+                message += "(Bạn đã nhận điểm hoàn thành trước đó)\n\n";
+            }
+
+            message += "Bạn đã học được:\n✅ Function là gì và tại sao cần dùng\n✅ Cách khai báo function (Declaration & Arrow)\n✅ Parameters và Return values\n✅ Default parameters\n✅ Cách tái sử dụng code hiệu quả";
+
+            alert(message);
+            window.location.href = "../index.html";
+        }
+    </script>
+</body>
+
+</html>

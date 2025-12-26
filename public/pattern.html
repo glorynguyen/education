@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8" />
+    <title>Advanced Knitting Visualizer</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+    <script src="https://unpkg.com/three@0.134.0/examples/js/controls/OrbitControls.js"></script>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; background: #2c3e50; color: white; display: flex; flex-direction: column; height: 100vh; }
+        .container { display: flex; flex: 1; overflow: hidden; }
+        .sidebar { width: 350px; padding: 20px; background: #34495e; box-shadow: 2px 0 10px rgba(0,0,0,0.3); z-index: 10; display: flex; flex-direction: column; }
+        textarea { flex: 1; width: 100%; font-family: 'Courier New', monospace; background: #1a252f; color: #ecf0f1; border: 1px solid #455a64; padding: 10px; border-radius: 4px; resize: none; font-size: 13px; }
+        .controls { margin-top: 15px; display: grid; gap: 10px; }
+        button { background: #27ae60; color: white; border: none; padding: 12px; border-radius: 4px; cursor: pointer; font-weight: bold; transition: 0.3s; }
+        button:hover { background: #2ecc71; }
+        #canvas-container { flex: 1; position: relative; background: #000; }
+        .label { font-size: 12px; color: #bdc3c7; margin-bottom: 5px; display: block; }
+        select, input[type="checkbox"] { margin-bottom: 10px; }
+        .stats { margin-top: 10px; font-size: 12px; color: #f1c40f; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="sidebar">
+        <h2>Knitting Parser</h2>
+        <span class="label">Pattern Instructions:</span>
+        <textarea id="patternInput">
+Row 1: K8
+Row 2: KFB x8 (16 sts)
+Row 3: (K1, KFB) x8 (24 sts)
+Row 4: K
+Row 5: (K2, KFB) x8 (32 sts)
+Row 6: P
+Row 7: (K3, KFB) x8 (40 sts)
+Row 8: K
+Row 9: (K4, KFB) x8 (48 sts)
+Row 10: P
+Row 11-15: K
+Row 16: (K4, K2TOG) x8 (40 sts)</textarea>
+
+        <div class="controls">
+            <label><input type="checkbox" id="autoRotate" checked /> Auto Rotate</label>
+            <span class="label">Style:</span>
+            <select id="renderStyle">
+                <option value="circular">Circular (Đan vòng/Ống)</option>
+                <option value="flat">Flat (Đan phẳng/Tấm)</option>
+            </select>
+            <button onclick="parseAndRender()">Visualize Pattern</button>
+            <div class="stats" id="stats">Rows: 0 | Max Stitches: 0</div>
+        </div>
+    </div>
+    <div id="canvas-container"></div>
+</div>
+
+<script>
+    /* =================================================+
+       1. STITCH LOGIC & PARSER
+    +================================================== */
+    const STITCH_MAP = {
+        'k': 1, 'p': 1, 
+        'kfb': 2, 'kll': 2, 'krl': 2, 'm1': 2,
+        'k2tog': -1, 'ssk': -1, 'p2tog': -1,
+        'yo': 1 // Yarn over adds a stitch
+    };
+
+    function parsePattern(text) {
+        const lines = text.split('\n').filter(l => l.trim());
+        let rows = [];
+        let currentStitchCount = 0;
+
+        lines.forEach(line => {
+            // Xử lý dải hàng (ví dụ Row 11-15: K)
+            let rangeMatch = line.match(/Row\s*(\d+)-(\d+):/i);
+            let repeatLine = 1;
+            if (rangeMatch) {
+                repeatLine = parseInt(rangeMatch[2]) - parseInt(rangeMatch[1]) + 1;
+            }
+
+            let cleanLine = line.replace(/Row\s*\d+(-?\d+)?:\s*/i, "")
+                                .replace(/\(\d+\s*sts?\)/i, "")
+                                .trim();
+
+            let rowData = expandGroups(cleanLine);
+            
+            // Nếu dòng chỉ ghi "K" hoặc "P" đơn thuần, lấy số lượng từ hàng trước
+            if (rowData.length === 0 && (cleanLine.toLowerCase() === 'k' || cleanLine.toLowerCase() === 'p')) {
+                rowData = Array(currentStitchCount).fill(cleanLine.toLowerCase());
+            }
+
+            // Tính toán số mũi sau khi kết thúc hàng
+            let rowDelta = 0;
+            rowData.forEach(st => {
+                const type = st.replace(/\d+/, '').toLowerCase();
+                const count = parseInt(st.match(/\d+/) || 1);
+                // Đơn giản hóa delta: k2tog tính là 1 thực thể nhưng chiếm 2 mũi cũ -> giảm 1
+                if (STITCH_MAP[type]) {
+                    // Nếu là k10 thì delta là 10. Nếu k2tog thì delta là -1.
+                    rowDelta += (type === 'k' || type === 'p') ? count : (STITCH_MAP[type] || 1);
+                } else {
+                    rowDelta += count;
+                }
+            });
+
+            // Nếu là hàng đầu tiên và chưa có định nghĩa số mũi, dùng rowDelta làm gốc
+            if (currentStitchCount === 0) currentStitchCount = rowDelta;
+            else currentStitchCount = rowDelta;
+
+            for(let r=0; r<repeatLine; r++) {
+                rows.push({ stitches: rowData, count: currentStitchCount });
+            }
+        });
+        return rows;
+    }
+
+    function expandGroups(text) {
+        // Xử lý lặp (Group) x N
+        while (text.includes('(')) {
+            text = text.replace(/\(([^()]+)\)\s*x\s*(\d+)/gi, (_, g, n) => {
+                return Array(parseInt(n)).fill(g).join(', ');
+            });
+        }
+        
+        // Tách các thành phần k1, kfb x6...
+        return text.split(/[ ,]+/).filter(Boolean).flatMap(part => {
+            let mult = part.match(/(.+?)x(\d+)/i);
+            if (mult) return Array(parseInt(mult[2])).fill(mult[1]);
+            return part;
+        });
+    }
+
+    /* =================================================+
+       2. THREE.JS ENGINE
+    +================================================== */
+    let scene, camera, renderer, controls, group;
+
+    function initScene() {
+        const container = document.getElementById("canvas-container");
+        scene = new THREE.Scene();
+        camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
+        camera.position.set(20, 20, 40);
+
+        renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(container.clientWidth, container.clientHeight);
+        renderer.setPixelRatio(window.devicePixelRatio);
+        container.appendChild(renderer.domElement);
+
+        const ambient = new THREE.AmbientLight(0xffffff, 0.8);
+        scene.add(ambient);
+
+        const directional = new THREE.DirectionalLight(0xffffff, 0.5);
+        directional.position.set(10, 20, 10);
+        scene.add(directional);
+
+        controls = new THREE.OrbitControls(camera, renderer.domElement);
+        group = new THREE.Group();
+        scene.add(group);
+
+        window.addEventListener('resize', () => {
+            camera.aspect = container.clientWidth / container.clientHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(container.clientWidth, container.clientHeight);
+        });
+    }
+
+    function render3D(rows) {
+        group.clear();
+        const style = document.getElementById("renderStyle").value;
+        const scale = 0.4;
+        const rowHeight = 0.5;
+        let maxSts = 0;
+
+        rows.forEach((row, i) => {
+            maxSts = Math.max(maxSts, row.count);
+            const radius = (row.count * scale) / (2 * Math.PI);
+            const color = i % 2 === 0 ? 0x3498db : 0x2980b9;
+            
+            let mesh;
+            if (style === 'circular') {
+                // Sử dụng Torus để giả lập vòng len
+                const geometry = new THREE.TorusGeometry(radius, 0.2, 8, 50);
+                const material = new THREE.MeshStandardMaterial({ color: color, roughness: 0.8 });
+                mesh = new THREE.Mesh(geometry, material);
+                mesh.rotation.x = Math.PI / 2;
+                mesh.position.y = i * rowHeight;
+            } else {
+                // Chế độ phẳng (Flat)
+                const width = row.count * scale;
+                const geometry = new THREE.CylinderGeometry(0.2, 0.2, width, 8);
+                const material = new THREE.MeshStandardMaterial({ color: color, roughness: 0.8 });
+                mesh = new THREE.Mesh(geometry, material);
+                mesh.rotation.z = Math.PI / 2;
+                mesh.position.y = i * rowHeight;
+                // Tạo hiệu ứng sóng nhẹ cho tấm đan
+                mesh.position.z = Math.sin(i * 0.5) * 0.5;
+            }
+            group.add(mesh);
+        });
+
+        document.getElementById('stats').innerText = `Rows: ${rows.length} | Max Stitches: ${maxSts}`;
+        
+        // Căn giữa camera
+        const centerOffset = (rows.length * rowHeight) / 2;
+        group.position.y = -centerOffset;
+    }
+
+    function parseAndRender() {
+        const input = document.getElementById("patternInput").value;
+        const rows = parsePattern(input);
+        render3D(rows);
+    }
+
+    function animate() {
+        requestAnimationFrame(animate);
+        if (document.getElementById("autoRotate").checked) {
+            group.rotation.y += 0.005;
+        }
+        controls.update();
+        renderer.render(scene, camera);
+    }
+
+    // Khởi tạo
+    initScene();
+    parseAndRender();
+    animate();
+
+</script>
+</body>
+</html>
