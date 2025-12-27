@@ -50,7 +50,6 @@
         }
     </style>
 </head>
-
 <body>
     <div class="container">
         <div class="header">
@@ -269,148 +268,9 @@
     <script src="../js/config.js"></script>
     <script src="../js/storage.js"></script>
     <script src="../js/auth.js"></script>
-
-    <!-- Then inline script that uses functions from storage.js -->
+    <script src="../js/quiz-handler.js"></script>
     <script>
-        const LESSON_ID = 'day5';
-
-        function checkQuiz() {
-            const form = document.getElementById('quizForm');
-            const feedback = document.getElementById('quiz-feedback');
-            const completeBtn = document.getElementById('completeBtn');
-            let score = 0;
-            const total = 4;
-
-            // Track points earned this attempt
-            let pointsEarned = 0;
-            let pointsLost = 0;
-            let newCorrect = 0;
-            let alreadyCorrect = 0;
-
-            document.querySelectorAll('.option-label').forEach(label => label.classList.remove('correct', 'wrong'));
-
-            const answers = { q1: 'correct', q2: 'correct', q3: 'correct', q4: 'correct' };
-            let allAnswered = true;
-
-            for (let q in answers) {
-                const selected = form.querySelector(`input[name="${q}"]:checked`);
-                if (!selected) { allAnswered = false; continue; }
-
-                const parent = selected.parentElement;
-                const wasAlreadyAnswered = typeof isQuestionAnswered === 'function' && isQuestionAnswered(LESSON_ID, q);
-
-                if (selected.value === answers[q]) {
-                    parent.classList.add('correct');
-                    score++;
-
-                    if (wasAlreadyAnswered) {
-                        // Already answered correctly before - no new points
-                        alreadyCorrect++;
-                    } else {
-                        // New correct answer - add points and mark as answered
-                        newCorrect++;
-                        pointsEarned += 10;
-                        if (typeof markQuestionAnswered === 'function') {
-                            markQuestionAnswered(LESSON_ID, q);
-                        }
-                    }
-                } else {
-                    parent.classList.add('wrong');
-                    // Wrong answer - always subtract points (even if was correct before)
-                    pointsLost += 5;
-                }
-            }
-
-            if (!allAnswered) {
-                feedback.style.display = 'block';
-                feedback.style.background = '#fef3c7';
-                feedback.style.color = '#92400e';
-                feedback.textContent = '⚠️ Vui lòng trả lời hết các câu hỏi!';
-                return;
-            }
-
-            // Add/subtract points
-            if (typeof addPoints === 'function') {
-                if (pointsEarned > 0) addPoints(pointsEarned, 'quiz_correct');
-                if (pointsLost > 0) subtractPoints(pointsLost, 'quiz_wrong');
-            }
-
-            feedback.style.display = 'block';
-
-            if (score === total) {
-                // Check if quiz was already completed with perfect score
-                const wasQuizCompleted = typeof isQuizCompleted === 'function' && isQuizCompleted(LESSON_ID);
-                let bonusPoints = 0;
-
-                if (!wasQuizCompleted) {
-                    bonusPoints = 50;
-                    if (typeof addPoints === 'function') {
-                        addPoints(50, 'perfect_quiz');
-                    }
-                    if (typeof markQuizCompleted === 'function') {
-                        markQuizCompleted(LESSON_ID);
-                    }
-                }
-
-                feedback.style.background = '#dcfce7';
-                feedback.style.color = '#166534';
-
-                let resultMsg = '🎉 Xuất sắc! Bạn đã nắm vững JavaScript cơ bản!<br>';
-                if (pointsEarned > 0 || bonusPoints > 0) {
-                    resultMsg += `<span style="font-size: 0.9em;">`;
-                    if (newCorrect > 0) resultMsg += `+${pointsEarned} điểm mới`;
-                    if (alreadyCorrect > 0) resultMsg += ` (${alreadyCorrect} câu đã đúng trước)`;
-                    if (bonusPoints > 0) resultMsg += ` + ${bonusPoints} bonus`;
-                    resultMsg += `</span>`;
-                } else {
-                    resultMsg += `<span style="font-size: 0.9em;">Bạn đã làm bài này trước đó!</span>`;
-                }
-
-                feedback.innerHTML = resultMsg;
-                completeBtn.style.opacity = '1';
-                completeBtn.style.pointerEvents = 'auto';
-                completeBtn.textContent = '✅ Đã hiểu & Hoàn thành!';
-            } else {
-                feedback.style.background = '#fee2e2';
-                feedback.style.color = '#991b1b';
-
-                let netPoints = pointsEarned - pointsLost;
-                let resultMsg = `❌ Bạn đúng ${score}/${total} câu.`;
-                resultMsg += `<span style="font-size: 0.9em;"> (`;
-                if (newCorrect > 0) resultMsg += `+${pointsEarned} mới`;
-                if (alreadyCorrect > 0) resultMsg += ` ${alreadyCorrect} đã đúng`;
-                if (pointsLost > 0) resultMsg += ` -${pointsLost} sai`;
-                resultMsg += `)</span><br>Hãy đọc lại bài học và thử lại nhé!`;
-
-                feedback.innerHTML = resultMsg;
-                completeBtn.style.opacity = '0.5';
-                completeBtn.style.pointerEvents = 'none';
-            }
-        }
-
-        function completeLesson() {
-            // Check if lesson was already completed
-            const wasCompleted = typeof isLessonCompleted === 'function' && isLessonCompleted(LESSON_ID);
-
-            let message = "🎉 Chúc mừng! Bạn đã hoàn thành bài học Ngày 5.\n\n";
-
-            if (!wasCompleted) {
-                if (typeof addPoints === 'function') {
-                    addPoints(20, 'complete_lesson');
-                }
-                if (typeof markLessonCompleted === 'function') {
-                    markLessonCompleted(LESSON_ID);
-                }
-                message += "+20 điểm hoàn thành bài học!\n\n";
-            } else {
-                message += "(Bạn đã nhận điểm hoàn thành trước đó)\n\n";
-            }
-
-            message += "Bạn đã học được:\n✅ JavaScript là gì và cách sử dụng\n✅ Khai báo biến với let và const\n✅ Các kiểu dữ liệu cơ bản: String, Number, Boolean\n✅ Sử dụng console.log() để debug";
-
-            alert(message);
-            window.location.href = "../index.html";
-        }
+        initQuiz('day5');
     </script>
 </body>
 
