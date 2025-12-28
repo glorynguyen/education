@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cheat Sheet - Web Development Quick Reference</title>
+    <link rel="stylesheet" href="css/variables.css">
     <link rel="stylesheet" href="css/style.css">
     <style>
         .cheatsheet-container {
@@ -104,6 +105,7 @@
             font-size: 0.9rem;
             overflow-x: auto;
             margin: 10px 0;
+            line-height: 1.5;
         }
 
         .code-box .comment {
@@ -140,6 +142,7 @@
             padding: 12px;
             border-radius: 0 8px 8px 0;
             margin: 10px 0;
+            font-size: 0.9rem;
         }
 
         .tip-box strong {
@@ -152,6 +155,7 @@
             padding: 12px;
             border-radius: 0 8px 8px 0;
             margin: 10px 0;
+            font-size: 0.9rem;
         }
 
         .warning-box strong {
@@ -172,10 +176,6 @@
             gap: 10px;
         }
 
-        .property-list li:last-child {
-            border-bottom: none;
-        }
-
         .property-list code {
             background: #f3f4f6;
             padding: 2px 8px;
@@ -192,11 +192,12 @@
             width: 100%;
             border-collapse: collapse;
             margin: 15px 0;
+            font-size: 0.9rem;
         }
 
         .comparison-table th,
         .comparison-table td {
-            padding: 12px;
+            padding: 10px;
             text-align: left;
             border: 1px solid #e5e7eb;
         }
@@ -204,10 +205,6 @@
         .comparison-table th {
             background: #f3f4f6;
             font-weight: 600;
-        }
-
-        .comparison-table tr:nth-child(even) {
-            background: #f9fafb;
         }
 
         .back-btn {
@@ -238,11 +235,6 @@
             margin: 20px auto;
             display: block;
             outline: none;
-            transition: border-color 0.3s;
-        }
-
-        .search-box:focus {
-            border-color: #667eea;
         }
 
         .print-btn {
@@ -271,16 +263,7 @@
 
             .cheat-card {
                 break-inside: avoid;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .cheat-header h1 {
-                font-size: 1.8rem;
-            }
-
-            .cheat-grid {
-                grid-template-columns: 1fr;
+                margin-bottom: 20px;
             }
         }
     </style>
@@ -293,93 +276,51 @@
 
         <div class="cheat-header">
             <h1>📋 Web Development Cheat Sheet</h1>
-            <p>Tài liệu tham khảo nhanh cho HTML, CSS & JavaScript</p>
+            <p>Tài liệu tham khảo nhanh cho HTML, CSS & JavaScript (Ngày 1 - 6)</p>
         </div>
 
-        <input type="text" class="search-box" id="searchBox" placeholder="🔍 Tìm kiếm... (VD: flexbox, let, semantic)"
+        <input type="text" class="search-box" id="searchBox" placeholder="🔍 Tìm kiếm... (VD: function, grid, semantic)"
             oninput="filterCards()">
 
         <div class="tabs">
             <button class="tab-btn active" onclick="switchTab('html')">🏗️ HTML</button>
             <button class="tab-btn" onclick="switchTab('css')">🎨 CSS</button>
-            <button class="tab-btn" onclick="switchTab('flexbox')">📦 Flexbox</button>
-            <button class="tab-btn" onclick="switchTab('grid')">📐 Grid</button>
             <button class="tab-btn" onclick="switchTab('js')">⚡ JavaScript</button>
         </div>
 
         <!-- HTML TAB -->
         <div id="html" class="tab-content active">
             <div class="cheat-grid">
-                <div class="cheat-card" data-keywords="html structure boilerplate template cấu trúc">
-                    <h3><span class="icon">📄</span> Cấu trúc HTML cơ bản</h3>
+                <div class="cheat-card" data-keywords="html structure semantic tags">
+                    <h3><span class="icon">📄</span> HTML5 & Semantic</h3>
                     <div class="code-box">
-                        <span class="tag">&lt;!DOCTYPE html&gt;</span>
-                        <span class="tag">&lt;html</span> <span class="attr">lang</span>=<span
-                            class="value">"vi"</span><span class="tag">&gt;</span>
-                        <span class="tag">&lt;head&gt;</span>
-                        <span class="tag">&lt;meta</span> <span class="attr">charset</span>=<span
-                            class="value">"UTF-8"</span><span class="tag">&gt;</span>
-                        <span class="tag">&lt;meta</span> <span class="attr">name</span>=<span
-                            class="value">"viewport"</span> <span class="attr">content</span>=<span
-                            class="value">"width=device-width, initial-scale=1.0"</span><span class="tag">&gt;</span>
-                        <span class="tag">&lt;title&gt;</span>Tiêu đề<span class="tag">&lt;/title&gt;</span>
-                        <span class="tag">&lt;/head&gt;</span>
-                        <span class="tag">&lt;body&gt;</span>
-                        <span class="comment">&lt;!-- Nội dung --&gt;</span>
-                        <span class="tag">&lt;/body&gt;</span>
-                        <span class="tag">&lt;/html&gt;</span>
+                        <span class="tag">&lt;header&gt;</span> <span class="comment">&lt;!-- Đầu trang
+                            --&gt;</span><br>
+                        <span class="tag">&lt;nav&gt;</span> <span class="comment">&lt;!-- Menu --&gt;</span><br>
+                        <span class="tag">&lt;main&gt;</span> <span class="comment">&lt;!-- Nội dung chính
+                            --&gt;</span><br>
+                        <span class="tag">&lt;article&gt;</span> <span class="comment">&lt;!-- Bài viết
+                            --&gt;</span><br>
+                        <span class="tag">&lt;section&gt;</span> <span class="comment">&lt;!-- Phần --&gt;</span><br>
+                        <span class="tag">&lt;footer&gt;</span> <span class="comment">&lt;!-- Chân trang --&gt;</span>
                     </div>
+                    <div class="tip-box"><strong>💡 SEO Tip:</strong> Luôn dùng thẻ <code>&lt;main&gt;</code> duy nhất
+                        cho nội dung quan trọng nhất của trang.</div>
                 </div>
 
-                <div class="cheat-card" data-keywords="semantic tags thẻ ngữ nghĩa header nav main article footer">
-                    <h3><span class="icon">🏷️</span> Semantic Tags</h3>
-                    <ul class="property-list">
-                        <li><code>&lt;header&gt;</code> <span class="desc">Phần đầu trang</span></li>
-                        <li><code>&lt;nav&gt;</code> <span class="desc">Menu điều hướng</span></li>
-                        <li><code>&lt;main&gt;</code> <span class="desc">Nội dung chính</span></li>
-                        <li><code>&lt;article&gt;</code> <span class="desc">Bài viết độc lập</span></li>
-                        <li><code>&lt;section&gt;</code> <span class="desc">Phần nội dung</span></li>
-                        <li><code>&lt;aside&gt;</code> <span class="desc">Nội dung phụ (sidebar)</span></li>
-                        <li><code>&lt;footer&gt;</code> <span class="desc">Phần chân trang</span></li>
-                    </ul>
-                    <div class="tip-box">
-                        <strong>💡 Tip:</strong> Dùng semantic tags giúp SEO tốt hơn và code dễ đọc hơn!
-                    </div>
-                </div>
-
-                <div class="cheat-card" data-keywords="text heading paragraph link image thẻ văn bản">
-                    <h3><span class="icon">✍️</span> Text & Media Tags</h3>
-                    <ul class="property-list">
-                        <li><code>&lt;h1&gt; - &lt;h6&gt;</code> <span class="desc">Tiêu đề (h1 lớn nhất)</span></li>
-                        <li><code>&lt;p&gt;</code> <span class="desc">Đoạn văn</span></li>
-                        <li><code>&lt;a href="..."&gt;</code> <span class="desc">Liên kết</span></li>
-                        <li><code>&lt;img src="..." alt="..."&gt;</code> <span class="desc">Hình ảnh</span></li>
-                        <li><code>&lt;strong&gt;</code> <span class="desc">In đậm (quan trọng)</span></li>
-                        <li><code>&lt;em&gt;</code> <span class="desc">In nghiêng (nhấn mạnh)</span></li>
-                        <li><code>&lt;br&gt;</code> <span class="desc">Xuống dòng</span></li>
-                    </ul>
-                </div>
-
-                <div class="cheat-card" data-keywords="list form input danh sách biểu mẫu">
-                    <h3><span class="icon">📝</span> Lists & Forms</h3>
+                <div class="cheat-card" data-keywords="forms inputs labels">
+                    <h3><span class="icon">📝</span> Forms & Inputs</h3>
                     <div class="code-box">
-                        <span class="comment">&lt;!-- Danh sách --&gt;</span>
-                        <span class="tag">&lt;ul&gt;</span> <span class="comment">&lt;!-- Unordered --&gt;</span>
-                        <span class="tag">&lt;li&gt;</span>Item 1<span class="tag">&lt;/li&gt;</span>
-                        <span class="tag">&lt;/ul&gt;</span>
-
-                        <span class="tag">&lt;ol&gt;</span> <span class="comment">&lt;!-- Ordered --&gt;</span>
-                        <span class="tag">&lt;li&gt;</span>Item 1<span class="tag">&lt;/li&gt;</span>
-                        <span class="tag">&lt;/ol&gt;</span>
-
-                        <span class="comment">&lt;!-- Form --&gt;</span>
-                        <span class="tag">&lt;form&gt;</span>
-                        <span class="tag">&lt;input</span> <span class="attr">type</span>=<span
-                            class="value">"text"</span> <span class="attr">placeholder</span>=<span
-                            class="value">"Nhập..."</span><span class="tag">&gt;</span>
-                        <span class="tag">&lt;button</span> <span class="attr">type</span>=<span
+                        <span class="tag">&lt;form&gt;</span><br>
+                        &nbsp;&nbsp;<span class="tag">&lt;label</span> <span class="attr">for</span>=<span
+                            class="value">"name"</span><span class="tag">&gt;</span>Tên:<span
+                            class="tag">&lt;/label&gt;</span><br>
+                        &nbsp;&nbsp;<span class="tag">&lt;input</span> <span class="attr">type</span>=<span
+                            class="value">"text"</span> <span class="attr">id</span>=<span
+                            class="value">"name"</span><span class="tag">&gt;</span><br>
+                        &nbsp;&nbsp;<span class="tag">&lt;button</span> <span class="attr">type</span>=<span
                             class="value">"submit"</span><span class="tag">&gt;</span>Gửi<span
-                            class="tag">&lt;/button&gt;</span>
+                            class="tag">&lt;/button&gt;</span><br>
                         <span class="tag">&lt;/form&gt;</span>
                     </div>
                 </div>
@@ -389,345 +330,54 @@
         <!-- CSS TAB -->
         <div id="css" class="tab-content">
             <div class="cheat-grid">
-                <div class="cheat-card" data-keywords="css syntax cú pháp selector bộ chọn">
-                    <h3><span class="icon">🎯</span> CSS Syntax & Selectors</h3>
+                <div class="cheat-card" data-keywords="selectors id class element">
+                    <h3><span class="icon">🎯</span> Selectors & Priority</h3>
+                    <ul class="property-list">
+                        <li><code>#id</code> <span class="desc">Độ ưu tiên cao nhất (Duy nhất)</span></li>
+                        <li><code>.class</code> <span class="desc">Dùng cho nhiều phần tử</span></li>
+                        <li><code>element</code> <span class="desc">Chọn theo tên thẻ (p, div, h1)</span></li>
+                    </ul>
                     <div class="code-box">
-                        <span class="comment">/* Element selector */</span>
-                        <span class="keyword">p</span> { <span class="property">color</span>: blue; }
-
-                        <span class="comment">/* Class selector (.) */</span>
-                        <span class="keyword">.button</span> { <span class="property">background</span>: red; }
-
-                        <span class="comment">/* ID selector (#) */</span>
-                        <span class="keyword">#header</span> { <span class="property">height</span>: 60px; }
-
-                        <span class="comment">/* Descendant */</span>
-                        <span class="keyword">.nav a</span> { <span class="property">color</span>: white; }
-                    </div>
-                    <div class="tip-box">
-                        <strong>💡 Độ ưu tiên:</strong> ID &gt; Class &gt; Element
+                        <span class="comment">/* Phổ biến nhất: Class Selector */</span><br>
+                        <span class="keyword">.button-primary</span> { <span class="property">color</span>: white; }
                     </div>
                 </div>
 
-                <div class="cheat-card" data-keywords="box model margin padding border content">
-                    <h3><span class="icon">📦</span> Box Model</h3>
-                    <div style="text-align: center; padding: 10px;">
-                        <div style="background: #fef3c7; padding: 15px; border-radius: 8px;">
-                            <div style="font-size: 0.8rem; color: #92400e;">Margin (lề ngoài)</div>
-                            <div style="background: #fecaca; padding: 15px; border-radius: 6px; margin-top: 5px;">
-                                <div style="font-size: 0.8rem; color: #991b1b;">Border (viền)</div>
-                                <div style="background: #bbf7d0; padding: 15px; border-radius: 4px; margin-top: 5px;">
-                                    <div style="font-size: 0.8rem; color: #166534;">Padding (đệm)</div>
-                                    <div
-                                        style="background: #bfdbfe; padding: 15px; border-radius: 4px; margin-top: 5px; color: #1e40af;">
-                                        Content
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                <div class="cheat-card" data-keywords="box model padding margin border">
+                    <h3><span class="icon">📦</span> The Box Model</h3>
                     <div class="code-box">
-                        <span class="keyword">.box</span> {
-                        <span class="property">margin</span>: 20px; <span class="comment">/* Bên ngoài */</span>
-                        <span class="property">padding</span>: 15px; <span class="comment">/* Bên trong */</span>
-                        <span class="property">border</span>: 1px solid #ccc;
-                        <span class="property">box-sizing</span>: border-box; <span class="comment">/* Quan trọng!
+                        <span class="property">padding</span>: 10px; <span class="comment">/* Đệm bên trong
+                            */</span><br>
+                        <span class="property">border</span>: 1px solid; <span class="comment">/* Viền */</span><br>
+                        <span class="property">margin</span>: 20px; <span class="comment">/* Lề bên ngoài */</span><br>
+                        <span class="property">box-sizing</span>: border-box; <span class="comment">/* Rất quan trọng!
                             */</span>
-                        }
                     </div>
+                    <div class="tip-box"><strong>💡 Note:</strong> Margin dùng để đẩy các hộp khác ra xa, Padding dùng
+                        để làm "mập" cái hộp hiện tại.</div>
                 </div>
 
-                <div class="cheat-card" data-keywords="color background màu sắc nền">
-                    <h3><span class="icon">🎨</span> Colors & Background</h3>
-                    <ul class="property-list">
-                        <li><code>color</code> <span class="desc">Màu chữ</span></li>
-                        <li><code>background-color</code> <span class="desc">Màu nền</span></li>
-                        <li><code>background-image</code> <span class="desc">Hình nền</span></li>
-                        <li><code>opacity</code> <span class="desc">Độ trong suốt (0-1)</span></li>
-                    </ul>
+                <div class="cheat-card" data-keywords="flexbox justify align">
+                    <h3><span class="icon">📦</span> Flexbox Quick Guide</h3>
                     <div class="code-box">
-                        <span class="comment">/* Các cách viết màu */</span>
-                        <span class="property">color</span>: red;
-                        <span class="property">color</span>: #ff0000;
-                        <span class="property">color</span>: rgb(255, 0, 0);
-                        <span class="property">color</span>: rgba(255, 0, 0, 0.5);
-                        <span class="property">color</span>: hsl(0, 100%, 50%);
-                    </div>
-                </div>
-
-                <div class="cheat-card" data-keywords="typography font text chữ">
-                    <h3><span class="icon">🔤</span> Typography</h3>
-                    <ul class="property-list">
-                        <li><code>font-family</code> <span class="desc">Font chữ</span></li>
-                        <li><code>font-size</code> <span class="desc">Cỡ chữ</span></li>
-                        <li><code>font-weight</code> <span class="desc">Độ đậm (400, 700...)</span></li>
-                        <li><code>line-height</code> <span class="desc">Chiều cao dòng</span></li>
-                        <li><code>text-align</code> <span class="desc">Căn lề (left, center, right)</span></li>
-                        <li><code>text-decoration</code> <span class="desc">Gạch chân, gạch ngang...</span></li>
-                    </ul>
-                </div>
-
-                <div class="cheat-card" data-keywords="units đơn vị px em rem vh vw">
-                    <h3><span class="icon">📏</span> CSS Units</h3>
-                    <table class="comparison-table">
-                        <tr>
-                            <th>Unit</th>
-                            <th>Mô tả</th>
-                        </tr>
-                        <tr>
-                            <td><code>px</code></td>
-                            <td>Pixel (cố định)</td>
-                        </tr>
-                        <tr>
-                            <td><code>%</code></td>
-                            <td>Phần trăm của parent</td>
-                        </tr>
-                        <tr>
-                            <td><code>em</code></td>
-                            <td>Tương đối với font-size của parent</td>
-                        </tr>
-                        <tr>
-                            <td><code>rem</code></td>
-                            <td>Tương đối với font-size của root</td>
-                        </tr>
-                        <tr>
-                            <td><code>vh/vw</code></td>
-                            <td>% của viewport height/width</td>
-                        </tr>
-                    </table>
-                </div>
-
-                <div class="cheat-card" data-keywords="position vị trí relative absolute fixed sticky">
-                    <h3><span class="icon">📍</span> Position</h3>
-                    <ul class="property-list">
-                        <li><code>static</code> <span class="desc">Mặc định, theo flow</span></li>
-                        <li><code>relative</code> <span class="desc">Dịch chuyển từ vị trí gốc</span></li>
-                        <li><code>absolute</code> <span class="desc">Tương đối với parent (có position)</span></li>
-                        <li><code>fixed</code> <span class="desc">Cố định theo viewport</span></li>
-                        <li><code>sticky</code> <span class="desc">Dính khi scroll</span></li>
-                    </ul>
-                    <div class="code-box">
-                        <span class="keyword">.fixed-header</span> {
-                        <span class="property">position</span>: fixed;
-                        <span class="property">top</span>: 0;
-                        <span class="property">left</span>: 0;
-                        <span class="property">width</span>: 100%;
-                        }
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- FLEXBOX TAB -->
-        <div id="flexbox" class="tab-content">
-            <div class="cheat-grid">
-                <div class="cheat-card" data-keywords="flexbox container display flex">
-                    <h3><span class="icon">📦</span> Flexbox Container</h3>
-                    <div class="code-box">
-                        <span class="keyword">.container</span> {
-                        <span class="property">display</span>: flex;
-                        <span class="property">flex-direction</span>: row | column;
-                        <span class="property">justify-content</span>: flex-start | center | space-between;
-                        <span class="property">align-items</span>: stretch | center | flex-start;
-                        <span class="property">flex-wrap</span>: nowrap | wrap;
-                        <span class="property">gap</span>: 20px;
-                        }
-                    </div>
-                </div>
-
-                <div class="cheat-card" data-keywords="flex-direction hướng row column">
-                    <h3><span class="icon">↔️</span> flex-direction</h3>
-                    <table class="comparison-table">
-                        <tr>
-                            <th>Giá trị</th>
-                            <th>Hướng</th>
-                        </tr>
-                        <tr>
-                            <td><code>row</code></td>
-                            <td>→ Ngang (mặc định)</td>
-                        </tr>
-                        <tr>
-                            <td><code>row-reverse</code></td>
-                            <td>← Ngang ngược</td>
-                        </tr>
-                        <tr>
-                            <td><code>column</code></td>
-                            <td>↓ Dọc</td>
-                        </tr>
-                        <tr>
-                            <td><code>column-reverse</code></td>
-                            <td>↑ Dọc ngược</td>
-                        </tr>
-                    </table>
-                </div>
-
-                <div class="cheat-card" data-keywords="justify-content căn ngang main axis">
-                    <h3><span class="icon">↔️</span> justify-content (Main Axis)</h3>
-                    <ul class="property-list">
-                        <li><code>flex-start</code> <span class="desc">Bắt đầu</span></li>
-                        <li><code>flex-end</code> <span class="desc">Kết thúc</span></li>
-                        <li><code>center</code> <span class="desc">Giữa</span></li>
-                        <li><code>space-between</code> <span class="desc">Cách đều, không có khoảng ở đầu/cuối</span>
-                        </li>
-                        <li><code>space-around</code> <span class="desc">Cách đều, có khoảng ở đầu/cuối</span></li>
-                        <li><code>space-evenly</code> <span class="desc">Cách đều hoàn toàn</span></li>
-                    </ul>
-                </div>
-
-                <div class="cheat-card" data-keywords="align-items căn dọc cross axis">
-                    <h3><span class="icon">↕️</span> align-items (Cross Axis)</h3>
-                    <ul class="property-list">
-                        <li><code>stretch</code> <span class="desc">Kéo dãn (mặc định)</span></li>
-                        <li><code>flex-start</code> <span class="desc">Đầu trục phụ</span></li>
-                        <li><code>flex-end</code> <span class="desc">Cuối trục phụ</span></li>
-                        <li><code>center</code> <span class="desc">Giữa</span></li>
-                        <li><code>baseline</code> <span class="desc">Theo baseline của text</span></li>
-                    </ul>
-                </div>
-
-                <div class="cheat-card" data-keywords="flex item grow shrink basis">
-                    <h3><span class="icon">🧩</span> Flex Item Properties</h3>
-                    <div class="code-box">
-                        <span class="keyword">.item</span> {
-                        <span class="property">flex-grow</span>: 1; <span class="comment">/* Tỷ lệ mở rộng */</span>
-                        <span class="property">flex-shrink</span>: 1; <span class="comment">/* Tỷ lệ co lại */</span>
-                        <span class="property">flex-basis</span>: auto; <span class="comment">/* Kích thước ban đầu
+                        <span class="property">display</span>: flex;<br>
+                        <span class="property">flex-direction</span>: row | column;<br>
+                        <span class="property">justify-content</span>: center | space-between;<br>
+                        <span class="property">align-items</span>: center | stretch;<br>
+                        <span class="property">gap</span>: 15px; <span class="comment">/* Khoảng cách giữa các item
                             */</span>
-
-                        <span class="comment">/* Shorthand */</span>
-                        <span class="property">flex</span>: 1; <span class="comment">/* = flex: 1 1 0% */</span>
-                        <span class="property">flex</span>: 0 0 200px; <span class="comment">/* Cố định 200px */</span>
-                        }
                     </div>
                 </div>
 
-                <div class="cheat-card" data-keywords="flexbox pattern navbar center">
-                    <h3><span class="icon">🎯</span> Common Patterns</h3>
+                <div class="cheat-card" data-keywords="grid template columns repeat fr">
+                    <h3><span class="icon">📐</span> CSS Grid Layout</h3>
                     <div class="code-box">
-                        <span class="comment">/* Căn giữa hoàn hảo */</span>
-                        <span class="keyword">.center</span> {
-                        <span class="property">display</span>: flex;
-                        <span class="property">justify-content</span>: center;
-                        <span class="property">align-items</span>: center;
-                        }
-
-                        <span class="comment">/* Navbar: logo trái, menu phải */</span>
-                        <span class="keyword">.navbar</span> {
-                        <span class="property">display</span>: flex;
-                        <span class="property">justify-content</span>: space-between;
-                        <span class="property">align-items</span>: center;
-                        }
+                        <span class="property">display</span>: grid;<br>
+                        <span class="property">grid-template-columns</span>: repeat(3, 1fr);<br>
+                        <span class="property">gap</span>: 20px;<br>
+                        <span class="comment">/* Responsive tự động không cần Media Query */</span><br>
+                        <span class="property">grid-template-columns</span>: repeat(auto-fit, minmax(200px, 1fr));
                     </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- GRID TAB -->
-        <div id="grid" class="tab-content">
-            <div class="cheat-grid">
-                <div class="cheat-card" data-keywords="grid container display template">
-                    <h3><span class="icon">📐</span> Grid Container</h3>
-                    <div class="code-box">
-                        <span class="keyword">.container</span> {
-                        <span class="property">display</span>: grid;
-                        <span class="property">grid-template-columns</span>: 200px 1fr 1fr;
-                        <span class="property">grid-template-rows</span>: 100px auto;
-                        <span class="property">gap</span>: 20px;
-                        }
-                    </div>
-                </div>
-
-                <div class="cheat-card" data-keywords="grid template columns rows fr repeat">
-                    <h3><span class="icon">📊</span> Defining Grid</h3>
-                    <div class="code-box">
-                        <span class="comment">/* Fixed + Flexible */</span>
-                        <span class="property">grid-template-columns</span>: 200px 1fr 1fr;
-
-                        <span class="comment">/* Repeat */</span>
-                        <span class="property">grid-template-columns</span>: repeat(3, 1fr);
-
-                        <span class="comment">/* Auto-fit (responsive) */</span>
-                        <span class="property">grid-template-columns</span>: repeat(auto-fit, minmax(250px, 1fr));
-
-                        <span class="comment">/* minmax */</span>
-                        <span class="property">grid-template-columns</span>: minmax(100px, 300px) 1fr;
-                    </div>
-                    <div class="tip-box">
-                        <strong>💡 fr:</strong> Đơn vị fraction - chia đều không gian còn lại
-                    </div>
-                </div>
-
-                <div class="cheat-card" data-keywords="grid template areas layout">
-                    <h3><span class="icon">🗺️</span> Grid Template Areas</h3>
-                    <div class="code-box">
-                        <span class="keyword">.container</span> {
-                        <span class="property">display</span>: grid;
-                        <span class="property">grid-template-areas</span>:
-                        "header header"
-                        "sidebar main"
-                        "footer footer";
-                        }
-
-                        <span class="keyword">.header</span> { <span class="property">grid-area</span>: header; }
-                        <span class="keyword">.sidebar</span> { <span class="property">grid-area</span>: sidebar; }
-                        <span class="keyword">.main</span> { <span class="property">grid-area</span>: main; }
-                        <span class="keyword">.footer</span> { <span class="property">grid-area</span>: footer; }
-                    </div>
-                </div>
-
-                <div class="cheat-card" data-keywords="grid item placement column row span">
-                    <h3><span class="icon">🧩</span> Grid Item Placement</h3>
-                    <div class="code-box">
-                        <span class="keyword">.item</span> {
-                        <span class="property">grid-column</span>: 1 / 3; <span class="comment">/* Cột 1 đến 3 */</span>
-                        <span class="property">grid-row</span>: 1 / 2; <span class="comment">/* Hàng 1 */</span>
-
-                        <span class="comment">/* Hoặc dùng span */</span>
-                        <span class="property">grid-column</span>: span 2; <span class="comment">/* Chiếm 2 cột
-                            */</span>
-                        <span class="property">grid-row</span>: span 3; <span class="comment">/* Chiếm 3 hàng */</span>
-                        }
-                    </div>
-                </div>
-
-                <div class="cheat-card" data-keywords="grid vs flexbox so sánh">
-                    <h3><span class="icon">⚖️</span> Grid vs Flexbox</h3>
-                    <table class="comparison-table">
-                        <tr>
-                            <th>Tiêu chí</th>
-                            <th>Flexbox</th>
-                            <th>Grid</th>
-                        </tr>
-                        <tr>
-                            <td>Chiều</td>
-                            <td>1D (dòng/cột)</td>
-                            <td>2D (dòng + cột)</td>
-                        </tr>
-                        <tr>
-                            <td>Use case</td>
-                            <td>Navbar, card items</td>
-                            <td>Page layouts, gallery</td>
-                        </tr>
-                        <tr>
-                            <td>Control</td>
-                            <td>Content-first</td>
-                            <td>Layout-first</td>
-                        </tr>
-                    </table>
-                    <div class="tip-box">
-                        <strong>💡 Tip:</strong> Kết hợp cả hai! Grid cho layout tổng thể, Flexbox cho components.
-                    </div>
-                </div>
-
-                <div class="cheat-card" data-keywords="grid alignment place items justify">
-                    <h3><span class="icon">🎯</span> Grid Alignment</h3>
-                    <ul class="property-list">
-                        <li><code>justify-items</code> <span class="desc">Căn ngang items trong ô</span></li>
-                        <li><code>align-items</code> <span class="desc">Căn dọc items trong ô</span></li>
-                        <li><code>place-items</code> <span class="desc">Shorthand (align justify)</span></li>
-                        <li><code>justify-content</code> <span class="desc">Căn ngang toàn grid</span></li>
-                        <li><code>align-content</code> <span class="desc">Căn dọc toàn grid</span></li>
-                    </ul>
                 </div>
             </div>
         </div>
@@ -735,173 +385,60 @@
         <!-- JAVASCRIPT TAB -->
         <div id="js" class="tab-content">
             <div class="cheat-grid">
-                <div class="cheat-card" data-keywords="javascript variables biến let const var">
-                    <h3><span class="icon">📦</span> Variables (Biến)</h3>
+                <div class="cheat-card" data-keywords="variables let const types">
+                    <h3><span class="icon">📦</span> Variables & Types</h3>
                     <div class="code-box">
-                        <span class="comment">// ✅ Nên dùng</span>
-                        <span class="keyword">let</span> age = 25; <span class="comment">// Có thể thay đổi</span>
-                        <span class="keyword">const</span> PI = 3.14; <span class="comment">// Không thể thay đổi</span>
-
-                        <span class="comment">// ❌ Hạn chế</span>
-                        <span class="keyword">var</span> name = "Tên"; <span class="comment">// Scope dễ gây lỗi</span>
+                        <span class="keyword">let</span> age = 25; <span class="comment">// Có thể đổi giá
+                            trị</span><br>
+                        <span class="keyword">const</span> PI = 3.14; <span class="comment">// Hằng số</span><br><br>
+                        <span class="comment">// Kiểu dữ liệu</span><br>
+                        <span class="string">"String"</span>, <span class="keyword">42</span> (Number), <span
+                            class="keyword">true</span> (Boolean)
                     </div>
-                    <div class="warning-box">
-                        <strong>⚠️ Luôn dùng <code>const</code></strong> trước, chỉ đổi sang <code>let</code> khi cần
-                        thay đổi giá trị.
-                    </div>
+                    <div class="tip-box"><strong>💡 Template Literal (Ngày 5):</strong> Dùng <code
+                            class="string">`Chào ${ten}`</code> để nối chuỗi hiện đại thay vì dấu <code>+</code>.</div>
                 </div>
 
-                <div class="cheat-card" data-keywords="data types kiểu dữ liệu string number boolean">
-                    <h3><span class="icon">🏷️</span> Data Types</h3>
-                    <table class="comparison-table">
-                        <tr>
-                            <th>Type</th>
-                            <th>Ví dụ</th>
-                        </tr>
-                        <tr>
-                            <td><code>String</code></td>
-                            <td><code>"Hello"</code>, <code>'World'</code></td>
-                        </tr>
-                        <tr>
-                            <td><code>Number</code></td>
-                            <td><code>42</code>, <code>3.14</code></td>
-                        </tr>
-                        <tr>
-                            <td><code>Boolean</code></td>
-                            <td><code>true</code>, <code>false</code></td>
-                        </tr>
-                        <tr>
-                            <td><code>Null</code></td>
-                            <td><code>null</code></td>
-                        </tr>
-                        <tr>
-                            <td><code>Undefined</code></td>
-                            <td><code>undefined</code></td>
-                        </tr>
-                        <tr>
-                            <td><code>Array</code></td>
-                            <td><code>[1, 2, 3]</code></td>
-                        </tr>
-                        <tr>
-                            <td><code>Object</code></td>
-                            <td><code>{ name: "Tên" }</code></td>
-                        </tr>
-                    </table>
+                <div class="cheat-card" data-keywords="functions arrow return parameters">
+                    <h3><span class="icon">⚙️</span> Functions (Ngày 6)</h3>
                     <div class="code-box">
-                        <span class="comment">// Kiểm tra type</span>
-                        <span class="keyword">typeof</span> <span class="string">"Hello"</span> <span class="comment">//
-                            "string"</span>
-                        <span class="keyword">typeof</span> 42 <span class="comment">// "number"</span>
-                        <span class="keyword">typeof</span> true <span class="comment">// "boolean"</span>
+                        <span class="comment">// 1. Khai báo truyền thống</span><br>
+                        <span class="keyword">function</span> <span class="property">sum</span>(a, b) {<br>
+                        &nbsp;&nbsp;<span class="keyword">return</span> a + b;<br>
+                        }<br><br>
+                        <span class="comment">// 2. Arrow Function (Ngắn gọn)</span><br>
+                        <span class="keyword">const</span> <span class="property">multiply</span> = (a, b) => a *
+                        b;<br><br>
+                        <span class="comment">// 3. Tham số mặc định</span><br>
+                        <span class="keyword">function</span> <span class="property">greet</span>(name = <span
+                            class="string">"Bạn"</span>) { ... }
                     </div>
+                    <div class="warning-box"><strong>⚠️ Lưu ý:</strong> Lệnh <code>return</code> sẽ kết thúc hàm ngay
+                        lập tức. Code phía sau nó sẽ không chạy.</div>
                 </div>
 
-                <div class="cheat-card" data-keywords="string template literal nối chuỗi">
-                    <h3><span class="icon">📝</span> Strings</h3>
-                    <div class="code-box">
-                        <span class="comment">// Nối chuỗi truyền thống</span>
-                        <span class="keyword">let</span> msg = <span class="string">"Hello, "</span> + name + <span
-                            class="string">"!"</span>;
-
-                        <span class="comment">// Template Literals (ES6+) ✅</span>
-                        <span class="keyword">let</span> msg = <span class="string">`Hello, ${name}!`</span>;
-                        <span class="keyword">let</span> multi = <span class="string">`Dòng 1
-                            Dòng 2`</span>;
-
-                        <span class="comment">// String methods</span>
-                        str.<span class="property">length</span> <span class="comment">// Độ dài</span>
-                        str.<span class="property">toUpperCase</span>() <span class="comment">// CHỮ HOA</span>
-                        str.<span class="property">toLowerCase</span>() <span class="comment">// chữ thường</span>
-                        str.<span class="property">includes</span>(<span class="string">"abc"</span>) <span
-                            class="comment">// Kiểm tra chứa</span>
-                        str.<span class="property">split</span>(<span class="string">","</span>) <span
-                            class="comment">// Tách thành array</span>
-                    </div>
-                </div>
-
-                <div class="cheat-card" data-keywords="operators toán tử so sánh">
-                    <h3><span class="icon">🔢</span> Operators</h3>
-                    <table class="comparison-table">
-                        <tr>
-                            <th>Toán tử</th>
-                            <th>Mô tả</th>
-                        </tr>
-                        <tr>
-                            <td><code>+</code> <code>-</code> <code>*</code> <code>/</code></td>
-                            <td>Số học</td>
-                        </tr>
-                        <tr>
-                            <td><code>%</code></td>
-                            <td>Chia lấy dư</td>
-                        </tr>
-                        <tr>
-                            <td><code>==</code></td>
-                            <td>So sánh giá trị</td>
-                        </tr>
-                        <tr>
-                            <td><code>===</code></td>
-                            <td>So sánh giá trị + type ✅</td>
-                        </tr>
-                        <tr>
-                            <td><code>!=</code> <code>!==</code></td>
-                            <td>Không bằng</td>
-                        </tr>
-                        <tr>
-                            <td><code>&&</code></td>
-                            <td>AND (và)</td>
-                        </tr>
-                        <tr>
-                            <td><code>||</code></td>
-                            <td>OR (hoặc)</td>
-                        </tr>
-                        <tr>
-                            <td><code>!</code></td>
-                            <td>NOT (phủ định)</td>
-                        </tr>
-                    </table>
-                    <div class="tip-box">
-                        <strong>💡 Tip:</strong> Luôn dùng <code>===</code> thay vì <code>==</code> để tránh bug!
-                    </div>
-                </div>
-
-                <div class="cheat-card" data-keywords="console log debug gỡ lỗi">
-                    <h3><span class="icon">🔧</span> Console & Debugging</h3>
-                    <div class="code-box">
-                        <span class="comment">// In ra console</span>
-                        console.<span class="property">log</span>(<span class="string">"Debug info"</span>);
-                        console.<span class="property">warn</span>(<span class="string">"Warning!"</span>);
-                        console.<span class="property">error</span>(<span class="string">"Error!"</span>);
-                        console.<span class="property">table</span>([1, 2, 3]);
-
-                        <span class="comment">// Popup</span>
-                        <span class="keyword">alert</span>(<span class="string">"Thông báo"</span>);
-                        <span class="keyword">confirm</span>(<span class="string">"Bạn chắc chứ?"</span>);
-                        <span class="keyword">prompt</span>(<span class="string">"Nhập tên:"</span>);
-                    </div>
-                </div>
-
-                <div class="cheat-card" data-keywords="array mảng push pop methods">
+                <div class="cheat-card" data-keywords="arrays methods push map filter">
                     <h3><span class="icon">📚</span> Arrays (Mảng)</h3>
                     <div class="code-box">
-                        <span class="keyword">const</span> fruits = [<span class="string">"🍎"</span>, <span
-                            class="string">"🍌"</span>, <span class="string">"🍊"</span>];
+                        <span class="keyword">const</span> list = [<span class="string">"🍎"</span>, <span
+                            class="string">"🍌"</span>];<br>
+                        list.<span class="property">push</span>(<span class="string">"🍇"</span>); <span
+                            class="comment">// Thêm cuối</span><br>
+                        list.<span class="property">length</span>; <span class="comment">// Số phần tử</span><br>
+                        list.<span class="property">forEach</span>(item => <span
+                            class="property">console.log</span>(item));
+                    </div>
+                </div>
 
-                        <span class="comment">// Truy cập</span>
-                        fruits[0] <span class="comment">// "🍎"</span>
-                        fruits.<span class="property">length</span> <span class="comment">// 3</span>
-
-                        <span class="comment">// Thêm/Xóa</span>
-                        fruits.<span class="property">push</span>(<span class="string">"🍇"</span>) <span
-                            class="comment">// Thêm cuối</span>
-                        fruits.<span class="property">pop</span>() <span class="comment">// Xóa cuối</span>
-                        fruits.<span class="property">unshift</span>(<span class="string">"🍓"</span>) <span
-                            class="comment">// Thêm đầu</span>
-                        fruits.<span class="property">shift</span>() <span class="comment">// Xóa đầu</span>
-
-                        <span class="comment">// Duyệt</span>
-                        fruits.<span class="property">forEach</span>(fruit => console.log(fruit));
-                        fruits.<span class="property">map</span>(fruit => fruit + <span class="string">"!"</span>);
-                        fruits.<span class="property">filter</span>(f => f === <span class="string">"🍎"</span>);
+                <div class="cheat-card" data-keywords="dom manipulation queryselector">
+                    <h3><span class="icon">🖱️</span> DOM Basic</h3>
+                    <div class="code-box">
+                        <span class="keyword">const</span> el = <span
+                            class="property">document.querySelector</span>(<span class="string">".my-class"</span>);<br>
+                        el.<span class="property">textContent</span> = <span class="string">"Nội dung mới"</span>;<br>
+                        el.<span class="property">style.color</span> = <span class="string">"red"</span>;<br>
+                        el.<span class="property">addEventListener</span>(<span class="string">"click"</span>, () => {
+                        ... });
                     </div>
                 </div>
             </div>
@@ -910,11 +447,8 @@
 
     <script>
         function switchTab(tabId) {
-            // Remove active from all tabs and contents
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
             document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
-
-            // Add active to clicked tab and corresponding content
             document.querySelector(`[onclick="switchTab('${tabId}')"]`).classList.add('active');
             document.getElementById(tabId).classList.add('active');
         }
@@ -923,20 +457,10 @@
             const query = document.getElementById('searchBox').value.toLowerCase();
             const cards = document.querySelectorAll('.cheat-card');
 
-            // Show all tabs if searching
             if (query) {
-                document.querySelectorAll('.tab-content').forEach(content => {
-                    content.style.display = 'block';
-                });
-                document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.style.display = 'block');
             } else {
-                // Reset to first tab
-                document.querySelectorAll('.tab-content').forEach(content => {
-                    content.classList.remove('active');
-                    content.style.display = '';
-                });
-                document.getElementById('html').classList.add('active');
-                document.querySelector('.tab-btn').classList.add('active');
+                document.querySelectorAll('.tab-content').forEach(c => c.style.display = '');
             }
 
             cards.forEach(card => {
