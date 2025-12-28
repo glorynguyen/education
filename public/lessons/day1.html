@@ -157,69 +157,16 @@
             </div>
         </div>
     </div>
-
+    <script src="../js/shared-quiz.js"></script>
     <script>
+        const quiz = new SimpleQuiz('day1', 3);
+        
         function checkQuiz() {
-            const form = document.getElementById('quizForm');
-            const feedback = document.getElementById('quiz-feedback');
-            const completeBtn = document.getElementById('completeBtn');
-            let score = 0;
-            const total = 3;
-
-            // Reset styles
-            document.querySelectorAll('.option-label').forEach(label => {
-                label.classList.remove('correct', 'wrong');
-            });
-
-            const answers = { q1: 'correct', q2: 'correct', q3: 'correct' };
-            let allAnswered = true;
-
-            for (let q in answers) {
-                const selected = form.querySelector(`input[name="${q}"]:checked`);
-                if (!selected) {
-                    allAnswered = false;
-                    continue;
-                }
-
-                const parent = selected.parentElement;
-                if (selected.value === answers[q]) {
-                    parent.classList.add('correct');
-                    score++;
-                } else {
-                    parent.classList.add('wrong');
-                }
-            }
-
-            if (!allAnswered) {
-                feedback.style.display = 'block';
-                feedback.style.background = '#fef3c7';
-                feedback.style.color = '#92400e';
-                feedback.textContent = '⚠️ Vui lòng trả lời hết các câu hỏi!';
-                return;
-            }
-
-            feedback.style.display = 'block';
-            if (score === total) {
-                feedback.style.background = '#dcfce7';
-                feedback.style.color = '#166534';
-                feedback.innerHTML = '🎉 Xuất sắc! Bạn đã nắm vững HTML cơ bản!';
-
-                completeBtn.style.opacity = '1';
-                completeBtn.style.pointerEvents = 'auto';
-                completeBtn.textContent = '✅ Đã hiểu & Hoàn thành!';
-            } else {
-                feedback.style.background = '#fee2e2';
-                feedback.style.color = '#991b1b';
-                feedback.textContent = `❌ Bạn đúng ${score}/${total} câu. Hãy đọc lại bài học và thử lại nhé!`;
-
-                completeBtn.style.opacity = '0.5';
-                completeBtn.style.pointerEvents = 'none';
-            }
+            quiz.check({ q1: 'correct', q2: 'correct', q3: 'correct' });
         }
-
+        
         function completeLesson() {
-            alert("🎉 Chúc mừng! Bạn đã hoàn thành bài học Ngày 1.\n\nBạn đã học được:\n✅ Cấu trúc cơ bản của HTML\n✅ Các thẻ semantic quan trọng\n✅ Cách tổ chức nội dung trang web");
-            window.location.href = "../index.html";
+            quiz.complete("🎉 Chúc mừng! Bạn đã hoàn thành bài học Ngày 1.\n\n✅ Cấu trúc HTML\n✅ Semantic tags");
         }
     </script>
 </body>

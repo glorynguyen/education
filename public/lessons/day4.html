@@ -17,8 +17,7 @@
         </div>
 
         <div class="content">
-            <a href="../index.html" class="btn"
-                style="display: inline-block; text-decoration: none; margin-bottom: 20px;">
+            <a href="../index.html" class="btn" style="display: inline-block; text-decoration: none; margin-bottom: 20px;">
                 ⬅️ Quay lại Lộ trình
             </a>
 
@@ -357,8 +356,23 @@
         </div>
     </div>
 
+    <script src="../js/shared-quiz.js"></script>
     <script>
-        // Initialize grid demo
+        const quiz = new SimpleQuiz('day4', 4);
+
+        function checkQuiz() {
+            quiz.check({
+                q1: 'correct',
+                q2: 'correct',
+                q3: 'correct',
+                q4: 'correct'
+            });
+        }
+
+        function handleComplete() {
+            quiz.complete("🎉 Tuyệt vời! Bạn đã hoàn thành bài học CSS Grid.\n\nKiến thức đạt được:\n✅ Khởi tạo display: grid\n✅ Chia cột với fr và repeat()\n✅ Sử dụng gap và Grid Areas.");
+        }
+
         function updateGrid() {
             const cols = document.getElementById('grid-cols').value;
             const rows = document.getElementById('grid-rows').value;
@@ -396,69 +410,6 @@
 
         // Initialize on load
         updateGrid();
-
-        // Quiz functions
-        function checkQuiz() {
-            const form = document.getElementById('quizForm');
-            const feedback = document.getElementById('quiz-feedback');
-            const completeBtn = document.getElementById('completeBtn');
-            let score = 0;
-            const total = 4;
-
-            document.querySelectorAll('.option-label').forEach(label => {
-                label.classList.remove('correct', 'wrong');
-            });
-
-            const answers = { q1: 'correct', q2: 'correct', q3: 'correct', q4: 'correct' };
-            let allAnswered = true;
-
-            for (let q in answers) {
-                const selected = form.querySelector(`input[name="${q}"]:checked`);
-                if (!selected) {
-                    allAnswered = false;
-                    continue;
-                }
-
-                const parent = selected.parentElement;
-                if (selected.value === answers[q]) {
-                    parent.classList.add('correct');
-                    score++;
-                } else {
-                    parent.classList.add('wrong');
-                }
-            }
-
-            if (!allAnswered) {
-                feedback.style.display = 'block';
-                feedback.style.background = '#fef3c7';
-                feedback.style.color = '#92400e';
-                feedback.textContent = '⚠️ Vui lòng trả lời hết các câu hỏi!';
-                return;
-            }
-
-            feedback.style.display = 'block';
-            if (score === total) {
-                feedback.style.background = '#dcfce7';
-                feedback.style.color = '#166534';
-                feedback.innerHTML = '🎉 Xuất sắc! Bạn đã nắm vững CSS Grid!';
-
-                completeBtn.style.opacity = '1';
-                completeBtn.style.pointerEvents = 'auto';
-                completeBtn.textContent = '✅ Đã hiểu & Hoàn thành!';
-            } else {
-                feedback.style.background = '#fee2e2';
-                feedback.style.color = '#991b1b';
-                feedback.textContent = `❌ Bạn đúng ${score}/${total} câu. Hãy đọc lại bài học và thử lại nhé!`;
-
-                completeBtn.style.opacity = '0.5';
-                completeBtn.style.pointerEvents = 'none';
-            }
-        }
-
-        function completeLesson() {
-            alert("🎉 Chúc mừng! Bạn đã hoàn thành bài học Ngày 4.\n\nBạn đã học được:\n✅ CSS Grid Layout cơ bản\n✅ Sự khác biệt giữa Grid và Flexbox\n✅ Grid Template Areas\n✅ Các thuộc tính Grid quan trọng");
-            window.location.href = "../index.html";
-        }
     </script>
 </body>
 
