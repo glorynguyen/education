@@ -1,229 +1,347 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-    <meta charset="UTF-8" />
-    <title>Advanced Knitting Visualizer</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
-    <script src="https://unpkg.com/three@0.134.0/examples/js/controls/OrbitControls.js"></script>
-    <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; background: #2c3e50; color: white; display: flex; flex-direction: column; height: 100vh; }
-        .container { display: flex; flex: 1; overflow: hidden; }
-        .sidebar { width: 350px; padding: 20px; background: #34495e; box-shadow: 2px 0 10px rgba(0,0,0,0.3); z-index: 10; display: flex; flex-direction: column; }
-        textarea { flex: 1; width: 100%; font-family: 'Courier New', monospace; background: #1a252f; color: #ecf0f1; border: 1px solid #455a64; padding: 10px; border-radius: 4px; resize: none; font-size: 13px; }
-        .controls { margin-top: 15px; display: grid; gap: 10px; }
-        button { background: #27ae60; color: white; border: none; padding: 12px; border-radius: 4px; cursor: pointer; font-weight: bold; transition: 0.3s; }
-        button:hover { background: #2ecc71; }
-        #canvas-container { flex: 1; position: relative; background: #000; }
-        .label { font-size: 12px; color: #bdc3c7; margin-bottom: 5px; display: block; }
-        select, input[type="checkbox"] { margin-bottom: 10px; }
-        .stats { margin-top: 10px; font-size: 12px; color: #f1c40f; }
-    </style>
+<meta charset="UTF-8" />
+<title>Pro Knitting Visualizer - Auto Calculator</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+<script src="https://unpkg.com/three@0.134.0/examples/js/controls/OrbitControls.js"></script>
+<style>
+    body { margin: 0; background: #0d0d0d; color: white; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; overflow: hidden; display: flex; }
+    
+    /* Giao diện UI bên trái */
+    #sidebar {
+        width: 400px; height: 100vh; background: #1a1a1a; border-right: 1px solid #333;
+        display: flex; flex-direction: column; z-index: 10; padding: 15px; box-sizing: border-box;
+    }
+
+    h3 { margin-top: 0; color: #58a6ff; display: flex; align-items: center; gap: 10px; }
+    
+    textarea {
+        flex-grow: 1; width: 100%; background: #000; color: #40ff00;
+        border: 1px solid #444; padding: 10px; font-family: 'Consolas', monospace;
+        font-size: 13px; line-height: 1.4; resize: none; border-radius: 4px;
+    }
+
+    .controls-grid {
+        display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 15px;
+    }
+
+    .control-group {
+        background: #252525; padding: 10px; border-radius: 6px; border: 1px solid #333;
+        margin-bottom: 10px;
+    }
+
+    label { display: block; font-size: 11px; color: #888; margin-bottom: 5px; text-transform: uppercase; }
+
+    button {
+        padding: 8px; border: none; border-radius: 4px; cursor: pointer;
+        font-weight: bold; transition: 0.2s; background: #30363d; color: white;
+    }
+
+    button:hover { background: #484f58; }
+    button.primary { background: #238636; }
+    button.primary:hover { background: #2ea043; }
+    button.danger { background: #da3633; }
+
+    #debug-info {
+        position: absolute; bottom: 20px; right: 20px; background: rgba(0,0,0,0.85);
+        padding: 15px; font-size: 12px; color: #40ff00; border: 1px solid #444;
+        max-height: 250px; overflow-y: auto; pointer-events: none; border-radius: 8px;
+    }
+
+    .current-stat {
+        font-size: 18px; color: #ffca28; margin-bottom: 10px; font-weight: bold;
+        text-align: center; border-bottom: 1px solid #333; padding-bottom: 10px;
+    }
+</style>
 </head>
 <body>
 
-<div class="container">
-    <div class="sidebar">
-        <h2>Knitting Parser</h2>
-        <span class="label">Pattern Instructions:</span>
-        <textarea id="patternInput">
-Row 1: K8
-Row 2: KFB x8 (16 sts)
-Row 3: (K1, KFB) x8 (24 sts)
-Row 4: K
-Row 5: (K2, KFB) x8 (32 sts)
-Row 6: P
-Row 7: (K3, KFB) x8 (40 sts)
-Row 8: K
-Row 9: (K4, KFB) x8 (48 sts)
-Row 10: P
-Row 11-15: K
-Row 16: (K4, K2TOG) x8 (40 sts)</textarea>
+<div id="sidebar">
+    <h3>🧶 Knitting Assistant</h3>
+    
+    <div class="current-stat" id="status-display">Số mũi hiện tại: 0</div>
 
-        <div class="controls">
-            <label><input type="checkbox" id="autoRotate" checked /> Auto Rotate</label>
-            <span class="label">Style:</span>
-            <select id="renderStyle">
-                <option value="circular">Circular (Đan vòng/Ống)</option>
-                <option value="flat">Flat (Đan phẳng/Tấm)</option>
-            </select>
-            <button onclick="parseAndRender()">Visualize Pattern</button>
-            <div class="stats" id="stats">Rows: 0 | Max Stitches: 0</div>
+    <div class="control-group">
+        <label>Khởi tạo (Cast On)</label>
+        <div style="display: flex; gap: 5px;">
+            <input type="number" id="co-count" value="8" style="width: 60px; background: #000; color: #fff; border: 1px solid #444; padding: 5px;">
+            <button onclick="addCO()" class="primary" style="flex-grow: 1;">Gầy mũi (CO)</button>
         </div>
     </div>
-    <div id="canvas-container"></div>
+
+    <textarea id="pattern" oninput="updateStats()">CO 8
+Row 1: K1, KFB x6, K1 (14 sts)
+Row 2: P</textarea>
+
+    <div class="controls-grid">
+        <button onclick="addRow('K')">Hàng Knit (K)</button>
+        <button onclick="addRow('P')">Hàng Purl (P)</button>
+        <button onclick="addIncrease()">Tăng mũi (+6)</button>
+        <button onclick="addDecrease()">Giảm mũi (-8)</button>
+        <button onclick="addStStRange()" style="grid-column: span 2;">Thêm 5 hàng St st</button>
+        <button onclick="undo()" class="danger">Hoàn tác (Undo)</button>
+        <button onclick="build()" class="primary">MÔ PHỎNG 3D</button>
+    </div>
 </div>
 
+<div id="debug-info">Thống kê chi tiết...</div>
+
 <script>
-    /* =================================================+
-       1. STITCH LOGIC & PARSER
-    +================================================== */
-    const STITCH_MAP = {
-        'k': 1, 'p': 1, 
-        'kfb': 2, 'kll': 2, 'krl': 2, 'm1': 2,
-        'k2tog': -1, 'ssk': -1, 'p2tog': -1,
-        'yo': 1 // Yarn over adds a stitch
-    };
+/* =========================
+   LOGIC XỬ LÝ PATTERN
+========================= */
+let currentStitches = 0;
+let lastRowNumber = 0;
 
-    function parsePattern(text) {
-        const lines = text.split('\n').filter(l => l.trim());
-        let rows = [];
-        let currentStitchCount = 0;
+function updateStats() {
+    const text = document.getElementById("pattern").value;
+    const data = parseKnittingPattern(text);
+    if (data.length > 0) {
+        currentStitches = data[data.length - 1].stitches.length;
+        
+        // Tìm số hàng cuối cùng
+        const lastRowLabel = data[data.length - 1].label;
+        if (!isNaN(lastRowLabel)) lastRowNumber = parseInt(lastRowLabel);
+    } else {
+        currentStitches = 0;
+        lastRowNumber = 0;
+    }
+    document.getElementById("status-display").innerText = `Số mũi hiện tại: ${currentStitches}`;
+}
 
-        lines.forEach(line => {
-            // Xử lý dải hàng (ví dụ Row 11-15: K)
-            let rangeMatch = line.match(/Row\s*(\d+)-(\d+):/i);
-            let repeatLine = 1;
-            if (rangeMatch) {
-                repeatLine = parseInt(rangeMatch[2]) - parseInt(rangeMatch[1]) + 1;
+function addCO() {
+    const count = document.getElementById("co-count").value;
+    document.getElementById("pattern").value = `CO ${count}`;
+    updateStats();
+    build();
+}
+
+function addRow(type) {
+    updateStats();
+    lastRowNumber++;
+    const newRow = `Row ${lastRowNumber}: ${type}\n`;
+    document.getElementById("pattern").value += newRow;
+    updateStats();
+}
+
+function addIncrease() {
+    updateStats();
+    lastRowNumber++;
+    // Logic: K1, (K..., KFB) x 6, K1
+    const repeatCount = 6;
+    const interior = Math.floor((currentStitches - 2) / repeatCount);
+    const kVal = interior > 0 ? `K${interior}, ` : "";
+    const newRow = `Row ${lastRowNumber}: K1, (${kVal}KLL) x${repeatCount}, K1\n`;
+    document.getElementById("pattern").value += newRow;
+    updateStats();
+}
+
+function addDecrease() {
+    updateStats();
+    lastRowNumber++;
+    const repeatCount = 8;
+    const interior = Math.floor((currentStitches - 2) / repeatCount) - 2;
+    const kVal = interior > 0 ? `K${interior}, ` : "";
+    const newRow = `Row ${lastRowNumber}: K1, (${kVal}K2tog) x${repeatCount}, K1\n`;
+    document.getElementById("pattern").value += newRow;
+    updateStats();
+}
+
+function addStStRange() {
+    updateStats();
+    const start = lastRowNumber + 1;
+    const end = lastRowNumber + 5;
+    const newRow = `Row ${start} – Row ${end}: St st\n`;
+    document.getElementById("pattern").value += newRow;
+    updateStats();
+}
+
+function undo() {
+    const lines = document.getElementById("pattern").value.trim().split("\n");
+    lines.pop();
+    document.getElementById("pattern").value = lines.join("\n") + (lines.length > 0 ? "\n" : "");
+    updateStats();
+}
+
+function parseKnittingPattern(text) {
+    let rowsData = [];
+    let lastStCount = 0;
+    const lines = text.split("\n").map(l => l.trim()).filter(l => l);
+
+    lines.forEach((line) => {
+        if (line.toUpperCase().startsWith("CO")) {
+            let count = parseInt(line.match(/\d+/)[0]);
+            lastStCount = count;
+            rowsData.push({ label: "CO", stitches: Array(count).fill("S") });
+            return;
+        }
+
+        let rangeMatch = line.match(/Row\s*(\d+)\s*[–-]\s*Row\s*(\d+):\s*(.*)/i);
+        if (rangeMatch) {
+            let start = parseInt(rangeMatch[1]), end = parseInt(rangeMatch[2]);
+            for (let r = start; r <= end; r++) {
+                rowsData.push({ label: r.toString(), stitches: Array(lastStCount).fill("S") });
             }
+            return;
+        }
 
-            let cleanLine = line.replace(/Row\s*\d+(-?\d+)?:\s*/i, "")
-                                .replace(/\(\d+\s*sts?\)/i, "")
-                                .trim();
+        let rowLabelMatch = line.match(/Row\s*(\d+):/i);
+        let rowLabel = rowLabelMatch ? rowLabelMatch[1] : "??";
+        let instr = line.replace(/Row\s*\d+:/i, "").replace(/\(\d+\s*sts?\)/i, "").trim();
 
-            let rowData = expandGroups(cleanLine);
-            
-            // Nếu dòng chỉ ghi "K" hoặc "P" đơn thuần, lấy số lượng từ hàng trước
-            if (rowData.length === 0 && (cleanLine.toLowerCase() === 'k' || cleanLine.toLowerCase() === 'p')) {
-                rowData = Array(currentStitchCount).fill(cleanLine.toLowerCase());
-            }
+        // Xử lý nhân cụm ( ) x N
+        while (instr.includes("(")) {
+            instr = instr.replace(/\(([^()]+)\)\s*x\s*(\d+)/gi, (_, content, count) => 
+                Array(parseInt(count)).fill(content).join(", "));
+        }
 
-            // Tính toán số mũi sau khi kết thúc hàng
-            let rowDelta = 0;
-            rowData.forEach(st => {
-                const type = st.replace(/\d+/, '').toLowerCase();
-                const count = parseInt(st.match(/\d+/) || 1);
-                // Đơn giản hóa delta: k2tog tính là 1 thực thể nhưng chiếm 2 mũi cũ -> giảm 1
-                if (STITCH_MAP[type]) {
-                    // Nếu là k10 thì delta là 10. Nếu k2tog thì delta là -1.
-                    rowDelta += (type === 'k' || type === 'p') ? count : (STITCH_MAP[type] || 1);
+        let stitchesInRow = [];
+        let parts = instr.split(/[,\s]+/).filter(Boolean);
+
+        if (parts.length === 1 && (parts[0].toUpperCase() === "P" || parts[0].toUpperCase() === "K" || parts[0].toUpperCase() === "ST ST")) {
+            stitchesInRow = Array(lastStCount).fill("S");
+        } else {
+            parts.forEach(p => {
+                p = p.toUpperCase();
+                if (p.includes("KFB") || p.includes("KLL") || p.includes("M1")) {
+                    stitchesInRow.push("S", "S");
+                } else if (p.includes("K2TOG") || p.includes("SSK")) {
+                    stitchesInRow.push("S"); 
+                } else if (p.match(/^K\d+$/)) {
+                    let num = parseInt(p.replace("K", ""));
+                    for(let i=0; i<num; i++) stitchesInRow.push("S");
+                } else if (p !== "K" && p !== "P") {
+                    // Xử lý xN lẻ
+                    let mult = p.match(/x(\d+)/);
+                    if (mult) {
+                        for(let i=0; i<parseInt(mult[1]); i++) stitchesInRow.push("S");
+                    } else {
+                        stitchesInRow.push("S");
+                    }
                 } else {
-                    rowDelta += count;
+                    stitchesInRow.push("S");
                 }
             });
-
-            // Nếu là hàng đầu tiên và chưa có định nghĩa số mũi, dùng rowDelta làm gốc
-            if (currentStitchCount === 0) currentStitchCount = rowDelta;
-            else currentStitchCount = rowDelta;
-
-            for(let r=0; r<repeatLine; r++) {
-                rows.push({ stitches: rowData, count: currentStitchCount });
-            }
-        });
-        return rows;
-    }
-
-    function expandGroups(text) {
-        // Xử lý lặp (Group) x N
-        while (text.includes('(')) {
-            text = text.replace(/\(([^()]+)\)\s*x\s*(\d+)/gi, (_, g, n) => {
-                return Array(parseInt(n)).fill(g).join(', ');
-            });
         }
         
-        // Tách các thành phần k1, kfb x6...
-        return text.split(/[ ,]+/).filter(Boolean).flatMap(part => {
-            let mult = part.match(/(.+?)x(\d+)/i);
-            if (mult) return Array(parseInt(mult[2])).fill(mult[1]);
-            return part;
+        // Cập nhật lại số mũi cho hàng tiếp theo dựa trên logic tăng/giảm
+        // Ở đây ta đơn giản hóa là lấy độ dài mảng vừa tạo
+        rowsData.push({ label: rowLabel, stitches: stitchesInRow });
+        lastStCount = stitchesInRow.length;
+    });
+    return rowsData;
+}
+
+/* =========================
+   THREE.JS VISUALIZER
+========================= */
+let scene, camera, renderer, controls, group;
+
+init();
+animate();
+
+function init() {
+    scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x0a0a0a);
+    camera = new THREE.PerspectiveCamera(45, (window.innerWidth - 400) / window.innerHeight, 0.1, 1000);
+    camera.position.set(0, 0, 100);
+
+    renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(window.innerWidth - 400, window.innerHeight);
+    document.body.appendChild(renderer.domElement);
+
+    scene.add(new THREE.AmbientLight(0xffffff, 1));
+    const sun = new THREE.DirectionalLight(0xffffff, 0.5);
+    sun.position.set(10, 20, 10);
+    scene.add(sun);
+
+    controls = new THREE.OrbitControls(camera, renderer.domElement);
+    group = new THREE.Group();
+    scene.add(group);
+    
+    window.addEventListener('resize', onWindowResize);
+    build();
+    updateStats();
+}
+
+function createStitch(x, y, color) {
+    const w = 0.8, h = 0.9;
+    const points = [
+        new THREE.Vector3(x - w/2, y + h/2, 0),
+        new THREE.Vector3(x, y - h/2, 0.2),
+        new THREE.Vector3(x + w/2, y + h/2, 0)
+    ];
+    const curve = new THREE.CatmullRomCurve3(points);
+    const geo = new THREE.TubeGeometry(curve, 8, 0.18, 6, false);
+    return new THREE.Mesh(geo, new THREE.MeshStandardMaterial({ 
+        color: color,
+        roughness: 0.8,
+        metalness: 0.2
+    }));
+}
+
+function makeTextSprite(message) {
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = 128; canvas.height = 64;
+    ctx.font = "Bold 32px monospace"; ctx.fillStyle = "#888"; 
+    ctx.fillText(message, 10, 40);
+    const texture = new THREE.CanvasTexture(canvas);
+    const sprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: texture }));
+    sprite.scale.set(3, 1.5, 1);
+    return sprite;
+}
+
+function build() {
+    group.clear();
+    const data = parseKnittingPattern(document.getElementById("pattern").value);
+    const rowGap = 1.1, stitchGap = 0.9;
+    let debugHtml = "<b>CHI TIẾT HÀNG:</b><br>";
+
+    data.forEach((rowData, idx) => {
+        const row = rowData.stitches;
+        const rowWidth = (row.length - 1) * stitchGap;
+        const xStart = -(rowWidth / 2);
+
+        debugHtml += `Hàng ${rowData.label}: ${row.length} mũi<br>`;
+
+        // Phối màu: Hàng lẻ màu xanh, hàng chẵn màu đỏ cam
+        let color = (idx % 2 !== 0) ? 0x58a6ff : 0xec6a5e;
+        if (rowData.label === "CO") color = 0xaaaaaa;
+
+        row.forEach((_, sIdx) => {
+            const x = xStart + (sIdx * stitchGap);
+            const y = idx * rowGap;
+            group.add(createStitch(x, y, color));
         });
-    }
 
-    /* =================================================+
-       2. THREE.JS ENGINE
-    +================================================== */
-    let scene, camera, renderer, controls, group;
-
-    function initScene() {
-        const container = document.getElementById("canvas-container");
-        scene = new THREE.Scene();
-        camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
-        camera.position.set(20, 20, 40);
-
-        renderer = new THREE.WebGLRenderer({ antialias: true });
-        renderer.setSize(container.clientWidth, container.clientHeight);
-        renderer.setPixelRatio(window.devicePixelRatio);
-        container.appendChild(renderer.domElement);
-
-        const ambient = new THREE.AmbientLight(0xffffff, 0.8);
-        scene.add(ambient);
-
-        const directional = new THREE.DirectionalLight(0xffffff, 0.5);
-        directional.position.set(10, 20, 10);
-        scene.add(directional);
-
-        controls = new THREE.OrbitControls(camera, renderer.domElement);
-        group = new THREE.Group();
-        scene.add(group);
-
-        window.addEventListener('resize', () => {
-            camera.aspect = container.clientWidth / container.clientHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(container.clientWidth, container.clientHeight);
-        });
-    }
-
-    function render3D(rows) {
-        group.clear();
-        const style = document.getElementById("renderStyle").value;
-        const scale = 0.4;
-        const rowHeight = 0.5;
-        let maxSts = 0;
-
-        rows.forEach((row, i) => {
-            maxSts = Math.max(maxSts, row.count);
-            const radius = (row.count * scale) / (2 * Math.PI);
-            const color = i % 2 === 0 ? 0x3498db : 0x2980b9;
-            
-            let mesh;
-            if (style === 'circular') {
-                // Sử dụng Torus để giả lập vòng len
-                const geometry = new THREE.TorusGeometry(radius, 0.2, 8, 50);
-                const material = new THREE.MeshStandardMaterial({ color: color, roughness: 0.8 });
-                mesh = new THREE.Mesh(geometry, material);
-                mesh.rotation.x = Math.PI / 2;
-                mesh.position.y = i * rowHeight;
-            } else {
-                // Chế độ phẳng (Flat)
-                const width = row.count * scale;
-                const geometry = new THREE.CylinderGeometry(0.2, 0.2, width, 8);
-                const material = new THREE.MeshStandardMaterial({ color: color, roughness: 0.8 });
-                mesh = new THREE.Mesh(geometry, material);
-                mesh.rotation.z = Math.PI / 2;
-                mesh.position.y = i * rowHeight;
-                // Tạo hiệu ứng sóng nhẹ cho tấm đan
-                mesh.position.z = Math.sin(i * 0.5) * 0.5;
-            }
-            group.add(mesh);
-        });
-
-        document.getElementById('stats').innerText = `Rows: ${rows.length} | Max Stitches: ${maxSts}`;
-        
-        // Căn giữa camera
-        const centerOffset = (rows.length * rowHeight) / 2;
-        group.position.y = -centerOffset;
-    }
-
-    function parseAndRender() {
-        const input = document.getElementById("patternInput").value;
-        const rows = parsePattern(input);
-        render3D(rows);
-    }
-
-    function animate() {
-        requestAnimationFrame(animate);
-        if (document.getElementById("autoRotate").checked) {
-            group.rotation.y += 0.005;
+        // Nhãn số hàng
+        if (idx % 2 === 0) {
+            const label = makeTextSprite(rowData.label);
+            label.position.set((rowWidth / 2) + 5, idx * rowGap, 0);
+            group.add(label);
         }
-        controls.update();
-        renderer.render(scene, camera);
-    }
+    });
 
-    // Khởi tạo
-    initScene();
-    parseAndRender();
-    animate();
+    const box = new THREE.Box3().setFromObject(group);
+    const center = box.getCenter(new THREE.Vector3());
+    group.position.y = -center.y;
+    
+    document.getElementById("debug-info").innerHTML = debugHtml;
+}
 
+function animate() {
+    requestAnimationFrame(animate);
+    controls.update();
+    renderer.render(scene, camera);
+}
+
+function onWindowResize() {
+    camera.aspect = (window.innerWidth - 400) / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth - 400, window.innerHeight);
+}
 </script>
 </body>
 </html>

@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ngày 7 - JavaScript Arrays (Mảng)</title>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="../css/variables.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/lesson-style.css">
+
+    <style>
+        .array-visual {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .array-item {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            min-width: 60px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .array-index {
+            font-size: 0.8em;
+            opacity: 0.8;
+            display: block;
+            margin-top: 5px;
+        }
+
+        .method-demo {
+            background: #f9fafb;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .demo-controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        .demo-controls button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: transform 0.2s;
+        }
+
+        .demo-controls button:hover {
+            transform: scale(1.05);
+        }
+
+        .demo-controls input {
+            padding: 10px;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        #arrayOutput {
+            min-height: 60px;
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            border: 2px dashed #cbd5e1;
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .method-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .method-card h4 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .method-card code {
+            background: #1f2937;
+            color: #e5e7eb;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Consolas', monospace;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📅 Tháng 1 - Ngày 7</h1>
+            <p>Làm quen với Arrays (Mảng) - Quản lý danh sách dữ liệu</p>
+        </div>
+
+        <div class="content">
+            <a href="../index.html" class="btn"
+                style="display: inline-block; text-decoration: none; margin-bottom: 20px;">⬅️ Quay lại Lộ trình</a>
+
+            <h2>1. Array (Mảng) là gì?</h2>
+            <div class="concept-card">
+                <p>Array là một cấu trúc dữ liệu dùng để <strong>lưu trữ nhiều giá trị</strong> trong một biến duy nhất.
+                    Thay vì khai báo nhiều biến riêng lẻ, bạn có thể nhóm chúng lại thành một mảng.</p>
+            </div>
+
+            <div class="info-box">
+                <strong>🎯 Tại sao cần dùng Arrays?</strong><br>
+                • Quản lý danh sách dữ liệu (tên học sinh, sản phẩm, điểm số...)<br>
+                • Dễ dàng thêm, xóa, sửa phần tử<br>
+                • Có thể lặp qua từng phần tử để xử lý<br>
+                • Tiết kiệm code, dễ bảo trì
+            </div>
+
+            <h3>Hình dung Array:</h3>
+            <div class="array-visual">
+                <div class="array-item">
+                    "🍎"
+                    <span class="array-index">[0]</span>
+                </div>
+                <div class="array-item">
+                    "🍌"
+                    <span class="array-index">[1]</span>
+                </div>
+                <div class="array-item">
+                    "🍇"
+                    <span class="array-index">[2]</span>
+                </div>
+                <div class="array-item">
+                    "🍊"
+                    <span class="array-index">[3]</span>
+                </div>
+            </div>
+
+            <div class="warning-box">
+                <strong>⚠️ Lưu ý:</strong> Array trong JavaScript bắt đầu từ index (chỉ số) <code>0</code>, không phải
+                <code>1</code>!
+            </div>
+
+            <h2>2. Cách khai báo Array</h2>
+
+            <h3>✅ Cách 1: Array Literal (Khuyến khích)</h3>
+            <div class="code-block">
+                <pre>let fruits = ["Táo", "Chuối", "Nho"];
+let numbers = [1, 2, 3, 4, 5];
+let mixed = ["Text", 100, true]; // Có thể chứa nhiều kiểu dữ liệu</pre>
+            </div>
+
+            <h3>✅ Cách 2: Tạo mảng rỗng rồi thêm dần</h3>
+            <div class="code-block">
+                <pre>let students = [];
+students.push("An");
+students.push("Bình");
+students.push("Chi");
+console.log(students); // ["An", "Bình", "Chi"]</pre>
+            </div>
+
+            <h2>3. Truy cập phần tử trong Array</h2>
+            <div class="code-block">
+                <pre>let colors = ["Đỏ", "Xanh", "Vàng", "Tím"];
+
+console.log(colors[0]);  // "Đỏ" (phần tử đầu tiên)
+console.log(colors[2]);  // "Vàng" (phần tử thứ 3)
+console.log(colors[colors.length - 1]); // "Tím" (phần tử cuối cùng)
+
+// Thay đổi giá trị
+colors[1] = "Xanh lá";
+console.log(colors); // ["Đỏ", "Xanh lá", "Vàng", "Tím"]</pre>
+            </div>
+
+            <h2>4. Các phương thức Array quan trọng</h2>
+
+            <div class="comparison-grid">
+                <div class="method-card">
+                    <h4>📥 push()</h4>
+                    <p>Thêm phần tử vào <strong>cuối</strong> mảng</p>
+                    <div class="code-block">
+                        <pre>let arr = [1, 2, 3];
+arr.push(4);
+// [1, 2, 3, 4]</pre>
+                    </div>
+                </div>
+
+                <div class="method-card">
+                    <h4>📤 pop()</h4>
+                    <p>Xóa phần tử <strong>cuối cùng</strong></p>
+                    <div class="code-block">
+                        <pre>let arr = [1, 2, 3];
+arr.pop();
+// [1, 2]</pre>
+                    </div>
+                </div>
+
+                <div class="method-card">
+                    <h4>📥 unshift()</h4>
+                    <p>Thêm phần tử vào <strong>đầu</strong> mảng</p>
+                    <div class="code-block">
+                        <pre>let arr = [2, 3];
+arr.unshift(1);
+// [1, 2, 3]</pre>
+                    </div>
+                </div>
+
+                <div class="method-card">
+                    <h4>📤 shift()</h4>
+                    <p>Xóa phần tử <strong>đầu tiên</strong></p>
+                    <div class="code-block">
+                        <pre>let arr = [1, 2, 3];
+arr.shift();
+// [2, 3]</pre>
+                    </div>
+                </div>
+
+                <div class="method-card">
+                    <h4>📏 length</h4>
+                    <p>Số lượng phần tử trong mảng</p>
+                    <div class="code-block">
+                        <pre>let arr = [1, 2, 3];
+console.log(arr.length);
+// 3</pre>
+                    </div>
+                </div>
+
+                <div class="method-card">
+                    <h4>🔗 join()</h4>
+                    <p>Nối các phần tử thành chuỗi</p>
+                    <div class="code-block">
+                        <pre>let arr = ["A", "B", "C"];
+console.log(arr.join("-"));
+// "A-B-C"</pre>
+                    </div>
+                </div>
+            </div>
+
+            <h2>5. 💻 Thử nghiệm với Array</h2>
+            <div class="method-demo">
+                <h3>🎮 Quản lý danh sách Todos</h3>
+                <div class="demo-controls">
+                    <input type="text" id="todoInput" placeholder="Nhập công việc mới...">
+                    <button onclick="addTodo()">➕ Thêm Todo</button>
+                    <button onclick="removeLast()">🗑️ Xóa cuối</button>
+                    <button onclick="removeFirst()">🗑️ Xóa đầu</button>
+                    <button onclick="clearAll()">🧹 Xóa hết</button>
+                </div>
+
+                <div id="arrayOutput">
+                    <strong>Danh sách todos:</strong> (Chưa có todo nào)
+                </div>
+
+                <div style="margin-top: 15px; padding: 10px; background: white; border-radius: 8px;">
+                    <strong>📊 Thống kê:</strong>
+                    <div id="arrayStats">Số lượng: 0</div>
+                </div>
+            </div>
+
+            <h3>📖 Xem code của demo</h3>
+            <div class="code-block">
+                <pre>let todos = [];
+
+function addTodo() {
+    const input = document.getElementById('todoInput');
+    if (input.value.trim()) {
+        todos.push(input.value.trim());
+        input.value = '';
+        updateDisplay();
+    }
+}
+
+function removeLast() {
+    todos.pop();
+    updateDisplay();
+}
+
+function removeFirst() {
+    todos.shift();
+    updateDisplay();
+}
+
+function clearAll() {
+    todos = [];
+    updateDisplay();
+}
+
+function updateDisplay() {
+    const output = document.getElementById('arrayOutput');
+    const stats = document.getElementById('arrayStats');
+    
+    if (todos.length === 0) {
+        output.innerHTML = '<strong>Danh sách todos:</strong> (Chưa có todo nào)';
+    } else {
+        output.innerHTML = '<strong>Danh sách todos:</strong><br>' + 
+            todos.map((todo, i) => `[${i}] ${todo}`).join('<br>');
+    }
+    
+    stats.textContent = `Số lượng: ${todos.length}`;
+}</pre>
+            </div>
+
+            <h2>6. Lặp qua Array với forEach()</h2>
+            <div class="concept-card">
+                <p>Phương thức <code>forEach()</code> cho phép bạn thực hiện một hành động với <strong>từng phần
+                        tử</strong> trong mảng.</p>
+            </div>
+
+            <div class="code-block">
+                <pre>let fruits = ["Táo", "Chuối", "Nho"];
+
+// Cách 1: forEach với Arrow Function
+fruits.forEach(fruit => {
+    console.log("Tôi thích " + fruit);
+});
+
+// Cách 2: forEach với function thông thường
+fruits.forEach(function(fruit, index) {
+    console.log(`${index}: ${fruit}`);
+});
+
+// Output:
+// 0: Táo
+// 1: Chuối
+// 2: Nho</pre>
+            </div>
+
+            <div class="info-box">
+                <strong>💡 Mẹo:</strong> <code>forEach()</code> nhận vào 3 tham số:<br>
+                • <code>item</code> - Giá trị của phần tử hiện tại<br>
+                • <code>index</code> - Chỉ số của phần tử (có thể bỏ qua)<br>
+                • <code>array</code> - Toàn bộ mảng (có thể bỏ qua)
+            </div>
+
+            <h2>🎯 Bài tập về nhà</h2>
+            <div class="concept-card">
+                <h3>Tạo "Quản lý danh sách học sinh"</h3>
+                <p>Tạo một file <code>students.html</code> với các chức năng sau:</p>
+                <ul>
+                    <li>Khai báo mảng <code>students</code> với ít nhất 5 tên học sinh</li>
+                    <li>Hiển thị tất cả học sinh ra màn hình (dùng <code>forEach</code>)</li>
+                    <li>Tạo nút "Thêm học sinh" để thêm tên mới vào cuối danh sách</li>
+                    <li>Tạo nút "Xóa học sinh cuối" để xóa học sinh cuối cùng</li>
+                    <li>Hiển thị tổng số học sinh (dùng <code>length</code>)</li>
+                    <li><strong>Bonus:</strong> Tìm học sinh theo tên (dùng <code>indexOf()</code> hoặc
+                        <code>includes()</code>)
+                    </li>
+                </ul>
+            </div>
+
+            <h2>🧠 Kiểm tra kiến thức</h2>
+            <form id="quizForm" class="quiz-container">
+                <div class="question-item">
+                    <p class="question-text">Câu 1: Index (chỉ số) của phần tử đầu tiên trong Array là bao nhiêu?</p>
+                    <ul class="options-list">
+                        <li><label class="option-label"><input type="radio" name="q1" value="wrong"> 1</label></li>
+                        <li><label class="option-label"><input type="radio" name="q1" value="correct"> 0</label></li>
+                        <li><label class="option-label"><input type="radio" name="q1" value="wrong"> -1</label></li>
+                    </ul>
+                </div>
+
+                <div class="question-item">
+                    <p class="question-text">Câu 2: Phương thức nào dùng để thêm phần tử vào cuối mảng?</p>
+                    <ul class="options-list">
+                        <li><label class="option-label"><input type="radio" name="q2" value="wrong"> add()</label></li>
+                        <li><label class="option-label"><input type="radio" name="q2" value="correct"> push()</label>
+                        </li>
+                        <li><label class="option-label"><input type="radio" name="q2" value="wrong"> append()</label>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="question-item">
+                    <p class="question-text">Câu 3: <code>let arr = [1, 2, 3]; arr.pop();</code> - Mảng arr sau khi
+                        pop() là gì?</p>
+                    <ul class="options-list">
+                        <li><label class="option-label"><input type="radio" name="q3" value="wrong"> [2, 3]</label></li>
+                        <li><label class="option-label"><input type="radio" name="q3" value="correct"> [1, 2]</label>
+                        </li>
+                        <li><label class="option-label"><input type="radio" name="q3" value="wrong"> [1, 2, 3]</label>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="question-item">
+                    <p class="question-text">Câu 4: Làm sao để lấy số lượng phần tử trong mảng?</p>
+                    <ul class="options-list">
+                        <li><label class="option-label"><input type="radio" name="q4" value="wrong"> arr.size</label>
+                        </li>
+                        <li><label class="option-label"><input type="radio" name="q4" value="correct">
+                                arr.length</label></li>
+                        <li><label class="option-label"><input type="radio" name="q4" value="wrong"> arr.count()</label>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="question-item">
+                    <p class="question-text">Câu 5: Phương thức nào dùng để lặp qua từng phần tử trong mảng?</p>
+                    <ul class="options-list">
+                        <li><label class="option-label"><input type="radio" name="q5" value="wrong"> loop()</label></li>
+                        <li><label class="option-label"><input type="radio" name="q5" value="correct"> forEach()</label>
+                        </li>
+                        <li><label class="option-label"><input type="radio" name="q5" value="wrong"> iterate()</label>
+                        </li>
+                    </ul>
+                </div>
+
+                <button type="button" onclick="checkQuiz()" class="btn">Kiểm tra đáp án</button>
+                <div id="quiz-feedback"></div>
+            </form>
+
+            <div class="actions">
+                <a href="day6.html" class="btn">⬅️ Quay lại ngày 6</a>
+                <button id="completeBtn" class="btn" onclick="completeLesson()">✅ Hoàn thành bài học</button>
+            </div>
+            <p style="text-align: center; color: #6b7280; margin-top: 10px; font-size: 0.9em;">
+                (Hãy làm đúng Quiz để mở khóa nút hoàn thành)
+            </p>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="../js/config.js"></script>
+    <script src="../js/auth.js"></script>
+    <script src="../js/storage.js"></script>
+    <script src="../js/quiz-handler.js"></script>
+
+    <script>
+        // Initialize quiz for day 7
+        initQuiz('day7');
+
+        // Array demo code
+        let todos = [];
+
+        function addTodo() {
+            const input = document.getElementById('todoInput');
+            const value = input.value.trim();
+
+            if (value) {
+                todos.push(value);
+                input.value = '';
+                updateDisplay();
+            } else {
+                alert('⚠️ Vui lòng nhập todo!');
+            }
+        }
+
+        function removeLast() {
+            if (todos.length > 0) {
+                const removed = todos.pop();
+                updateDisplay();
+                console.log('Đã xóa:', removed);
+            } else {
+                alert('⚠️ Danh sách đã trống!');
+            }
+        }
+
+        function removeFirst() {
+            if (todos.length > 0) {
+                const removed = todos.shift();
+                updateDisplay();
+                console.log('Đã xóa:', removed);
+            } else {
+                alert('⚠️ Danh sách đã trống!');
+            }
+        }
+
+        function clearAll() {
+            if (todos.length > 0) {
+                if (confirm('Bạn có chắc muốn xóa hết?')) {
+                    todos = [];
+                    updateDisplay();
+                }
+            } else {
+                alert('⚠️ Danh sách đã trống!');
+            }
+        }
+
+        function updateDisplay() {
+            const output = document.getElementById('arrayOutput');
+            const stats = document.getElementById('arrayStats');
+
+            if (todos.length === 0) {
+                output.innerHTML = '<strong>Danh sách todos:</strong> (Chưa có todo nào)';
+                stats.innerHTML = `
+            Số lượng: <strong>0</strong><br>
+            Phần tử đầu: <strong>N/A</strong><br>
+            Phần tử cuối: <strong>N/A</strong>
+        `;
+            } else {
+                // Create visual list with better formatting
+                const todoList = todos.map((todo, i) =>
+                    `<div style="padding: 8px; margin: 5px 0; background: #f3f4f6; border-radius: 5px; border-left: 3px solid #667eea;">
+                <strong>[${i}]</strong> ${todo}
+            </div>`
+                ).join('');
+
+                output.innerHTML = '<strong>Danh sách todos:</strong><br>' + todoList;
+
+                stats.innerHTML = `
+            Số lượng: <strong>${todos.length}</strong><br>
+            Phần tử đầu: <strong>${todos[0]}</strong><br>
+            Phần tử cuối: <strong>${todos[todos.length - 1]}</strong>
+        `;
+            }
+        }
+
+        // Allow Enter key to add todo
+        const todoInput = document.getElementById('todoInput');
+        if (todoInput) {
+            todoInput.addEventListener('keypress', function (e) {
+                if (e.key === 'Enter') {
+                    addTodo();
+                }
+            });
+        }
+
+        // Initialize display on page load
+        updateDisplay();
+    </script>
+</body>
+
+</html>

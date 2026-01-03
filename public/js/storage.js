@@ -51,8 +51,9 @@ function applyData(data) {
     });
 
     // Restore notes
-    if (data.notes !== undefined) {
-        document.getElementById('notes').value = data.notes;
+    const notesElement = document.getElementById('notes');
+    if (notesElement && data && data.notes !== undefined) {
+        notesElement.value = data.notes;
     }
 
     updateStats();

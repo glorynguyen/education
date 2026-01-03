@@ -14,16 +14,16 @@ function updateAuthUI(user) {
     const loginPrompt = document.getElementById('loginPrompt');
 
     if (user) {
-        loginBtn.style.display = 'none';
-        logoutBtn.style.display = 'inline-block';
-        userInfo.style.display = 'inline-block';
-        loginPrompt.style.display = 'none';
-        userEmail.textContent = user.email;
+        if (loginBtn) loginBtn.style.display = 'none';
+        if (logoutBtn) logoutBtn.style.display = 'inline-block';
+        if (userInfo) userInfo.style.display = 'inline-block';
+        if (loginPrompt) loginPrompt.style.display = 'none';
+        if (userEmail) userEmail.textContent = user.email;
     } else {
-        loginBtn.style.display = 'inline-block';
-        logoutBtn.style.display = 'none';
-        userInfo.style.display = 'none';
-        loginPrompt.style.display = 'inline-block';
+        if (loginBtn) loginBtn.style.display = 'inline-block';
+        if (logoutBtn) logoutBtn.style.display = 'none';
+        if (userInfo) userInfo.style.display = 'none';
+        if (loginPrompt) loginPrompt.style.display = 'inline-block';
     }
 }
 
@@ -68,7 +68,7 @@ function signOut() {
 auth.onAuthStateChanged((user) => {
     currentUser = user;
     updateAuthUI(user);
-    
+
     if (user) {
         console.log('👤 User logged in:', user.email);
         loadAllProgress();

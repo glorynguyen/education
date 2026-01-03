@@ -11,6 +11,12 @@ const LESSON_CONFIG = {
         totalQuestions: 5,
         answers: { q1: 'correct', q2: 'correct', q3: 'correct', q4: 'correct', q5: 'correct' },
         completionMsg: "Bạn đã hoàn thành bài học Ngày 6.\n\n✅ Function là gì và tại sao cần dùng\n✅ Cách khai báo function\n✅ Parameters và Return values\n✅ Default parameters\n✅ Cách tái sử dụng code hiệu quả"
+    },
+    day7: {
+        id: 'day7',
+        totalQuestions: 5,
+        answers: { q1: 'correct', q2: 'correct', q3: 'correct', q4: 'correct', q5: 'correct' },
+        completionMsg: "Bạn đã hoàn thành bài học Ngày 7.\n\n✅ Array (Mảng) là gì và cách sử dụng\n✅ Cách khai báo và truy cập Array\n✅ Các phương thức quan trọng: push, pop, shift, unshift\n✅ Sử dụng forEach() để lặp qua mảng\n✅ Quản lý danh sách dữ liệu hiệu quả"
     }
 };
 
