@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ngày 8: JavaScript DOM Manipulation</title>
+    <link rel="stylesheet" href="../css/variables.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/lesson-style.css">
+    <style>
+        .dom-tree {
+            background: #f9fafb;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-family: monospace;
+        }
+
+        .dom-tree .node {
+            margin-left: 20px;
+            padding: 8px;
+            border-left: 2px solid #cbd5e1;
+        }
+
+        .dom-tree .element {
+            color: #7c3aed;
+            font-weight: bold;
+        }
+
+        .demo-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .demo-box h3 {
+            margin-bottom: 20px;
+        }
+
+        .demo-controls {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .demo-controls button {
+            background: white;
+            color: #667eea;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .demo-controls button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .demo-controls input {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            min-width: 200px;
+        }
+
+        #demoTarget {
+            background: white;
+            color: #1f2937;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 15px;
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        .interactive-demo {
+            background: #f9fafb;
+            padding: 25px;
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+
+        .todo-input-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .todo-input-group input {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        .todo-input-group button {
+            background: #10b981;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        #todoList {
+            list-style: none;
+            padding: 0;
+        }
+
+        .todo-item {
+            background: white;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 4px solid #667eea;
+            transition: all 0.3s;
+        }
+
+        .todo-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .todo-item.completed {
+            opacity: 0.6;
+            text-decoration: line-through;
+            border-left-color: #10b981;
+        }
+
+        .todo-item button {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9em;
+        }
+
+        .method-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .method-box {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .method-box h4 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .method-box code {
+            background: #1f2937;
+            color: #e5e7eb;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 4px solid #f59e0b;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📅 Tháng 1 - Ngày 8</h1>
+            <p>DOM Manipulation - Điều khiển và thay đổi giao diện web</p>
+        </div>
+
+        <div class="content">
+            <a href="../index.html" class="btn"
+                style="display: inline-block; text-decoration: none; margin-bottom: 20px;">
+                ⬅️ Quay lại Lộ trình
+            </a>
+
+            <!-- Section 1: DOM là gì? -->
+            <div class="section">
+                <div class="section-title">1. DOM (Document Object Model) là gì?</div>
+                <p>DOM là cấu trúc cây (tree) đại diện cho toàn bộ nội dung HTML của trang web. JavaScript có thể truy
+                    cập và thay đổi bất kỳ phần tử nào trong DOM.</p>
+
+                <div class="info-box">
+                    <strong>🌳 Hình dung DOM như một cái cây:</strong><br>
+                    • <code>document</code> là gốc (root)<br>
+                    • Mỗi thẻ HTML là một "nhánh" (node)<br>
+                    • JavaScript có thể chọn, thêm, xóa, sửa bất kỳ nhánh nào
+                </div>
+
+                <div class="dom-tree">
+                    <div class="element">document</div>
+                    <div class="node">
+                        <div class="element">&lt;html&gt;</div>
+                        <div class="node">
+                            <div class="element">&lt;head&gt;</div>
+                            <div class="node">
+                                <div>&lt;title&gt;...&lt;/title&gt;</div>
+                            </div>
+                        </div>
+                        <div class="node">
+                            <div class="element">&lt;body&gt;</div>
+                            <div class="node">
+                                <div>&lt;h1&gt;...&lt;/h1&gt;</div>
+                                <div>&lt;p&gt;...&lt;/p&gt;</div>
+                                <div>&lt;div&gt;...&lt;/div&gt;</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 2: Selecting Elements -->
+            <div class="section">
+                <div class="section-title">2. Chọn phần tử (Selecting Elements)</div>
+                <p>Trước khi thay đổi, bạn cần <strong>chọn</strong> phần tử muốn thao tác:</p>
+
+                <div class="method-grid">
+                    <div class="method-box">
+                        <h4>🎯 getElementById()</h4>
+                        <p>Chọn theo ID (chỉ 1 phần tử)</p>
+                        <div class="code-block">
+                            const el = document.getElementById('myId');
+                        </div>
+                    </div>
+
+                    <div class="method-box">
+                        <h4>🎯 querySelector()</h4>
+                        <p>Chọn theo CSS selector (phần tử đầu tiên)</p>
+                        <div class="code-block">
+                            const el = document.querySelector('.myClass');
+                            const el2 = document.querySelector('#myId');
+                        </div>
+                    </div>
+
+                    <div class="method-box">
+                        <h4>🎯 querySelectorAll()</h4>
+                        <p>Chọn tất cả phần tử khớp</p>
+                        <div class="code-block">
+                            const items = document.querySelectorAll('.item');
+                            // Trả về NodeList (giống array)
+                        </div>
+                    </div>
+
+                    <div class="method-box">
+                        <h4>🎯 getElementsByClassName()</h4>
+                        <p>Chọn theo class name</p>
+                        <div class="code-block">
+                            const items = document.getElementsByClassName('item');
+                            // Trả về HTMLCollection
+                        </div>
+                    </div>
+                </div>
+
+                <div class="highlight-box">
+                    <strong>💡 Khuyến khích:</strong> Dùng <code>querySelector()</code> và
+                    <code>querySelectorAll()</code> vì linh hoạt nhất và dễ nhớ!
+                </div>
+            </div>
+
+            <!-- Section 3: Thay đổi nội dung -->
+            <div class="section">
+                <div class="section-title">3. Thay đổi nội dung (Changing Content)</div>
+
+                <div class="method-grid">
+                    <div class="method-box">
+                        <h4>📝 textContent</h4>
+                        <p>Thay đổi text thuần (không có HTML)</p>
+                        <div class="code-block">
+                            element.textContent = "Xin chào!";
+                        </div>
+                    </div>
+
+                    <div class="method-box">
+                        <h4>📝 innerHTML</h4>
+                        <p>Thay đổi cả HTML bên trong</p>
+                        <div class="code-block">
+                            element.innerHTML = "&lt;strong&gt;Bold&lt;/strong&gt;";
+                        </div>
+                    </div>
+
+                    <div class="method-box">
+                        <h4>🎨 style</h4>
+                        <p>Thay đổi CSS trực tiếp</p>
+                        <div class="code-block">
+                            element.style.color = "red";
+                            element.style.fontSize = "20px";
+                        </div>
+                    </div>
+
+                    <div class="method-box">
+                        <h4>🏷️ className / classList</h4>
+                        <p>Thêm/xóa class CSS</p>
+                        <div class="code-block">
+                            element.classList.add('active');
+                            element.classList.remove('hidden');
+                            element.classList.toggle('dark');
+                        </div>
+                    </div>
+                </div>
+
+                <div class="code-block">
+                    // Ví dụ thực tế
+                    const title = document.querySelector('h1');
+                    title.textContent = "Tiêu đề mới";
+                    title.style.color = "blue";
+                    title.classList.add('highlighted');
+
+                    const box = document.querySelector('.box');
+                    box.innerHTML = "&lt;p&gt;Nội dung mới&lt;/p&gt;";
+                </div>
+            </div>
+
+            <!-- Section 4: Demo tương tác -->
+            <div class="section">
+                <div class="section-title">4. 💻 Thử nghiệm DOM Manipulation</div>
+
+                <div class="demo-box">
+                    <h3>🎮 Thay đổi phần tử bên dưới</h3>
+                    <div class="demo-controls">
+                        <input type="text" id="textInput" placeholder="Nhập text mới...">
+                        <button onclick="changeText()">📝 Đổi Text</button>
+                        <button onclick="changeColor()">🎨 Đổi Màu</button>
+                        <button onclick="makeHuge()">📏 To Hơn</button>
+                        <button onclick="hide()">👻 Ẩn/Hiện</button>
+                        <button onclick="reset()">🔄 Reset</button>
+                    </div>
+                    <div id="demoTarget">Đây là phần tử demo!</div>
+                </div>
+
+                <details style="margin-top: 15px; background: #f9fafb; padding: 15px; border-radius: 8px;">
+                    <summary style="cursor: pointer; font-weight: bold; color: #667eea;">📖 Xem code của demo</summary>
+                    <div class="code-block" style="margin-top: 10px;">
+                        function changeText() {
+                        const input = document.getElementById('textInput');
+                        const target = document.getElementById('demoTarget');
+                        if (input.value.trim()) {
+                        target.textContent = input.value;
+                        input.value = '';
+                        }
+                        }
+
+                        function changeColor() {
+                        const target = document.getElementById('demoTarget');
+                        const colors = ['#ef4444', '#10b981', '#3b82f6', '#f59e0b', '#8b5cf6'];
+                        const randomColor = colors[Math.floor(Math.random() * colors.length)];
+                        target.style.color = randomColor;
+                        }
+
+                        function makeHuge() {
+                        const target = document.getElementById('demoTarget');
+                        const currentSize = parseInt(window.getComputedStyle(target).fontSize);
+                        target.style.fontSize = (currentSize + 4) + 'px';
+                        }
+
+                        function hide() {
+                        const target = document.getElementById('demoTarget');
+                        if (target.style.display === 'none') {
+                        target.style.display = 'flex';
+                        } else {
+                        target.style.display = 'none';
+                        }
+                        }
+
+                        function reset() {
+                        const target = document.getElementById('demoTarget');
+                        target.textContent = 'Đây là phần tử demo!';
+                        target.style.color = '#1f2937';
+                        target.style.fontSize = '1.2em';
+                        target.style.display = 'flex';
+                        }
+                    </div>
+                </details>
+            </div>
+
+            <!-- Section 5: Events -->
+            <div class="section">
+                <div class="section-title">5. Events (Sự kiện)</div>
+                <p>Events giúp trang web tương tác với người dùng (click, hover, nhập text...)</p>
+
+                <div class="method-grid">
+                    <div class="method-box">
+                        <h4>🖱️ click</h4>
+                        <p>Khi người dùng click</p>
+                        <div class="code-block">
+                            button.addEventListener('click', () => {
+                            alert('Đã click!');
+                            });
+                        </div>
+                    </div>
+
+                    <div class="method-box">
+                        <h4>⌨️ input</h4>
+                        <p>Khi nhập text vào input</p>
+                        <div class="code-block">
+                            input.addEventListener('input', (e) => {
+                            console.log(e.target.value);
+                            });
+                        </div>
+                    </div>
+
+                    <div class="method-box">
+                        <h4>📝 submit</h4>
+                        <p>Khi submit form</p>
+                        <div class="code-block">
+                            form.addEventListener('submit', (e) => {
+                            e.preventDefault(); // Chặn reload
+                            // Xử lý form
+                            });
+                        </div>
+                    </div>
+
+                    <div class="method-box">
+                        <h4>🖱️ mouseover</h4>
+                        <p>Khi di chuột vào</p>
+                        <div class="code-block">
+                            element.addEventListener('mouseover', () => {
+                            element.style.background = 'yellow';
+                            });
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 6: Thêm/Xóa Elements -->
+            <div class="section">
+                <div class="section-title">6. Tạo, Thêm, Xóa phần tử</div>
+
+                <div class="code-block">
+                    // Tạo phần tử mới
+                    const newDiv = document.createElement('div');
+                    newDiv.textContent = "Phần tử mới";
+                    newDiv.classList.add('item');
+
+                    // Thêm vào DOM
+                    document.body.appendChild(newDiv);
+
+                    // Hoặc thêm vào container cụ thể
+                    const container = document.querySelector('.container');
+                    container.appendChild(newDiv);
+
+                    // Xóa phần tử
+                    const element = document.querySelector('.old-item');
+                    element.remove();
+
+                    // Hoặc xóa từ parent
+                    element.parentElement.removeChild(element);
+                </div>
+            </div>
+
+            <!-- Section 7: Todo App Demo -->
+            <div class="section">
+                <div class="section-title">7. 🎯 Dự án thực hành: Todo List App</div>
+
+                <div class="interactive-demo">
+                    <h3 style="margin-bottom: 15px;">✅ Quản lý công việc</h3>
+                    <div class="todo-input-group">
+                        <input type="text" id="todoInput2" placeholder="Nhập công việc cần làm...">
+                        <button onclick="addTodoItem()">➕ Thêm</button>
+                    </div>
+                    <ul id="todoList"></ul>
+                    <div style="text-align: center; margin-top: 15px; color: #6b7280;">
+                        <small>Tổng công việc: <strong id="todoCount">0</strong></small>
+                    </div>
+                </div>
+
+                <details style="margin-top: 15px; background: #f9fafb; padding: 15px; border-radius: 8px;">
+                    <summary style="cursor: pointer; font-weight: bold; color: #667eea;">📖 Xem code đầy đủ</summary>
+                    <div class="code-block" style="margin-top: 10px;">
+                        let todoCount = 0;
+
+                        function addTodoItem() {
+                        const input = document.getElementById('todoInput2');
+                        const text = input.value.trim();
+
+                        if (!text) {
+                        alert('Vui lòng nhập công việc!');
+                        return;
+                        }
+
+                        // Tạo li element
+                        const li = document.createElement('li');
+                        li.className = 'todo-item';
+
+                        // Tạo span cho text
+                        const span = document.createElement('span');
+                        span.textContent = text;
+                        span.onclick = () => li.classList.toggle('completed');
+
+                        // Tạo button xóa
+                        const deleteBtn = document.createElement('button');
+                        deleteBtn.textContent = '🗑️ Xóa';
+                        deleteBtn.onclick = () => {
+                        li.remove();
+                        updateTodoCount();
+                        };
+
+                        li.appendChild(span);
+                        li.appendChild(deleteBtn);
+
+                        document.getElementById('todoList').appendChild(li);
+                        input.value = '';
+                        updateTodoCount();
+                        }
+
+                        function updateTodoCount() {
+                        const count = document.querySelectorAll('.todo-item').length;
+                        document.getElementById('todoCount').textContent = count;
+                        }
+
+                        // Cho phép Enter để thêm
+                        document.getElementById('todoInput2').addEventListener('keypress', (e) => {
+                        if (e.key === 'Enter') addTodoItem();
+                        });
+                    </div>
+                </details>
+            </div>
+
+            <!-- Bài tập về nhà -->
+            <div class="section">
+                <div class="section-title">🎯 Bài tập về nhà</div>
+                <div class="project-card">
+                    <div class="project-header">
+                        <div class="project-title">Tạo "Color Changer App"</div>
+                    </div>
+                    <p style="margin-top: 10px; line-height: 1.6;">
+                        Tạo một trang web cho phép thay đổi màu nền:
+                    </p>
+                    <ul style="margin: 10px 0 10px 20px; color: #4b5563;">
+                        <li>Có 5 nút màu khác nhau (đỏ, xanh, vàng, tím, xanh lá)</li>
+                        <li>Click vào nút nào thì <code>document.body</code> đổi màu tương ứng</li>
+                        <li>Hiển thị tên màu hiện tại trên màn hình</li>
+                        <li>Có nút "Random" để đổi màu ngẫu nhiên</li>
+                        <li><strong>Bonus:</strong> Lưu màu đã chọn vào localStorage</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Quiz -->
+            <div class="section">
+                <div class="section-title">🧠 Kiểm tra kiến thức</div>
+                <div class="quiz-container">
+                    <form id="quizForm">
+                        <div class="question-item">
+                            <div class="question-text">Câu 1: DOM là viết tắt của gì?</div>
+                            <div class="options-list">
+                                <label class="option-label">
+                                    <input type="radio" name="q1" value="wrong"> Data Object Model
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q1" value="correct"> Document Object Model
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q1" value="wrong"> Dynamic Object Management
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-item">
+                            <div class="question-text">Câu 2: Phương thức nào dùng để chọn phần tử theo CSS selector?
+                            </div>
+                            <div class="options-list">
+                                <label class="option-label">
+                                    <input type="radio" name="q2" value="wrong"> getElement()
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q2" value="correct"> querySelector()
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q2" value="wrong"> selectElement()
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-item">
+                            <div class="question-text">Câu 3: Thuộc tính nào dùng để thay đổi text bên trong element
+                                (không có HTML)?</div>
+                            <div class="options-list">
+                                <label class="option-label">
+                                    <input type="radio" name="q3" value="wrong"> innerHTML
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q3" value="correct"> textContent
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q3" value="wrong"> value
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-item">
+                            <div class="question-text">Câu 4: Phương thức nào dùng để thêm event listener?</div>
+                            <div class="options-list">
+                                <label class="option-label">
+                                    <input type="radio" name="q4" value="wrong"> onClick()
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q4" value="correct"> addEventListener()
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q4" value="wrong"> addEvent()
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-item">
+                            <div class="question-text">Câu 5: Để tạo element mới trong JavaScript, dùng lệnh nào?</div>
+                            <div class="options-list">
+                                <label class="option-label">
+                                    <input type="radio" name="q5" value="wrong"> document.newElement()
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q5" value="correct"> document.createElement()
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q5" value="wrong"> document.addElement()
+                                </label>
+                            </div>
+                        </div>
+
+                        <button type="button" class="btn" onclick="checkQuiz()">Kiểm tra đáp án</button>
+                    </form>
+                    <div id="quiz-feedback"></div>
+                </div>
+            </div>
+
+            <!-- Footer Actions -->
+            <div class="actions">
+                <button class="btn" onclick="window.location.href='day7.html'">⬅️ Quay lại ngày 7</button>
+                <button id="completeBtn" class="btn" style="opacity: 0.5; pointer-events: none;"
+                    onclick="completeLesson()">✅ Hoàn thành bài học</button>
+                <p style="font-size: 0.9em; color: #666; margin-top: 5px;">(Hãy làm đúng Quiz để mở khóa nút hoàn thành)
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+    <script src="../js/config.js"></script>
+    <script src="../js/storage.js"></script>
+    <script src="../js/auth.js"></script>
+    <script src="../js/quiz-handler.js"></script>
+
+    <script>
+        initQuiz('day8');
+
+        // Demo functions
+        function changeText() {
+            const input = document.getElementById('textInput');
+            const target = document.getElementById('demoTarget');
+            if (input.value.trim()) {
+                target.textContent = input.value;
+                input.value = '';
+            } else {
+                alert('Vui lòng nhập text!');
+            }
+        }
+
+        function changeColor() {
+            const target = document.getElementById('demoTarget');
+            const colors = ['#ef4444', '#10b981', '#3b82f6', '#f59e0b', '#8b5cf6', '#ec4899'];
+            const randomColor = colors[Math.floor(Math.random() * colors.length)];
+            target.style.color = randomColor;
+        }
+
+        function makeHuge() {
+            const target = document.getElementById('demoTarget');
+            const currentSize = parseInt(window.getComputedStyle(target).fontSize);
+            target.style.fontSize = (currentSize + 4) + 'px';
+        }
+
+        function hide() {
+            const target = document.getElementById('demoTarget');
+            if (target.style.display === 'none') {
+                target.style.display = 'flex';
+            } else {
+                target.style.display = 'none';
+            }
+        }
+
+        function reset() {
+            const target = document.getElementById('demoTarget');
+            target.textContent = 'Đây là phần tử demo!';
+            target.style.color = '#1f2937';
+            target.style.fontSize = '1.2em';
+            target.style.display = 'flex';
+        }
+
+        // Todo App
+        function addTodoItem() {
+            const input = document.getElementById('todoInput2');
+            const text = input.value.trim();
+
+            if (!text) {
+                alert('⚠️ Vui lòng nhập công việc!');
+                return;
+            }
+
+            const li = document.createElement('li');
+            li.className = 'todo-item';
+
+            const span = document.createElement('span');
+            span.textContent = text;
+            span.onclick = () => li.classList.toggle('completed');
+
+            const deleteBtn = document.createElement('button');
+            deleteBtn.textContent = '🗑️ Xóa';
+            deleteBtn.onclick = () => {
+                li.remove();
+                updateTodoCount();
+            };
+
+            li.appendChild(span);
+            li.appendChild(deleteBtn);
+
+            document.getElementById('todoList').appendChild(li);
+            input.value = '';
+            updateTodoCount();
+        }
+
+        function updateTodoCount() {
+            const count = document.querySelectorAll('.todo-item').length;
+            document.getElementById('todoCount').textContent = count;
+        }
+
+        const todoInput2 = document.getElementById('todoInput2');
+        if (todoInput2) {
+            todoInput2.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') addTodoItem();
+            });
+        }
+    </script>
+</body>
+
+</html>

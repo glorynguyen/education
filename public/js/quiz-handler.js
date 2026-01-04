@@ -17,6 +17,12 @@ const LESSON_CONFIG = {
         totalQuestions: 5,
         answers: { q1: 'correct', q2: 'correct', q3: 'correct', q4: 'correct', q5: 'correct' },
         completionMsg: "Bạn đã hoàn thành bài học Ngày 7.\n\n✅ Array (Mảng) là gì và cách sử dụng\n✅ Cách khai báo và truy cập Array\n✅ Các phương thức quan trọng: push, pop, shift, unshift\n✅ Sử dụng forEach() để lặp qua mảng\n✅ Quản lý danh sách dữ liệu hiệu quả"
+    },
+    day8: {
+        id: 'day8',
+        totalQuestions: 5,
+        answers: { q1: 'correct', q2: 'correct', q3: 'correct', q4: 'correct', q5: 'correct' },
+        completionMsg: "Bạn đã hoàn thành bài học Ngày 8.\n\n✅ DOM (Document Object Model) là gì\n✅ Cách chọn phần tử với querySelector\n✅ Thay đổi nội dung với textContent và innerHTML\n✅ Xử lý sự kiện với addEventListener\n✅ Tạo và xóa phần tử động"
     }
 };
 
@@ -35,7 +41,7 @@ function checkQuiz() {
 
     let pointsEarned = 0, pointsLost = 0, newCorrect = 0, alreadyCorrect = 0;
 
-    document.querySelectorAll('.option-label').forEach(label => 
+    document.querySelectorAll('.option-label').forEach(label =>
         label.classList.remove('correct', 'wrong')
     );
 
@@ -46,8 +52,8 @@ function checkQuiz() {
         if (!selected) { allAnswered = false; continue; }
 
         const parent = selected.parentElement;
-        const wasAlreadyAnswered = typeof isQuestionAnswered === 'function' && 
-                                   isQuestionAnswered(LESSON_ID, q);
+        const wasAlreadyAnswered = typeof isQuestionAnswered === 'function' &&
+            isQuestionAnswered(LESSON_ID, q);
 
         if (selected.value === config.answers[q]) {
             parent.classList.add('correct');
@@ -84,8 +90,8 @@ function checkQuiz() {
     feedback.style.display = 'block';
 
     if (score === config.totalQuestions) {
-        const wasQuizCompleted = typeof isQuizCompleted === 'function' && 
-                                 isQuizCompleted(LESSON_ID);
+        const wasQuizCompleted = typeof isQuizCompleted === 'function' &&
+            isQuizCompleted(LESSON_ID);
         let bonusPoints = 0;
 
         if (!wasQuizCompleted) {
@@ -131,8 +137,8 @@ function checkQuiz() {
 
 function completeLesson() {
     const config = QUIZ_CONFIG;
-    const wasCompleted = typeof isLessonCompleted === 'function' && 
-                         isLessonCompleted(LESSON_ID);
+    const wasCompleted = typeof isLessonCompleted === 'function' &&
+        isLessonCompleted(LESSON_ID);
 
     let message = "🎉 Chúc mừng! " + config.completionMsg;
 
