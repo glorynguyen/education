@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ngày 9: JavaScript Conditions & Loops</title>
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+    <!-- Styles -->
+    <link rel="stylesheet" href="../css/variables.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/lesson-style.css">
+    <style>
+        .condition-demo {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+        .demo-input {
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            margin-right: 10px;
+            width: 150px;
+        }
+        .demo-button {
+            padding: 10px 20px;
+            background: white;
+            color: #667eea;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        .demo-result {
+            margin-top: 15px;
+            padding: 15px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 8px;
+            font-weight: bold;
+        }
+        .loop-visual {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        .loop-item {
+            background: #10b981;
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            min-width: 80px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📅 Tháng 1 - Ngày 9</h1>
+            <p>Điều kiện (Conditions) và Vòng lặp (Loops) trong JavaScript</p>
+        </div>
+        <div class="content">
+            <a href="../index.html" class="btn"
+                style="display: inline-block; text-decoration: none; margin-bottom: 20px;">
+                ⬅️ Quay lại Lộ trình
+            </a>
+            <!-- Section 1: Conditions -->
+            <div class="section">
+                <div class="section-title">1. Conditions (Điều kiện) - Kiểm soát luồng code</div>
+                <p>Conditions giúp code quyết định thực thi phần nào dựa trên điều kiện đúng/sai.</p>
+                <h3>✅ If/Else/Else If</h3>
+                <div class="code-block">
+                    if (condition) {
+                        // Code nếu đúng
+                    } else if (anotherCondition) {
+                        // Code nếu điều kiện khác đúng
+                    } else {
+                        // Code nếu sai hết
+                    }
+                </div>
+                <h3>✅ Switch Case</h3>
+                <div class="code-block">
+                    switch (value) {
+                        case 'A':
+                            // Code cho A
+                            break;
+                        case 'B':
+                            // Code cho B
+                            break;
+                        default:
+                            // Mặc định
+                    }
+                </div>
+            </div>
+            <!-- Demo Conditions -->
+            <div class="section">
+                <div class="section-title">💻 Thử nghiệm Conditions</div>
+                <div class="condition-demo">
+                    <h4>🔢 Kiểm tra số chẵn/lẻ</h4>
+                    <input type="number" id="numberInput" class="demo-input" placeholder="Nhập số...">
+                    <button onclick="checkEvenOdd()" class="demo-button">Kiểm tra</button>
+                    <div id="evenOddResult" class="demo-result"></div>
+                </div>
+                <!-- Code mẫu cho thử nghiệm chẵn/lẻ -->
+                <h4>Code mẫu cho Kiểm tra số chẵn/lẻ</h4>
+                <div class="code-block">
+                    function checkEvenOdd() {
+                        const input = document.getElementById('numberInput');
+                        const resultDiv = document.getElementById('evenOddResult');
+                        const num = parseInt(input.value);
+
+                        if (isNaN(num)) {
+                            resultDiv.innerText = "❌ Vui lòng nhập một số hợp lệ!";
+                            resultDiv.style.color = "#feb2b2";
+                            return;
+                        }
+
+                        if (num % 2 === 0) {
+                            resultDiv.innerText = `✅ Số ${num} là số CHẴN (Even).`;
+                        } else {
+                            resultDiv.innerText = `✅ Số ${num} là số LẺ (Odd).`;
+                        }
+                    }
+                </div>
+                <div class="condition-demo">
+                    <h4>📅 Kiểm tra ngày trong tuần</h4>
+                    <select id="daySelect" class="demo-input">
+                        <option value="">Chọn ngày...</option>
+                        <option value="Monday">Thứ 2</option>
+                        <option value="Tuesday">Thứ 3</option>
+                        <option value="Wednesday">Thứ 4</option>
+                        <option value="Thursday">Thứ 5</option>
+                        <option value="Friday">Thứ 6</option>
+                        <option value="Saturday">Thứ 7</option>
+                        <option value="Sunday">Chủ Nhật</option>
+                    </select>
+                    <button onclick="checkDay()" class="demo-button">Kiểm tra</button>
+                    <div id="dayResult" class="demo-result"></div>
+                </div>
+                <!-- Code mẫu cho thử nghiệm ngày trong tuần -->
+                <h4>Code mẫu cho Kiểm tra ngày trong tuần</h4>
+                <div class="code-block">
+                    function checkDay() {
+                        const day = document.getElementById('daySelect').value;
+                        const resultDiv = document.getElementById('dayResult');
+                        let message = "";
+
+                        if (!day) {
+                            resultDiv.innerText = "⚠️ Hãy chọn một ngày!";
+                            return;
+                        }
+
+                        switch (day) {
+                            case 'Monday':
+                                message = "Thứ 2 là ngày đầu tuần, hăng hái lên! 💪";
+                                break;
+                            case 'Friday':
+                                message = "Thứ 6 rồi, chuẩn bị nghỉ ngơi thôi! ☕";
+                                break;
+                            case 'Saturday':
+                            case 'Sunday':
+                                message = "Cuối tuần rồi! Quẩy thôi! 🎉";
+                                break;
+                            default:
+                                message = "Một ngày làm việc bình thường. Cố gắng nhé! ✨";
+                        }
+
+                        resultDiv.innerText = `Kết quả: ${message}`;
+                    }
+                </div>
+            </div>
+            <!-- Section 2: Loops -->
+            <div class="section">
+                <div class="section-title">2. Loops (Vòng lặp) - Lặp lại code</div>
+                <h3>✅ For Loop</h3>
+                <div class="code-block">
+                    for (let i = 0; i < 5; i++) {
+                        console.log(i); // 0 1 2 3 4
+                    }
+                </div>
+                <h3>✅ While/Do-While</h3>
+                <div class="code-block">
+                    let i = 0;
+                    while (i < 5) {
+                        console.log(i);
+                        i++;
+                    }
+                </div>
+            </div>
+            <!-- Demo Loops -->
+            <div class="section">
+                <div class="section-title">💻 Thử nghiệm Loops</div>
+                <div class="condition-demo">
+                    <h4>🔄 Tạo danh sách số từ 1 đến N</h4>
+                    <input type="number" id="loopInput" class="demo-input" placeholder="Nhập N...">
+                    <button onclick="generateNumbers()" class="demo-button">Tạo</button>
+                    <div id="loopResult" class="loop-visual"></div>
+                </div>
+                <!-- Code mẫu cho thử nghiệm tạo danh sách số -->
+                <h4>Code mẫu cho Tạo danh sách số từ 1 đến N</h4>
+                <div class="code-block">
+                    function generateNumbers() {
+                        const input = document.getElementById('loopInput');
+                        const container = document.getElementById('loopResult');
+                        const n = parseInt(input.value);
+
+                        // Xóa kết quả cũ
+                        container.innerHTML = "";
+
+                        if (isNaN(n) || n <= 0) {
+                            container.innerHTML = "<p>Vui lòng nhập số N dương!</p>";
+                            return;
+                        }
+
+                        // Giới hạn để tránh làm treo trình duyệt nếu nhập số quá lớn
+                        const limit = n > 50 ? 50 : n;
+                        if (n > 50) alert("Để đảm bảo hiệu năng, hệ thống chỉ hiển thị 50 số đầu tiên.");
+
+                        for (let i = 1; i <= limit; i++) {
+                            const item = document.createElement('div');
+                            item.className = 'loop-item';
+                            item.innerText = i;
+                            
+                            // Hiệu ứng xuất hiện dần dần (tùy chọn)
+                            item.style.animation = `fadeIn 0.3s ease forwards ${i * 0.05}s`;
+                            
+                            container.appendChild(item);
+                        }
+                    }
+                </div>
+            </div>
+            <!-- Bài tập -->
+            <div class="section">
+                <div class="section-title">🎯 Bài tập về nhà</div>
+                <div class="project-card">
+                    <div class="project-header">
+                        <div class="project-title">Tạo "FizzBuzz Game"</div>
+                    </div>
+                    <ul style="margin: 10px 0 10px 20px; color: #4b5563;">
+                        <li>Lặp từ 1 đến 100</li>
+                        <li>Nếu chia hết cho 3: "Fizz"</li>
+                        <li>Chia hết cho 5: "Buzz"</li>
+                        <li>Chia hết cho cả 3 và 5: "FizzBuzz"</li>
+                        <li>Bonus: Hiển thị trên trang web</li>
+                    </ul>
+                </div>
+            </div>
+            <!-- Quiz -->
+            <div class="section">
+                <div class="section-title">🧠 Kiểm tra kiến thức</div>
+                <div class="quiz-container">
+                    <form id="quizForm">
+                        <div class="question-item">
+                            <div class="question-text">Câu 1: Cú pháp nào đúng cho if statement?</div>
+                            <div class="options-list">
+                                <label class="option-label"><input type="radio" name="q1" value="correct"> if (condition) { }</label>
+                                <label class="option-label"><input type="radio" name="q1" value="wrong"> when (condition) { }</label>
+                            </div>
+                        </div>
+                        <!-- Câu 2: For Loop -->
+                        <div class="question-item">
+                            <div class="question-text">Câu 2: Cú pháp nào sau đây là vòng lặp For đúng?</div>
+                            <div class="options-list">
+                                <label class="option-label"><input type="radio" name="q2" value="wrong"> for (i = 5; i++)</label>
+                                <label class="option-label"><input type="radio" name="q2" value="correct"> for (let i = 0; i < 5; i++)</label>
+                                <label class="option-label"><input type="radio" name="q2" value="wrong"> for (let i <= 5; i++)</label>
+                            </div>
+                        </div>
+
+                        <!-- Câu 3: Switch Case -->
+                        <div class="question-item">
+                            <div class="question-text">Câu 3: Trong lệnh Switch, từ khóa nào dùng để thoát khỏi nhánh sau khi thực hiện xong?</div>
+                            <div class="options-list">
+                                <label class="option-label"><input type="radio" name="q3" value="wrong"> stop</label>
+                                <label class="option-label"><input type="radio" name="q3" value="wrong"> exit</label>
+                                <label class="option-label"><input type="radio" name="q3" value="correct"> break</label>
+                            </div>
+                        </div>
+
+                        <!-- Câu 4: While Loop -->
+                        <div class="question-item">
+                            <div class="question-text">Câu 4: Vòng lặp nào luôn thực hiện code ít nhất MỘT LẦN trước khi kiểm tra điều kiện?</div>
+                            <div class="options-list">
+                                <label class="option-label"><input type="radio" name="q4" value="wrong"> while loop</label>
+                                <label class="option-label"><input type="radio" name="q4" value="correct"> do...while loop</label>
+                                <label class="option-label"><input type="radio" name="q4" value="wrong"> for loop</label>
+                            </div>
+                        </div>
+
+                        <!-- Câu 5: Toán tử logic trong điều kiện -->
+                        <div class="question-item">
+                            <div class="question-text">Câu 5: Để kiểm tra hai điều kiện cùng lúc (Điều kiện A VÀ Điều kiện B), ta dùng ký hiệu nào?</div>
+                            <div class="options-list">
+                                <label class="option-label"><input type="radio" name="q5" value="correct"> &amp;&amp;</label>
+                                <label class="option-label"><input type="radio" name="q5" value="wrong"> ||</label>
+                                <label class="option-label"><input type="radio" name="q5" value="wrong"> !!</label>
+                            </div>
+                        </div>
+                        <button type="button" class="btn" onclick="checkQuiz()">Kiểm tra</button>
+                    </form>
+                    <div id="quiz-feedback"></div>
+                </div>
+            </div>
+            <!-- Actions -->
+            <div class="actions">
+                <button class="btn" onclick="window.location.href='day8.html'">⬅️ Ngày 8</button>
+                <button id="completeBtn" class="btn" style="opacity: 0.5; pointer-events: none;" onclick="completeLesson()">✅ Hoàn thành</button>
+            </div>
+        </div>
+    </div>
+    <script src="../js/config.js"></script>
+    <script src="../js/storage.js"></script>
+    <script src="../js/auth.js"></script>
+    <script src="../js/quiz-handler.js"></script>
+    <script>
+        // Khởi tạo Quiz (giả định script quiz-handler.js đã sẵn sàng)
+        if (typeof initQuiz === 'function') {
+            initQuiz('day9');
+        }
+
+        /** 
+         * 1. KIỂM TRA CHẴN LẺ (Sử dụng If/Else)
+         */
+        function checkEvenOdd() {
+            const input = document.getElementById('numberInput');
+            const resultDiv = document.getElementById('evenOddResult');
+            const num = parseInt(input.value);
+
+            if (isNaN(num)) {
+                resultDiv.innerText = "❌ Vui lòng nhập một số hợp lệ!";
+                resultDiv.style.color = "#feb2b2";
+                return;
+            }
+
+            if (num % 2 === 0) {
+                resultDiv.innerText = `✅ Số ${num} là số CHẴN (Even).`;
+            } else {
+                resultDiv.innerText = `✅ Số ${num} là số LẺ (Odd).`;
+            }
+            
+            checkInteraction(); // Kiểm tra để mở khóa nút Hoàn thành
+        }
+
+        /**
+         * 2. KIỂM TRA NGÀY TRONG TUẦN (Sử dụng Switch Case)
+         */
+        function checkDay() {
+            const day = document.getElementById('daySelect').value;
+            const resultDiv = document.getElementById('dayResult');
+            let message = "";
+
+            if (!day) {
+                resultDiv.innerText = "⚠️ Hãy chọn một ngày!";
+                return;
+            }
+
+            switch (day) {
+                case 'Monday':
+                    message = "Thứ 2 là ngày đầu tuần, hăng hái lên! 💪";
+                    break;
+                case 'Friday':
+                    message = "Thứ 6 rồi, chuẩn bị nghỉ ngơi thôi! ☕";
+                    break;
+                case 'Saturday':
+                case 'Sunday':
+                    message = "Cuối tuần rồi! Quẩy thôi! 🎉";
+                    break;
+                default:
+                    message = "Một ngày làm việc bình thường. Cố gắng nhé! ✨";
+            }
+
+            resultDiv.innerText = `Kết quả: ${message}`;
+            checkInteraction();
+        }
+
+        /**
+         * 3. TẠO DANH SÁCH SỐ (Sử dụng Vòng lặp For)
+         */
+        function generateNumbers() {
+            const input = document.getElementById('loopInput');
+            const container = document.getElementById('loopResult');
+            const n = parseInt(input.value);
+
+            // Xóa kết quả cũ
+            container.innerHTML = "";
+
+            if (isNaN(n) || n <= 0) {
+                container.innerHTML = "<p>Vui lòng nhập số N dương!</p>";
+                return;
+            }
+
+            // Giới hạn để tránh làm treo trình duyệt nếu nhập số quá lớn
+            const limit = n > 50 ? 50 : n;
+            if (n > 50) alert("Để đảm bảo hiệu năng, hệ thống chỉ hiển thị 50 số đầu tiên.");
+
+            for (let i = 1; i <= limit; i++) {
+                const item = document.createElement('div');
+                item.className = 'loop-item';
+                item.innerText = i;
+                
+                // Hiệu ứng xuất hiện dần dần (tùy chọn)
+                item.style.animation = `fadeIn 0.3s ease forwards ${i * 0.05}s`;
+                
+                container.appendChild(item);
+            }
+            
+            checkInteraction();
+        }
+
+        /**
+         * LOGIC HOÀN THÀNH BÀI HỌC
+         */
+        let interactions = {
+            checkedEven: false,
+            checkedDay: false,
+            checkedLoop: false
+        };
+
+        function checkInteraction() {
+            // Đánh dấu người dùng đã thử các tính năng
+            const numInput = document.getElementById('numberInput').value;
+            const daySelect = document.getElementById('daySelect').value;
+            const loopInput = document.getElementById('loopInput').value;
+
+            if (numInput) interactions.checkedEven = true;
+            if (daySelect) interactions.checkedDay = true;
+            if (loopInput) interactions.checkedLoop = true;
+
+            // Nếu đã thử ít nhất 2 demo, cho phép bấm Hoàn thành
+            if (interactions.checkedEven && interactions.checkedDay || interactions.checkedLoop) {
+                const btn = document.getElementById('completeBtn');
+                btn.style.opacity = "1";
+                btn.style.pointerEvents = "auto";
+                btn.classList.add('btn-success'); // Giả sử bạn có class này
+            }
+        }
+
+        async function completeLesson() {
+            try {
+                // Gọi hàm từ storage.js để lưu tiến độ vào Firebase/LocalStorage
+                if (typeof markLessonComplete === 'function') {
+                    await markLessonComplete('day9');
+                    alert('Chúc mừng! Bạn đã hoàn thành bài học về Điều kiện và Vòng lặp. 🏆');
+                    window.location.href = '../index.html';
+                } else {
+                    alert('Hệ thống lưu trữ chưa sẵn sàng, nhưng bạn đã làm rất tốt!');
+                }
+            } catch (error) {
+                console.error("Lỗi khi lưu tiến độ:", error);
+            }
+        }
+
+        // Thêm CSS animation cho đẹp
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes fadeIn {
+                from { opacity: 0; transform: translateY(10px); }
+                to { opacity: 1; transform: translateY(0); }
+            }
+            .btn-success {
+                background-color: #10b981 !important;
+                box-shadow: 0 4px 14px rgba(16, 185, 129, 0.4);
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
