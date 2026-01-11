@@ -48,6 +48,18 @@ const LESSON_CONFIG = {
         },
         completionMsg: "Bạn đã hoàn thành bài học Ngày 10.\n\n✅ Objects (Đối tượng) và cách sử dụng\n✅ Methods và từ khóa this\n✅ Các phương thức Object quan trọng\n✅ JSON - Chuyển đổi và làm việc với dữ liệu\n✅ Nested Objects (Object lồng nhau)"
     },
+    day11: {
+        id: 'day11',
+        totalQuestions: 5,
+        answers: { 
+            q1: 'correct', 
+            q2: 'correct', 
+            q3: 'correct', 
+            q4: 'correct', 
+            q5: 'correct' 
+        },
+        completionMsg: "Chúc mừng! Bạn đã làm chủ các tính năng ES6+ Modern JavaScript.\n\n✅ Template Literals (Chuỗi mẫu với backticks)\n✅ Arrow Functions (Hàm mũi tên ngắn gọn)\n✅ Destructuring (Phá cấu trúc Object & Array)\n✅ Spread & Rest Operators (...)\n✅ Các phương thức Array hiện đại (map, filter, find, reduce)"
+    },
 };
 
 function initQuiz(lessonKey) {
