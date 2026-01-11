@@ -36,6 +36,18 @@ const LESSON_CONFIG = {
         },
         completionMsg: "Bạn đã hoàn thành bài học Ngày 9.\n\n✅ Kiểm soát luồng code với If/Else và Switch Case\n✅ Sử dụng các toán tử so sánh và logic\n✅ Lặp lại code hiệu quả với vòng lặp For và While\n✅ Hiểu cách xử lý dữ liệu lặp đi lặp lại\n✅ Ứng dụng giải quyết bài toán thực tế (FizzBuzz)"
     },
+    day10: {
+        id: 'day10',
+        totalQuestions: 5,
+        answers: { 
+            q1: 'correct', 
+            q2: 'correct', 
+            q3: 'correct', 
+            q4: 'correct', 
+            q5: 'correct' 
+        },
+        completionMsg: "Bạn đã hoàn thành bài học Ngày 10.\n\n✅ Objects (Đối tượng) và cách sử dụng\n✅ Methods và từ khóa this\n✅ Các phương thức Object quan trọng\n✅ JSON - Chuyển đổi và làm việc với dữ liệu\n✅ Nested Objects (Object lồng nhau)"
+    },
 };
 
 function initQuiz(lessonKey) {
