@@ -60,6 +60,18 @@ const LESSON_CONFIG = {
         },
         completionMsg: "Chúc mừng! Bạn đã làm chủ các tính năng ES6+ Modern JavaScript.\n\n✅ Template Literals (Chuỗi mẫu với backticks)\n✅ Arrow Functions (Hàm mũi tên ngắn gọn)\n✅ Destructuring (Phá cấu trúc Object & Array)\n✅ Spread & Rest Operators (...)\n✅ Các phương thức Array hiện đại (map, filter, find, reduce)"
     },
+    day12: {
+        id: 'day12',
+        totalQuestions: 5,
+        answers: { 
+            q1: 'correct', 
+            q2: 'correct', 
+            q3: 'correct', 
+            q4: 'correct', 
+            q5: 'correct' 
+        },
+        completionMsg: "Xuất sắc! Bạn đã làm chủ Async JavaScript.\n\n✅ Hiểu Synchronous vs Asynchronous\n✅ Promises và các trạng thái\n✅ Async/Await syntax\n✅ Error handling với try...catch\n✅ Promise.all() & Promise.race()\n✅ Fetch API thực tế"
+    }
 };
 
 function initQuiz(lessonKey) {

@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ngày 12: Async JavaScript - Promises & Async/Await</title>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="../css/variables.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/lesson-style.css">
+
+    <style>
+        .timeline-visual {
+            background: #f9fafb;
+            padding: 30px;
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+
+        .timeline-row {
+            display: flex;
+            align-items: center;
+            margin: 15px 0;
+            gap: 15px;
+        }
+
+        .timeline-label {
+            min-width: 120px;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .timeline-bar {
+            flex: 1;
+            height: 40px;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            padding: 0 15px;
+            color: white;
+            font-weight: bold;
+            animation: slideIn 0.5s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                width: 0;
+                opacity: 0;
+            }
+
+            to {
+                width: 100%;
+                opacity: 1;
+            }
+        }
+
+        .promise-states {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .state-card {
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            font-weight: bold;
+            color: white;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .state-pending {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+        }
+
+        .state-fulfilled {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        }
+
+        .state-rejected {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+        }
+
+        .demo-async {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 20px 0;
+        }
+
+        .demo-controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .demo-button {
+            background: white;
+            color: #667eea;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .demo-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .demo-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .demo-output {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 20px;
+            border-radius: 10px;
+            min-height: 100px;
+            font-family: monospace;
+            line-height: 1.8;
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .api-card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            margin: 20px 0;
+            border-left: 4px solid #667eea;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .api-response {
+            background: #1f2937;
+            color: #10b981;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: monospace;
+            overflow-x: auto;
+            margin-top: 15px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        @media (max-width: 768px) {
+            .comparison-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .code-old {
+            background: #fee2e2;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #ef4444;
+        }
+
+        .code-new {
+            background: #dcfce7;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #10b981;
+        }
+
+        .error-display {
+            background: #fee2e2;
+            color: #991b1b;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 10px;
+            display: none;
+        }
+
+        .success-display {
+            background: #dcfce7;
+            color: #166534;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 10px;
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📅 Tháng 1 - Ngày 12</h1>
+            <p>Async JavaScript - Xử lý code bất đồng bộ với Promises & Async/Await</p>
+        </div>
+
+        <div class="content">
+            <a href="../index.html" class="btn"
+                style="display: inline-block; text-decoration: none; margin-bottom: 20px;">
+                ⬅️ Quay lại Lộ trình
+            </a>
+
+            <!-- Section 1: Async là gì? -->
+            <div class="section">
+                <div class="section-title">1. Asynchronous (Bất đồng bộ) là gì?</div>
+                <p>JavaScript mặc định chạy theo kiểu <strong>synchronous</strong> (đồng bộ) - từng dòng code chạy tuần
+                    tự. Nhưng một số tác vụ như <strong>gọi API, đọc file, set timeout</strong> cần thời gian chờ đợi.
+                </p>
+
+                <div class="info-box">
+                    <strong>🎯 Tại sao cần Async?</strong><br>
+                    • Tránh block code (chờ đợi API xong mới chạy tiếp)<br>
+                    • Tăng hiệu suất - nhiều tác vụ chạy song song<br>
+                    • UX tốt hơn - trang web không bị "đơ" khi chờ dữ liệu<br>
+                    • Chuẩn bị cho việc làm việc với API trong các bài sau
+                </div>
+
+                <h3>📊 So sánh Sync vs Async</h3>
+                <div class="timeline-visual">
+                    <h4 style="margin-bottom: 15px;">Synchronous (Đồng bộ) - Chờ lần lượt</h4>
+                    <div class="timeline-row">
+                        <div class="timeline-label">Task 1</div>
+                        <div class="timeline-bar">Hoàn thành (2s)</div>
+                    </div>
+                    <div class="timeline-row">
+                        <div class="timeline-label">Task 2</div>
+                        <div class="timeline-bar">Hoàn thành (3s)</div>
+                    </div>
+                    <div class="timeline-row">
+                        <div class="timeline-label">Task 3</div>
+                        <div class="timeline-bar">Hoàn thành (1s)</div>
+                    </div>
+                    <p style="text-align: center; color: #ef4444; font-weight: bold; margin-top: 10px;">
+                        ⏱️ Tổng thời gian: 6 giây
+                    </p>
+                </div>
+
+                <div class="timeline-visual">
+                    <h4 style="margin-bottom: 15px;">Asynchronous (Bất đồng bộ) - Chạy song song</h4>
+                    <div class="timeline-row">
+                        <div class="timeline-label">Task 1</div>
+                        <div class="timeline-bar">Hoàn thành (2s)</div>
+                    </div>
+                    <div class="timeline-row">
+                        <div class="timeline-label">Task 2</div>
+                        <div class="timeline-bar">Hoàn thành (3s)</div>
+                    </div>
+                    <div class="timeline-row">
+                        <div class="timeline-label">Task 3</div>
+                        <div class="timeline-bar" style="max-width: 33%;">Hoàn thành (1s)</div>
+                    </div>
+                    <p style="text-align: center; color: #10b981; font-weight: bold; margin-top: 10px;">
+                        ⚡ Tổng thời gian: ~3 giây (nhanh gấp đôi!)
+                    </p>
+                </div>
+            </div>
+
+            <!-- Section 2: Callbacks (Cách cũ) -->
+            <div class="section">
+                <div class="section-title">2. Callbacks - Cách xử lý Async truyền thống</div>
+                <p>Trước ES6, JavaScript dùng <strong>callback functions</strong> để xử lý async. Nhưng dễ gây ra
+                    "Callback Hell" (địa ngục callback).</p>
+
+                <div class="code-block">
+// Ví dụ callback đơn giản
+function fetchData(callback) {
+    setTimeout(() => {
+    const data = { name: "John", age: 25 };
+        callback(data);
+    }, 2000);
+}
+
+fetchData((result) => {
+    console.log("Dữ liệu:", result);
+});
+                </div>
+
+                <div class="warning-box">
+                    <strong>❌ Callback Hell (Pyramid of Doom):</strong><br>
+                    Khi có nhiều async lồng nhau, code trở nên khó đọc và bảo trì:
+                </div>
+
+                <div class="code-block">
+getData(function(a) {
+    getMoreData(a, function(b) {
+        getEvenMoreData(b, function(c) {
+            getFinalData(c, function(d) {
+            // Quá nhiều lồng nhau! 😵
+            });
+        });
+    });
+});
+                </div>
+            </div>
+
+            <!-- Section 3: Promises -->
+            <div class="section">
+                <div class="section-title">3. Promises - Giải pháp hiện đại</div>
+                <p>Promise là một đối tượng đại diện cho kết quả của một tác vụ async trong tương lai.</p>
+
+                <h3>🎭 Ba trạng thái của Promise</h3>
+                <div class="promise-states">
+                    <div class="state-card state-pending">
+                        <h4>⏳ Pending</h4>
+                        <p>Đang chờ kết quả</p>
+                    </div>
+                    <div class="state-card state-fulfilled">
+                        <h4>✅ Fulfilled</h4>
+                        <p>Thành công</p>
+                    </div>
+                    <div class="state-card state-rejected">
+                        <h4>❌ Rejected</h4>
+                        <p>Thất bại</p>
+                    </div>
+                </div>
+
+                <h3>📝 Cú pháp Promise</h3>
+                <div class="code-block">
+// Tạo Promise
+const myPromise = new Promise((resolve, reject) => {
+    // Code async ở đây
+    const success = true;
+
+    if (success) {
+        resolve("Thành công!"); // Gọi khi hoàn thành
+    } else {
+        reject("Lỗi rồi!"); // Gọi khi có lỗi
+    }
+});
+
+// Sử dụng Promise
+myPromise
+.then((result) => {
+    console.log(result); // "Thành công!"
+})
+.catch((error) => {
+    console.error(error);
+})
+.finally(() => {
+    console.log("Luôn chạy dù thành công hay thất bại");
+});
+                </div>
+
+                <h3>🔗 Promise Chaining (Nối chuỗi)</h3>
+                <div class="code-block">
+fetch('https://api.example.com/user')
+.then(response => response.json())
+.then(data => {
+    console.log("User:", data);
+    return fetch(`https://api.example.com/posts/${data.id}`);
+})
+.then(response => response.json())
+.then(posts => {
+    console.log("Posts:", posts);
+})
+.catch(error => {
+    console.error("Lỗi:", error);
+});
+                </div>
+            </div>
+
+            <!-- Section 4: Async/Await -->
+            <div class="section">
+                <div class="section-title">4. Async/Await - Cách viết hiện đại nhất</div>
+                <p><strong>Async/Await</strong> (ES2017) giúp viết code bất đồng bộ giống như code đồng bộ, dễ đọc hơn
+                    Promise chaining.</p>
+
+                <div class="highlight-box">
+                    <strong>💡 Quy tắc:</strong><br>
+                    • Thêm <code>async</code> trước function<br>
+                    • Dùng <code>await</code> trước Promise (chỉ trong async function)<br>
+                    • Luôn dùng <code>try...catch</code> để bắt lỗi
+                </div>
+
+                <div class="comparison-grid">
+                    <div class="code-old">
+                        <h4 style="color: #991b1b;">❌ Promise (dài dòng hơn)</h4>
+                        <div class="code-block">
+function getUser() {
+    fetch('/api/user')
+    .then(res => res.json())
+    .then(user => {
+        console.log(user);
+    })
+    .catch(err => {
+        console.error(err);
+    });
+}
+                        </div>
+                    </div>
+
+                    <div class="code-new">
+                        <h4 style="color: #166534;">✅ Async/Await (dễ đọc)</h4>
+                        <div class="code-block">
+async function getUser() {
+    try {
+        const res = await fetch('/api/user');
+        const user = await res.json();
+        console.log(user);
+    } catch (err) {
+        console.error(err);
+    }
+}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 5: Demo thực hành -->
+            <div class="section">
+                <div class="section-title">5. 💻 Thử nghiệm Async/Await</div>
+
+                <div class="demo-async">
+                    <h3>⏱️ Mô phỏng tải dữ liệu</h3>
+                    <div class="demo-controls">
+                        <button onclick="simulateSync()" class="demo-button">🐢 Đồng bộ (Chậm)</button>
+                        <button onclick="simulateAsync()" class="demo-button">⚡ Bất đồng bộ (Nhanh)</button>
+                        <button onclick="fetchRandomUser()" class="demo-button">👤 Fetch User API</button>
+                        <button onclick="clearOutput()" class="demo-button"
+                            style="background: #ef4444; color: white;">🗑️ Xóa</button>
+                    </div>
+                    <div id="asyncOutput" class="demo-output">
+                        Nhấn các nút để xem demo...
+                    </div>
+                </div>
+
+                <div class="api-card">
+                    <h3>🌐 Fetch API thật với Random User</h3>
+                    <p>Sử dụng API công khai <code>https://randomuser.me/api/</code> để lấy dữ liệu người dùng ngẫu
+                        nhiên.</p>
+                    <button onclick="fetchAndDisplay()" class="demo-button"
+                        style="background: #667eea; color: white; margin-bottom: 15px;">
+                        🔄 Lấy người dùng mới
+                    </button>
+                    <div id="userDisplay"></div>
+                    <div id="apiResponse" class="api-response" style="display: none;"></div>
+                </div>
+
+                <details style="margin-top: 15px; background: #f9fafb; padding: 15px; border-radius: 8px;">
+                    <summary style="cursor: pointer; font-weight: bold; color: #667eea;">📖 Xem code của demo</summary>
+                    <div class="code-block" style="margin-top: 10px;">
+// Mô phỏng task tốn thời gian
+function delay(ms, taskName) {
+    return new Promise(resolve => {
+        setTimeout(() => resolve(taskName), ms);
+    });
+}
+
+// Demo đồng bộ (chờ lần lượt)
+async function simulateSync() {
+    const output = document.getElementById('asyncOutput');
+    output.innerHTML = '<div class="loading-spinner"></div> Đang xử lý đồng bộ...<br>';
+
+    const start = Date.now();
+
+    await delay(2000, 'Task 1');
+    output.innerHTML += '✅ Task 1 hoàn thành (2s)<br>';
+
+    await delay(3000, 'Task 2');
+    output.innerHTML += '✅ Task 2 hoàn thành (3s)<br>';
+
+    await delay(1000, 'Task 3');
+    output.innerHTML += '✅ Task 3 hoàn thành (1s)<br>';
+
+    const end = Date.now();
+    output.innerHTML += `<strong>⏱️ Tổng thời gian: ${(end - start) / 1000}s</strong>`;
+}
+
+// Demo bất đồng bộ (chạy song song)
+async function simulateAsync() {
+    const output = document.getElementById('asyncOutput');
+    output.innerHTML = '<div class="loading-spinner"></div> Đang xử lý bất đồng bộ...<br>';
+
+    const start = Date.now();
+
+    const tasks = [
+        delay(2000, 'Task 1'),
+        delay(3000, 'Task 2'),
+        delay(1000, 'Task 3')
+    ];
+
+    const results = await Promise.all(tasks);
+
+    results.forEach(task => {
+        output.innerHTML += `✅ ${task} hoàn thành<br>`;
+    });
+
+    const end = Date.now();
+    output.innerHTML += `<strong>⚡ Tổng thời gian: ${(end - start) / 1000}s</strong>`;
+}
+
+// Fetch API thật
+async function fetchRandomUser() {
+    const output = document.getElementById('asyncOutput');
+    output.innerHTML = '<div class="loading-spinner"></div> Đang tải dữ liệu từ API...';
+
+    try {
+        const response = await fetch('https://randomuser.me/api/');
+        const data = await response.json();
+        const user = data.results[0];
+
+        output.innerHTML = `
+        <strong>✅ Fetch thành công!</strong><br>
+        👤 Tên: ${user.name.first} ${user.name.last}<br>
+        📧 Email: ${user.email}<br>
+        🌍 Quốc gia: ${user.location.country}
+        `;
+    } catch (error) {
+        output.innerHTML = `<strong>❌ Lỗi:</strong> ${error.message}`;
+    }
+}
+                    </div>
+                </details>
+            </div>
+
+            <!-- Section 6: Error Handling -->
+            <div class="section">
+                <div class="section-title">6. Error Handling (Xử lý lỗi)</div>
+                <p>Luôn dùng <code>try...catch</code> để bắt lỗi khi làm việc với async/await:</p>
+
+                <div class="code-block">
+async function fetchData() {
+    try {
+        const response = await fetch('https://api.example.com/data');
+
+        // Kiểm tra HTTP status
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        return data;
+
+    } catch (error) {
+        console.error("Lỗi khi fetch:", error.message);
+        // Hiển thị thông báo lỗi cho user
+        alert("Không thể tải dữ liệu. Vui lòng thử lại!");
+    }
+}
+                </div>
+
+                <div class="warning-box">
+                    <strong>⚠️ Lưu ý quan trọng:</strong><br>
+                    • Không có <code>try...catch</code> → Lỗi sẽ crash app<br>
+                    • Luôn kiểm tra <code>response.ok</code> trước khi parse JSON<br>
+                    • Cung cấp fallback UI khi có lỗi
+                </div>
+            </div>
+
+            <!-- Section 7: Promise.all & Promise.race -->
+            <div class="section">
+                <div class="section-title">7. Promise.all() & Promise.race()</div>
+
+                <div class="comparison-grid">
+                    <div class="method-card">
+                        <h4>🔗 Promise.all()</h4>
+                        <p>Chờ <strong>TẤT CẢ</strong> Promises hoàn thành</p>
+                        <div class="code-block">
+const p1 = fetch('/api/users');
+const p2 = fetch('/api/posts');
+const p3 = fetch('/api/comments');
+
+const [users, posts, comments] =
+await Promise.all([p1, p2, p3]);
+
+// Cả 3 đều hoàn thành mới chạy tiếp
+                        </div>
+                        <div class="warning-box" style="margin-top: 10px;">
+                            ⚠️ Nếu 1 Promise lỗi → TẤT CẢ bị reject
+                        </div>
+                    </div>
+
+                    <div class="method-card">
+                        <h4>🏁 Promise.race()</h4>
+                        <p>Lấy kết quả của Promise <strong>NHANH NHẤT</strong></p>
+                        <div class="code-block">
+const timeout = new Promise((_, reject) =>
+    setTimeout(() => reject('Timeout!'), 5000)
+);
+
+const apiCall = fetch('/api/data');
+
+const result = await Promise.race([
+    apiCall,
+    timeout
+]);
+
+// Lấy cái nào xong trước
+                        </div>
+                        <div class="info-box" style="margin-top: 10px;">
+                            💡 Hữu ích để set timeout cho API calls
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Homework -->
+            <div class="section">
+                <div class="section-title">🎯 Bài tập về nhà</div>
+                <div class="project-card">
+                    <div class="project-header">
+                        <div class="project-title">Tạo "Weather App" với API</div>
+                    </div>
+                    <p style="margin-top: 10px; line-height: 1.6;">
+                        Sử dụng API miễn phí <code>https://api.open-meteo.com/v1/forecast</code>:
+                    </p>
+                    <ul style="margin: 10px 0 10px 20px; color: #4b5563;">
+                        <li>Input để nhập tọa độ (latitude, longitude)</li>
+                        <li>Button "Lấy thời tiết" gọi API bằng <code>async/await</code></li>
+                        <li>Hiển thị nhiệt độ, độ ẩm, tốc độ gió</li>
+                        <li>Hiển thị loading spinner khi đang fetch</li>
+                        <li>Xử lý lỗi với <code>try...catch</code></li>
+                        <li><strong>Bonus:</strong> Lưu kết quả vào localStorage</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Quiz -->
+            <div class="section">
+                <div class="section-title">🧠 Kiểm tra kiến thức</div>
+                <div class="quiz-container">
+                    <form id="quizForm">
+                        <div class="question-item">
+                            <div class="question-text">Câu 1: Asynchronous JavaScript giúp gì?</div>
+                            <div class="options-list">
+                                <label class="option-label">
+                                    <input type="radio" name="q1" value="wrong"> Làm code chạy chậm hơn
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q1" value="correct"> Tránh block code khi chờ tác vụ tốn
+                                    thời gian
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q1" value="wrong"> Không có tác dụng gì
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-item">
+                            <div class="question-text">Câu 2: Promise có bao nhiêu trạng thái?</div>
+                            <div class="options-list">
+                                <label class="option-label">
+                                    <input type="radio" name="q2" value="wrong"> 2 (Success, Fail)
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q2" value="correct"> 3 (Pending, Fulfilled, Rejected)
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q2" value="wrong"> 4 (Pending, Loading, Success, Error)
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-item">
+                            <div class="question-text">Câu 3: Để sử dụng <code>await</code>, function phải có từ khóa
+                                gì?</div>
+                            <div class="options-list">
+                                <label class="option-label">
+                                    <input type="radio" name="q3" value="wrong"> promise
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q3" value="correct"> async
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q3" value="wrong"> wait
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-item">
+                            <div class="question-text">Câu 4: <code>Promise.all()</code> sẽ như thế nào nếu 1 Promise bị
+                                lỗi?</div>
+                            <div class="options-list">
+                                <label class="option-label">
+                                    <input type="radio" name="q4" value="wrong"> Bỏ qua Promise lỗi, chỉ lấy những cái
+                                    thành công
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q4" value="correct"> Toàn bộ Promise.all() bị reject
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q4" value="wrong"> Không ảnh hưởng gì
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-item">
+                            <div class="question-text">Câu 5: Cú pháp nào đúng để bắt lỗi trong async/await?</div>
+                            <div class="options-list">
+                                <label class="option-label">
+                                    <input type="radio" name="q5" value="wrong"> catch (error) { }
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q5" value="correct"> try { } catch (error) { }
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q5" value="wrong"> .catch(error => { })
+                                </label>
+                            </div>
+                        </div>
+
+                        <button type="button" class="btn" onclick="checkQuiz()">Kiểm tra đáp án</button>
+                    </form>
+                    <div id="quiz-feedback"></div>
+                </div>
+            </div>
+
+            <!-- Footer Actions -->
+            <div class="actions">
+                <button class="btn" onclick="window.location.href='day11.html'">⬅️ Quay lại ngày 11</button>
+                <button id="completeBtn" class="btn" style="opacity: 0.5; pointer-events: none;"
+                    onclick="completeLesson()">✅ Hoàn thành bài học</button>
+                <p style="font-size: 0.9em; color: #666; margin-top: 5px;">(Hãy làm đúng Quiz để mở khóa nút hoàn thành)
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="../js/config.js"></script>
+    <script src="../js/storage.js"></script>
+    <script src="../js/auth.js"></script>
+    <script src="../js/quiz-handler.js"></script>
+
+    <script>
+        // Initialize quiz
+        initQuiz('day12');
+
+        // Helper function: Delay
+        function delay(ms, taskName) {
+            return new Promise(resolve => {
+                setTimeout(() => resolve(taskName), ms);
+            });
+        }
+
+        // Demo 1: Synchronous (chậm)
+        async function simulateSync() {
+            const output = document.getElementById('asyncOutput');
+            output.innerHTML = '<div class="loading-spinner"></div> Đang xử lý đồng bộ...<br>';
+
+            const start = Date.now();
+
+            await delay(2000, 'Task 1');
+            output.innerHTML += '✅ Task 1 hoàn thành (2s)<br>';
+
+            await delay(3000, 'Task 2');
+            output.innerHTML += '✅ Task 2 hoàn thành (3s)<br>';
+
+            await delay(1000, 'Task 3');
+            output.innerHTML += '✅ Task 3 hoàn thành (1s)<br>';
+
+            const end = Date.now();
+            output.innerHTML += `<strong style="color: #fbbf24;">⏱️ Tổng thời gian: ${(end - start) / 1000}s (chậm)</strong>`;
+        }
+
+        // Demo 2: Asynchronous (nhanh)
+        async function simulateAsync() {
+            const output = document.getElementById('asyncOutput');
+            output.innerHTML = '<div class="loading-spinner"></div> Đang xử lý bất đồng bộ...<br>';
+
+            const start = Date.now();
+
+            // Chạy song song
+            const tasks = [
+                delay(2000, 'Task 1'),
+                delay(3000, 'Task 2'),
+                delay(1000, 'Task 3')
+            ];
+
+            const results = await Promise.all(tasks);
+
+            results.forEach(task => {
+                output.innerHTML += `✅ ${task} hoàn thành<br>`;
+            });
+
+            const end = Date.now();
+            output.innerHTML += `<strong style="color: #10b981;">⚡ Tổng thời gian: ${(end - start) / 1000}s (nhanh gấp đôi!)</strong>`;
+        }
+
+        // Demo 3: Fetch API
+        async function fetchRandomUser() {
+            const output = document.getElementById('asyncOutput');
+            output.innerHTML = '<div class="loading-spinner"></div> Đang tải dữ liệu từ API...';
+
+            try {
+                const response = await fetch('https://randomuser.me/api/');
+
+                if (!response.ok) {
+                    throw new Error(`HTTP Error: ${response.status}`);
+                }
+
+                const data = await response.json();
+                const user = data.results[0];
+
+                output.innerHTML = `
+                <strong style="color: #10b981;">✅ Fetch thành công!</strong><br><br>
+                👤 <strong>Tên:</strong> ${user.name.first} ${user.name.last}<br>
+                📧 <strong>Email:</strong> ${user.email}<br>
+                📱 <strong>Phone:</strong> ${user.phone}<br>
+                🌍 <strong>Quốc gia:</strong> ${user.location.country}<br>
+                🏙️ <strong>Thành phố:</strong> ${user.location.city}
+            `;
+            } catch (error) {
+                output.innerHTML = `<strong style="color: #ef4444;">❌ Lỗi:</strong> ${error.message}`;
+            }
+        }
+
+        // Fetch and display with card UI
+        async function fetchAndDisplay() {
+            const display = document.getElementById('userDisplay');
+            const apiResponse = document.getElementById('apiResponse');
+
+            display.innerHTML = '<div class="loading-spinner"></div> Đang tải...';
+            apiResponse.style.display = 'none';
+
+            try {
+                const response = await fetch('https://randomuser.me/api/');
+
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+
+                const data = await response.json();
+                const user = data.results[0];
+
+                // Display user card
+                display.innerHTML = `
+                <div style="display: flex; gap: 20px; align-items: center; padding: 20px; background: #f9fafb; border-radius: 10px;">
+                    <img src="${user.picture.large}" alt="Avatar" style="border-radius: 50%; width: 100px; height: 100px;">
+                    <div>
+                        <h3 style="margin: 0 0 10px 0; color: #1f2937;">${user.name.first} ${user.name.last}</h3>
+                        <p style="margin: 5px 0; color: #6b7280;">📧 ${user.email}</p>
+                        <p style="margin: 5px 0; color: #6b7280;">📱 ${user.phone}</p>
+                        <p style="margin: 5px 0; color: #6b7280;">🌍 ${user.location.city}, ${user.location.country}</p>
+                    </div>
+                </div>
+            `;
+
+                // Show JSON response
+                apiResponse.style.display = 'block';
+                apiResponse.textContent = JSON.stringify(data, null, 2);
+
+            } catch (error) {
+                display.innerHTML = `
+                <div style="background: #fee2e2; color: #991b1b; padding: 15px; border-radius: 8px;">
+                    <strong>❌ Lỗi:</strong> ${error.message}
+                </div>
+            `;
+            }
+        }
+
+        // Clear output
+        function clearOutput() {
+            document.getElementById('asyncOutput').innerHTML = 'Đã xóa. Nhấn nút để xem demo...';
+        }
+    </script>
+</body>
+
+</html>
