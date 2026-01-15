@@ -71,6 +71,18 @@ const LESSON_CONFIG = {
             q5: 'correct' 
         },
         completionMsg: "Xuất sắc! Bạn đã làm chủ Async JavaScript.\n\n✅ Hiểu Synchronous vs Asynchronous\n✅ Promises và các trạng thái\n✅ Async/Await syntax\n✅ Error handling với try...catch\n✅ Promise.all() & Promise.race()\n✅ Fetch API thực tế"
+    },
+    day13: {
+        id: 'day13',
+        totalQuestions: 5,
+        answers: { 
+            q1: 'correct', 
+            q2: 'correct', 
+            q3: 'correct', 
+            q4: 'correct', 
+            q5: 'correct' 
+        },
+        completionMsg: "Chúc mừng! Bạn đã hoàn thành bài học về Fetch API & Real APIs.\n\n✅ Hiểu về API & luồng dữ liệu Client-Server\n✅ Thành thạo các HTTP Methods: GET, POST, PUT, DELETE\n✅ Sử dụng thành thạo Fetch API với Async/Await\n✅ Kiểm soát lỗi chặt chẽ với response.ok & try...catch\n✅ Biết cách làm việc với API thực tế và Headers/Authentication\n✅ Sẵn sàng xây dựng các ứng dụng dựa trên dữ liệu thật!"
     }
 };
 
