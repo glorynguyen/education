@@ -83,6 +83,18 @@ const LESSON_CONFIG = {
             q5: 'correct' 
         },
         completionMsg: "Chúc mừng! Bạn đã hoàn thành bài học về Fetch API & Real APIs.\n\n✅ Hiểu về API & luồng dữ liệu Client-Server\n✅ Thành thạo các HTTP Methods: GET, POST, PUT, DELETE\n✅ Sử dụng thành thạo Fetch API với Async/Await\n✅ Kiểm soát lỗi chặt chẽ với response.ok & try...catch\n✅ Biết cách làm việc với API thực tế và Headers/Authentication\n✅ Sẵn sàng xây dựng các ứng dụng dựa trên dữ liệu thật!"
+    },
+    day14: {
+        id: 'day14',
+        totalQuestions: 5,
+        answers: {
+            q1: 'correct',
+            q2: 'correct',
+            q3: 'correct',
+            q4: 'correct',
+            q5: 'correct'
+        },
+        completionMsg: "Xuất sắc! Bạn đã hoàn thành bài học về LocalStorage & SessionStorage.\n\n✅ Hiểu về Web Storage API và tại sao cần dùng\n✅ Thành thạo 4 phương thức: setItem, getItem, removeItem, clear\n✅ Lưu trữ Objects & Arrays với JSON.stringify/parse\n✅ Phân biệt LocalStorage vs SessionStorage\n✅ Best practices và xử lý lỗi an toàn\n✅ Xây dựng Todo App và Theme Switcher thực tế\n✅ Sẵn sàng xây dựng ứng dụng có tính năng lưu trữ dữ liệu!"
     }
 };
 
