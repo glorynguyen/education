@@ -95,6 +95,18 @@ const LESSON_CONFIG = {
             q5: 'correct'
         },
         completionMsg: "Xuất sắc! Bạn đã hoàn thành bài học về LocalStorage & SessionStorage.\n\n✅ Hiểu về Web Storage API và tại sao cần dùng\n✅ Thành thạo 4 phương thức: setItem, getItem, removeItem, clear\n✅ Lưu trữ Objects & Arrays với JSON.stringify/parse\n✅ Phân biệt LocalStorage vs SessionStorage\n✅ Best practices và xử lý lỗi an toàn\n✅ Xây dựng Todo App và Theme Switcher thực tế\n✅ Sẵn sàng xây dựng ứng dụng có tính năng lưu trữ dữ liệu!"
+    },
+    day15: {
+        id: 'day15',
+        totalQuestions: 5,
+        answers: { 
+            q1: 'correct', 
+            q2: 'correct', 
+            q3: 'correct', 
+            q4: 'correct', 
+            q5: 'correct' 
+        },
+        completionMsg: "Chúc mừng! Bạn đã hoàn thành bài học về Promises & Async/Await.\n\n✅ Hiểu các trạng thái của Promise (Pending, Fulfilled, Rejected)\n✅ Tạo và sử dụng Promise cơ bản\n✅ Chuỗi Promise để xử lý nhiều hành động bất đồng bộ\n✅ Sử dụng async/await để viết code sạch sẽ hơn\n✅ Xử lý lỗi với .catch() và try...catch\n✅ Sẵn sàng làm việc với API thực tế!"
     }
 };
 

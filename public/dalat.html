@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Timeline Đà Lạt 2025 - Team Vinh</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background-color: #f8fafc;
+        }
+
+        .timeline-line::before {
+            content: '';
+            position: absolute;
+            left: 19px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: #e2e8f0;
+        }
+
+        /* CSS Ẩn/Hiện quyền chỉnh sửa */
+        .admin-only {
+            display: none;
+        }
+
+        body.is-admin .admin-only {
+            display: flex;
+        }
+
+        /* CSS Ẩn/Hiện công cụ Admin ở Header */
+        #admin-tools {
+            display: none;
+        }
+
+        body.is-logged-in #admin-tools {
+            display: flex;
+        }
+
+        #btn-login {
+            display: block;
+        }
+
+        body.is-logged-in #btn-login {
+            display: none;
+        }
+
+        .tab-active {
+            border-bottom: 3px solid #16a34a;
+            color: #16a34a;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body class="pb-20">
+
+    <!-- Header & Login -->
+    <div class="bg-green-600 text-white p-5 sticky top-0 z-50 shadow-lg">
+        <div class="max-w-xl mx-auto flex justify-between items-center">
+            <div>
+                <h1 class="text-xl font-bold">Lịch Trình Đà Lạt 🚀</h1>
+                <p class="text-[10px] opacity-80 uppercase tracking-widest text-green-100">T7 (Hội quân) ➔ CN (Đám cưới)
+                    ➔ T2 (Về)</p>
+            </div>
+            <div class="flex gap-2">
+                <!-- Nút Đăng nhập cho Vinh -->
+                <button id="btn-login" onclick="login()"
+                    class="text-xs bg-white/20 px-3 py-1 rounded-full border border-white/30">🔑 Vinh Login</button>
+
+                <!-- Công cụ chỉ hiện khi Vinh đã Logged In -->
+                <div id="admin-tools" class="gap-2 items-center">
+                    <button onclick="toggleAdmin()"
+                        class="bg-yellow-400 text-green-900 px-3 py-1 rounded-full text-xs font-bold shadow-sm">🛠️ Edit
+                        Mode</button>
+                    <button onclick="openAddModal()"
+                        class="bg-white text-green-600 w-8 h-8 rounded-full font-bold flex items-center justify-center shadow-lg">+</button>
+                    <button onclick="logout()" class="text-xs bg-red-500/50 p-1 rounded-full"
+                        title="Đăng xuất">🚪</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tabs Ngày -->
+    <div class="bg-white shadow-sm sticky top-[72px] z-40">
+        <div class="max-w-xl mx-auto flex justify-around">
+            <button onclick="showDay('Sat')" id="tabSat" class="py-3 px-4 text-sm tab-active">T7 (Hội quân)</button>
+            <button onclick="showDay('Sun')" id="tabSun" class="py-3 px-4 text-sm">CN (Đám cưới)</button>
+            <button onclick="showDay('Mon')" id="tabMon" class="py-3 px-4 text-sm">Thứ 2 (Về)</button>
+        </div>
+    </div>
+
+    <div class="max-w-xl mx-auto px-4 mt-6">
+        <!-- Timeline Content -->
+        <div id="timeline-container" class="relative timeline-line pl-10 space-y-8"></div>
+
+        <!-- Empty State -->
+        <div id="empty-state" class="hidden text-center py-20 text-gray-400">
+            <p>Chưa có lịch trình cho ngày này.</p>
+        </div>
+    </div>
+
+    <!-- Modal Thêm/Sửa Sự Kiện -->
+    <div id="add-modal" class="fixed inset-0 bg-black/60 hidden z-[60] flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-sm rounded-3xl p-6 shadow-2xl">
+            <h3 id="modal-title" class="font-bold text-lg mb-4 text-green-700">➕ Thêm hoạt động</h3>
+            <input type="hidden" id="edit-id">
+
+            <div class="space-y-4">
+                <div>
+                    <label class="text-[10px] font-bold text-gray-400 uppercase">Chọn ngày</label>
+                    <select id="input-day" class="w-full p-3 bg-gray-50 border rounded-xl font-bold">
+                        <option value="Sat">Thứ Bảy (Hội quân)</option>
+                        <option value="Sun">Chủ Nhật (Đám cưới)</option>
+                        <option value="Mon">Thứ Hai (Về)</option>
+                    </select>
+                </div>
+                <div class="grid grid-cols-3 gap-3">
+                    <div class="col-span-1">
+                        <label class="text-[10px] font-bold text-gray-400 uppercase">Giờ</label>
+                        <input id="input-time" type="text" placeholder="04:00"
+                            class="w-full p-3 bg-gray-50 border rounded-xl font-bold">
+                    </div>
+                    <div class="col-span-2">
+                        <label class="text-[10px] font-bold text-gray-400 uppercase">Hoạt động</label>
+                        <input id="input-title" type="text" placeholder="Ăn sáng, đi cafe..."
+                            class="w-full p-3 bg-gray-50 border rounded-xl font-bold">
+                    </div>
+                </div>
+                <div>
+                    <label class="text-[10px] font-bold text-gray-400 uppercase">Ghi chú</label>
+                    <textarea id="input-desc" placeholder="Địa chỉ hoặc lưu ý..."
+                        class="w-full p-3 bg-gray-50 border rounded-xl text-sm" rows="2"></textarea>
+                </div>
+                <div class="flex gap-2 pt-2">
+                    <button onclick="hideModal()" class="flex-1 py-3 text-gray-500 font-bold">Hủy</button>
+                    <button id="btn-save" onclick="saveEvent()"
+                        class="flex-1 py-3 bg-green-600 text-white rounded-xl font-bold shadow-lg">Lưu lại</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyCrayfdLPobe8xiTU6siDYbI1T6bv9K9jo",
+            authDomain: "baucua-70f9b.firebaseapp.com",
+            databaseURL: "https://baucua-70f9b-default-rtdb.firebaseio.com",
+            projectId: "baucua-70f9b",
+            storageBucket: "baucua-70f9b.firebasestorage.app",
+            messagingSenderId: "807035202882",
+            appId: "1:807035202882:web:a3afb540b888cf8c636cdb"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+        const auth = firebase.auth();
+
+        let currentDay = 'Sat';
+        let allEvents = {};
+
+        // Lắng nghe dữ liệu
+        db.ref('trips/dalat/timeline').on('value', (snap) => {
+            allEvents = snap.val() || {};
+            renderTimeline(allEvents);
+        });
+
+        function renderTimeline(data) {
+            const container = document.getElementById('timeline-container');
+            const empty = document.getElementById('empty-state');
+            container.innerHTML = "";
+
+            // Sắp xếp theo thời gian
+            const filtered = Object.keys(data)
+                .map(key => ({ id: key, ...data[key] }))
+                .filter(ev => ev.day === currentDay)
+                .sort((a, b) => {
+                    const getMinutes = (t) => {
+                        const [h, m] = t.split(':').map(Number);
+                        return (h || 0) * 60 + (m || 0);
+                    };
+                    return getMinutes(a.time) - getMinutes(b.time);
+                });
+
+            if (filtered.length === 0) {
+                empty.classList.remove('hidden');
+                return;
+            }
+            empty.classList.add('hidden');
+
+            filtered.forEach(ev => {
+                // --- LOGIC XỬ LÝ LINK MAP ---
+                let description = ev.desc || "";
+                let mapLink = "";
+
+                // Tìm link trong mô tả (regex tìm chuỗi bắt đầu bằng http)
+                const urlRegex = /(https?:\/\/[^\s]+)/g;
+                const matches = description.match(urlRegex);
+
+                if (matches) {
+                    mapLink = matches[0]; // Lấy link đầu tiên tìm thấy
+                    description = description.replace(mapLink, "").trim(); // Xóa link khỏi text cho sạch
+                }
+                // ----------------------------
+
+                container.innerHTML += `
+            <div class="relative">
+                <div class="absolute -left-[30px] top-1 w-5 h-5 bg-white border-4 border-green-500 rounded-full z-10 shadow-sm"></div>
+                <div class="flex justify-between items-start">
+                    <span class="text-xs font-bold text-green-600 bg-green-50 px-2 py-1 rounded-md shadow-sm">${ev.time}</span>
+                    
+                    <div class="admin-only gap-3 items-center">
+                        <button onclick="openEditModal('${ev.id}')" class="text-blue-500 hover:text-blue-700 text-[11px] font-bold uppercase">Sửa</button>
+                        <button onclick="deleteEvent('${ev.id}')" class="text-red-400 hover:text-red-600 text-[11px] font-bold uppercase">Xóa</button>
+                    </div>
+                </div>
+                <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 mt-2">
+                    <h4 class="font-bold text-gray-800 text-base">${ev.title}</h4>
+                    ${description ? `<p class="text-xs text-gray-500 mt-1 leading-relaxed">${description}</p>` : ''}
+                    
+                    ${mapLink ? `
+                        <a href="${mapLink}" target="_blank" class="mt-3 inline-flex items-center gap-1 text-[11px] font-bold text-blue-600 bg-blue-50 px-3 py-2 rounded-xl hover:bg-blue-100 transition-all border border-blue-100">
+                            📍 Xem vị trí trên Maps
+                        </a>
+                    ` : ''}
+                </div>
+            </div>`;
+            });
+        }
+
+        // --- HÀM XỬ LÝ MODAL ---
+        function openAddModal() {
+            document.getElementById('modal-title').innerText = "➕ Thêm hoạt động";
+            document.getElementById('btn-save').innerText = "Lưu lại";
+            document.getElementById('edit-id').value = "";
+            document.getElementById('input-time').value = "";
+            document.getElementById('input-title').value = "";
+            document.getElementById('input-desc').value = "";
+            document.getElementById('input-day').value = currentDay;
+            document.getElementById('add-modal').classList.remove('hidden');
+        }
+
+        function openEditModal(id) {
+            const ev = allEvents[id];
+            if (!ev) return;
+            document.getElementById('modal-title').innerText = "📝 Sửa hoạt động";
+            document.getElementById('btn-save').innerText = "Cập nhật";
+            document.getElementById('edit-id').value = id;
+            document.getElementById('input-day').value = ev.day;
+            document.getElementById('input-time').value = ev.time;
+            document.getElementById('input-title').value = ev.title;
+            document.getElementById('input-desc').value = ev.desc || "";
+            document.getElementById('add-modal').classList.remove('hidden');
+        }
+
+        function hideModal() { document.getElementById('add-modal').classList.add('hidden'); }
+
+        // --- HÀM XỬ LÝ DỮ LIỆU ---
+        function saveEvent() {
+            const id = document.getElementById('edit-id').value;
+            const eventData = {
+                day: document.getElementById('input-day').value,
+                time: document.getElementById('input-time').value,
+                title: document.getElementById('input-title').value,
+                desc: document.getElementById('input-desc').value
+            };
+
+            if (!eventData.time || !eventData.title) return alert("Nhập đủ giờ và tên nha!");
+
+            if (id) db.ref(`trips/dalat/timeline/${id}`).update(eventData).then(hideModal);
+            else db.ref('trips/dalat/timeline').push(eventData).then(hideModal);
+        }
+
+        function deleteEvent(id) {
+            if (confirm("Chắc chắn xóa mốc này không Vinh?")) db.ref(`trips/dalat/timeline/${id}`).remove();
+        }
+
+        function showDay(day) {
+            currentDay = day;
+            document.querySelectorAll('[id^="tab"]').forEach(el => el.classList.remove('tab-active'));
+            document.getElementById('tab' + day).classList.add('tab-active');
+            renderTimeline(allEvents);
+        }
+
+        // --- AUTH & ADMIN LOGIC ---
+        function toggleAdmin() {
+            document.body.classList.toggle('is-admin');
+            const btn = document.querySelector('#admin-tools button');
+            if (document.body.classList.contains('is-admin')) {
+                btn.innerText = "✅ Editing";
+                btn.classList.replace('bg-yellow-400', 'bg-green-700');
+                btn.classList.replace('text-green-900', 'text-white');
+            } else {
+                btn.innerText = "🛠️ Edit Mode";
+                btn.classList.replace('bg-green-700', 'bg-yellow-400');
+                btn.classList.replace('text-white', 'text-green-900');
+            }
+        }
+
+        function login() {
+            const provider = new firebase.auth.GoogleAuthProvider();
+            auth.signInWithPopup(provider);
+        }
+
+        function logout() {
+            auth.signOut().then(() => {
+                document.body.classList.remove('is-logged-in', 'is-admin');
+                location.reload();
+            });
+        }
+
+        auth.onAuthStateChanged((user) => {
+            if (user && user.email === 'nguyenbavinhcntt@gmail.com') {
+                document.body.classList.add('is-logged-in');
+            } else {
+                document.body.classList.remove('is-logged-in', 'is-admin');
+            }
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ngày 15: JavaScript Promises & Async/Await</title>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="../css/variables.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/lesson-style.css">
+
+    <style>
+        .promise-visual {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .promise-states {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin-top: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .state-card {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 20px;
+            border-radius: 10px;
+            min-width: 150px;
+            backdrop-filter: blur(10px);
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .state-card.pending {
+            border-color: #fbbf24;
+        }
+
+        .state-card.fulfilled {
+            border-color: #10b981;
+        }
+
+        .state-card.rejected {
+            border-color: #ef4444;
+        }
+
+        .promise-chain {
+            background: #f9fafb;
+            padding: 25px;
+            border-radius: 12px;
+            margin: 20px 0;
+            border-left: 4px solid #667eea;
+        }
+
+        .chain-step {
+            display: flex;
+            align-items: center;
+            margin: 15px 0;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .chain-step .number {
+            background: #667eea;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-weight: bold;
+        }
+
+        .async-demo {
+            background: #1f2937;
+            color: #10b981;
+            padding: 20px;
+            border-radius: 10px;
+            font-family: 'Consolas', monospace;
+            overflow-x: auto;
+            margin: 15px 0;
+        }
+
+        .promise-controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        .promise-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .promise-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .promise-button.reject {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+        }
+
+        .promise-result {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            min-height: 100px;
+            border: 2px dashed #cbd5e1;
+            margin-top: 15px;
+        }
+
+        .promise-item {
+            background: #f9fafb;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border-left: 4px solid #10b981;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            animation: slideIn 0.3s ease;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📅 Tháng 1 - Ngày 15</h1>
+            <p>Promises & Async/Await - Xử lý bất đồng bộ trong JavaScript</p>
+        </div>
+
+        <div class="content">
+            <a href="../index.html" class="btn" style="display: inline-block; text-decoration: none; margin-bottom: 20px;">
+                ⬅️ Quay lại Lộ trình
+            </a>
+
+            <!-- Section 1: Promise là gì? -->
+            <div class="section">
+                <div class="section-title">1. Promise là gì?</div>
+                <p><strong>Promise</strong> là một đối tượng trong JavaScript biểu diễn kết quả cuối cùng của một hành động bất đồng bộ (asynchronous). Nó giống như một lời hứa rằng một giá trị sẽ có sẵn trong tương lai.</p>
+
+                <div class="info-box">
+                    <strong>🎯 Tại sao cần Promise?</strong><br>
+                    • Tránh callback hell (callback lồng nhau)<br>
+                    • Xử lý lỗi tốt hơn<br>
+                    • Viết code dễ đọc và bảo trì hơn<br>
+                    • Quản lý luồng thực thi bất đồng bộ hiệu quả<br>
+                    • Là nền tảng cho async/await
+                </div>
+
+                <div class="promise-visual">
+                    <h3>🔄 Các trạng thái của Promise</h3>
+                    <div class="promise-states">
+                        <div class="state-card pending">
+                            <h4>⏳ Pending</h4>
+                            <p>Đang chờ xử lý</p>
+                        </div>
+                        <div class="state-card fulfilled">
+                            <h4>✅ Fulfilled</h4>
+                            <p>Thành công</p>
+                        </div>
+                        <div class="state-card rejected">
+                            <h4>❌ Rejected</h4>
+                            <p>Bị từ chối</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="code-example">
+                    <div class="code-header">
+                        🔧 Cú pháp cơ bản của Promise
+                    </div>
+                    <pre class="code-block">
+const myPromise = new Promise((resolve, reject) => {
+    // Thực hiện hành động bất đồng bộ ở đây
+    
+    if (/* thành công */) {
+        resolve("Dữ liệu trả về");
+    } else {
+        reject(new Error("Có lỗi xảy ra"));
+    }
+});
+
+myPromise
+    .then(result => {
+        // Xử lý khi promise thành công
+        console.log(result);
+    })
+    .catch(error => {
+        // Xử lý khi promise thất bại
+        console.error(error);
+    });
+                    </pre>
+                </div>
+            </div>
+
+            <!-- Section 2: Promise Chain -->
+            <div class="section">
+                <div class="section-title">2. Chuỗi Promise (Promise Chain)</div>
+                <p>Một trong những lợi ích lớn nhất của Promise là khả năng tạo chuỗi các hành động bất đồng bộ bằng cách sử dụng <code>.then()</code>.</p>
+
+                <div class="promise-chain">
+                    <h4>🔗 Chuỗi Promise</h4>
+                    <div class="chain-step">
+                        <div class="number">1</div>
+                        <div>
+                            <strong>Lấy dữ liệu người dùng</strong><br>
+                            <code>getUserData().then(data => ...)</code>
+                        </div>
+                    </div>
+                    <div class="chain-step">
+                        <div class="number">2</div>
+                        <div>
+                            <strong>Xử lý dữ liệu</strong><br>
+                            <code>.then(processedData => ...)</code>
+                        </div>
+                    </div>
+                    <div class="chain-step">
+                        <div class="number">3</div>
+                        <div>
+                            <strong>Lưu vào database</strong><br>
+                            <code>.then(saveResult => ...)</code>
+                        </div>
+                    </div>
+                    <div class="chain-step">
+                        <div class="number">4</div>
+                        <div>
+                            <strong>Thông báo kết quả</strong><br>
+                            <code>.then(finalResult => ...)</code>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="code-example">
+                    <div class="code-header">
+                        🔗 Ví dụ chuỗi Promise thực tế
+                    </div>
+                    <pre class="code-block">
+fetch('/api/user/123')
+    .then(response => response.json())
+    .then(user => {
+        console.log('User:', user);
+        return fetch(`/api/posts/${user.id}`);
+    })
+    .then(response => response.json())
+    .then(posts => {
+        console.log('Posts:', posts);
+        return posts.filter(post => post.published);
+    })
+    .then(publishedPosts => {
+        displayPosts(publishedPosts);
+    })
+    .catch(error => {
+        console.error('Có lỗi xảy ra:', error);
+    });
+                    </pre>
+                </div>
+            </div>
+
+            <!-- Section 3: Async/Await -->
+            <div class="section">
+                <div class="section-title">3. Async/Await</div>
+                <p><strong>Async/Await</strong> là cú pháp mới hơn để làm việc với Promise, giúp code trông giống như code đồng bộ.</p>
+
+                <div class="info-box">
+                    <strong>💡 Lợi ích của Async/Await:</strong><br>
+                    • Code dễ đọc hơn<br>
+                    • Dễ debug hơn<br>
+                    • Xử lý lỗi với try/catch<br>
+                    • Tránh callback hell hoàn toàn
+                </div>
+
+                <div class="code-example">
+                    <div class="code-header">
+                        🔄 So sánh Promise vs Async/Await
+                    </div>
+                    <pre class="code-block">
+// Sử dụng Promise
+function getUserPosts_Promise(userId) {
+    return fetch(`/api/users/${userId}`)
+        .then(response => response.json())
+        .then(user => fetch(`/api/posts/${user.id}`))
+        .then(response => response.json());
+}
+
+// Sử dụng Async/Await
+async function getUserPosts_AsyncAwait(userId) {
+    try {
+        const userResponse = await fetch(`/api/users/${userId}`);
+        const user = await userResponse.json();
+        
+        const postsResponse = await fetch(`/api/posts/${user.id}`);
+        const posts = await postsResponse.json();
+        
+        return posts;
+    } catch (error) {
+        console.error('Có lỗi xảy ra:', error);
+        throw error;
+    }
+}
+                    </pre>
+                </div>
+            </div>
+
+            <!-- Section 4: Demo Tương tác -->
+            <div class="section">
+                <div class="section-title">4. Demo Tương tác</div>
+                <p>Hãy thử tạo một Promise và xem cách nó hoạt động:</p>
+
+                <div class="demo-storage">
+                    <div class="promise-controls">
+                        <button class="promise-button" onclick="createPromise('fulfill')">✅ Thành công</button>
+                        <button class="promise-button reject" onclick="createPromise('reject')">❌ Từ chối</button>
+                        <button class="promise-button" onclick="clearResults()">🗑️ Xóa kết quả</button>
+                    </div>
+
+                    <div class="promise-result" id="promiseResult">
+                        <p>Ấn nút để tạo Promise...</p>
+                    </div>
+                </div>
+
+                <div class="code-example">
+                    <div class="code-header">
+                        💻 Code phía sau demo
+                    </div>
+                    <pre class="code-block">
+function createPromise(outcome) {
+    const promise = new Promise((resolve, reject) => {
+        setTimeout(() => {
+            if (outcome === 'fulfill') {
+                resolve("✅ Promise đã hoàn thành thành công!");
+            } else {
+                reject(new Error("❌ Promise bị từ chối!"));
+            }
+        }, 2000);
+    });
+
+    promise
+        .then(result => {
+            displayResult(result, 'success');
+        })
+        .catch(error => {
+            displayResult(error.message, 'error');
+        });
+}
+                    </pre>
+                </div>
+            </div>
+
+            <!-- Section 5: Bài tập -->
+            <div class="section">
+                <div class="section-title">5. Bài tập thực hành</div>
+                
+                <div class="exercise">
+                    <h4>📝 Bài tập 1: Chuyển đổi Promise chain sang Async/Await</h4>
+                    <p>Chuyển đổi đoạn code sau sang sử dụng async/await:</p>
+                    <pre class="code-block">
+fetch('/api/products')
+    .then(response => response.json())
+    .then(products => {
+        const expensiveProducts = products.filter(p => p.price > 100);
+        return fetch('/api/discounts', {
+            method: 'POST',
+            body: JSON.stringify(expensiveProducts)
+        });
+    })
+    .then(response => response.json())
+    .then(discounts => {
+        applyDiscounts(discounts);
+    })
+    .catch(error => {
+        console.error('Lỗi:', error);
+    });
+                    </pre>
+                </div>
+
+                <div class="exercise">
+                    <h4>📝 Bài tập 2: Xử lý nhiều Promise song song</h4>
+                    <p>Sử dụng Promise.all() để tải thông tin người dùng và bài viết cùng lúc:</p>
+                    <pre class="code-block">
+// Gợi ý: Promise.all([promise1, promise2])
+                    </pre>
+                </div>
+            </div>
+
+            <!-- Section 6: Tổng kết -->
+            <div class="section">
+                <div class="section-title">6. Tổng kết</div>
+                <p>Hôm nay chúng ta đã học về:</p>
+                <ul>
+                    <li>Promise là gì và các trạng thái của nó</li>
+                    <li>Cách tạo và sử dụng Promise cơ bản</li>
+                    <li>Chuỗi Promise để xử lý nhiều hành động bất đồng bộ</li>
+                    <li>Cú pháp async/await để viết code sạch sẽ hơn</li>
+                    <li>Cách xử lý lỗi trong Promise và async/await</li>
+                </ul>
+
+                <div class="info-box">
+                    <strong>🔑 Điểm mấu chốt:</strong><br>
+                    • Promise giúp xử lý bất đồng bộ dễ dàng hơn<br>
+                    • Async/await là cú pháp hiện đại cho Promise<br>
+                    • Luôn nhớ xử lý lỗi với .catch() hoặc try/catch<br>
+                    • Promise.all() để chạy nhiều Promise song song
+                </div>
+            </div>
+
+            <!-- Quiz Section -->
+            <div class="section">
+                <div class="section-title">🧠 Kiểm tra kiến thức</div>
+                <div class="quiz-container">
+                    <form id="quizForm">
+                        <div class="question-item">
+                            <div class="question-text">Câu 1: Promise có bao nhiêu trạng thái?</div>
+                            <div class="options-list">
+                                <label class="option-label">
+                                    <input type="radio" name="q1" value="wrong"> 2 (Success, Failed)
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q1" value="correct"> 3 (Pending, Fulfilled, Rejected)
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q1" value="wrong"> 4 (Pending, Loading, Success, Error)
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q1" value="wrong"> 1 (Complete)
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-item">
+                            <div class="question-text">Câu 2: Phương thức nào dùng để xử lý khi Promise thành công?</div>
+                            <div class="options-list">
+                                <label class="option-label">
+                                    <input type="radio" name="q2" value="wrong"> .done()
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q2" value="correct"> .then()
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q2" value="wrong"> .success()
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q2" value="wrong"> .resolve()
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-item">
+                            <div class="question-text">Câu 3: Để sử dụng <code>await</code>, function phải được khai báo với từ khóa nào?</div>
+                            <div class="options-list">
+                                <label class="option-label">
+                                    <input type="radio" name="q3" value="wrong"> promise
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q3" value="correct"> async
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q3" value="wrong"> await
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q3" value="wrong"> defer
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-item">
+                            <div class="question-text">Câu 4: Phương thức nào dùng để xử lý lỗi trong Promise?</div>
+                            <div class="options-list">
+                                <label class="option-label">
+                                    <input type="radio" name="q4" value="wrong"> .error()
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q4" value="correct"> .catch()
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q4" value="wrong"> .reject()
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q4" value="wrong"> .fail()
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-item">
+                            <div class="question-text">Câu 5: Ưu điểm chính của async/await so với Promise chain là gì?</div>
+                            <div class="options-list">
+                                <label class="option-label">
+                                    <input type="radio" name="q5" value="wrong"> Chạy nhanh hơn
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q5" value="correct"> Code dễ đọc hơn, giống code đồng bộ
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q5" value="wrong"> Không cần xử lý lỗi
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q5" value="wrong"> Không có ưu điểm gì
+                                </label>
+                            </div>
+                        </div>
+
+                        <button type="button" class="btn" onclick="checkQuiz()">Kiểm tra đáp án</button>
+                    </form>
+                    <div id="quiz-feedback"></div>
+                </div>
+            </div>
+
+            <!-- Footer Actions -->
+            <div class="actions">
+                <button class="btn" onclick="window.location.href='day14.html'">⬅️ Quay lại ngày 14</button>
+                <button id="completeBtn" class="btn" style="opacity: 0.5; pointer-events: none;"
+                    onclick="completeLesson()">✅ Hoàn thành bài học</button>
+                <p style="font-size: 0.9em; color: #666; margin-top: 5px;">(Hãy làm đúng Quiz để mở khóa nút hoàn thành)</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="../js/auth.js"></script>
+    <script src="../js/storage.js"></script>
+    <script src="../js/config.js"></script>
+    <script src="../js/quiz-handler.js"></script>
+
+    <script>
+        // Initialize quiz for day 15
+        initQuiz('day15');
+        
+        // ========== DEMO LOGIC ==========
+        function createPromise(outcome) {
+            const resultDiv = document.getElementById('promiseResult');
+            resultDiv.innerHTML = '<p>⏳ Đang xử lý Promise...</p>';
+            
+            const promise = new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    if (outcome === 'fulfill') {
+                        resolve("✅ Promise đã hoàn thành thành công sau 2 giây!");
+                    } else {
+                        reject(new Error("❌ Promise bị từ chối sau 2 giây!"));
+                    }
+                }, 2000);
+            });
+
+            promise
+                .then(result => {
+                    displayResult(result, 'success');
+                })
+                .catch(error => {
+                    displayResult(error.message, 'error');
+                });
+        }
+
+        function displayResult(message, type) {
+            const resultDiv = document.getElementById('promiseResult');
+            const className = type === 'success' ? 'success-message' : 'error-message';
+            resultDiv.innerHTML = `<div class="${className} fade-in">${message}</div>`;
+        }
+
+        function clearResults() {
+            document.getElementById('promiseResult').innerHTML = '<p>Ấn nút để tạo Promise...</p>';
+        }
+
+        // ========== COMPLETION LOGIC ==========
+        function markAsCompleted() {
+            const lessonId = 'day15'; // Phải khớp với tên file
+            const completionMessage = document.getElementById('completionMessage');
+            
+            // Kiểm tra nếu người dùng đã đăng nhập
+            const user = getCurrentUser();
+            if (!user) {
+                alert('Vui lòng đăng nhập để lưu tiến độ!');
+                return;
+            }
+            
+            // Lưu tiến độ vào localStorage và Firebase
+            saveProgress(lessonId, true)
+                .then(() => {
+                    completionMessage.innerHTML = `
+                        <div class="success-message fade-in">
+                            🎉 Chúc mừng! Bạn đã hoàn thành bài học ngày 15.<br>
+                            Tiến độ đã được lưu tự động.
+                        </div>
+                    `;
+                    
+                    // Cập nhật stats trên trang chính
+                    updateStats();
+                })
+                .catch(error => {
+                    console.error('Lỗi khi lưu tiến độ:', error);
+                    completionMessage.innerHTML = `
+                        <div class="error-message fade-in">
+                            ❌ Có lỗi khi lưu tiến độ. Vui lòng thử lại!
+                        </div>
+                    `;
+                });
+        }
+
+        // ========== QUIZ LOGIC ==========
+        function checkQuiz() {
+            const answers = {
+                q1: 'correct',
+                q2: 'correct',
+                q3: 'correct',
+                q4: 'correct',
+                q5: 'correct'
+            };
+
+            let score = 0;
+            const totalQuestions = Object.keys(answers).length;
+
+            for (const [key, value] of Object.entries(answers)) {
+                const userAnswer = document.querySelector(`input[name="${key}"]:checked`);
+                if (userAnswer && userAnswer.value === value) {
+                    score++;
+                }
+            }
+
+            const feedbackDiv = document.getElementById('quiz-feedback');
+            feedbackDiv.innerHTML = `<p>Điểm của bạn: ${score} / ${totalQuestions}</p>`;
+
+            // Kích hoạt nút hoàn thành nếu đúng tất cả
+            const completeBtn = document.getElementById('completeBtn');
+            if (score === totalQuestions) {
+                completeBtn.style.opacity = 1;
+                completeBtn.style.pointerEvents = 'auto';
+            } else {
+                completeBtn.style.opacity = 0.5;
+                completeBtn.style.pointerEvents = 'none';
+            }
+        }
+
+        // ========== INITIALIZATION ==========
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load trạng thái hoàn thành nếu có
+            loadCompletionStatus('day15');
+        });
+    </script>
+</body>
+
+</html>
