@@ -27,6 +27,15 @@
             background: #e2e8f0;
         }
 
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+            scroll-behavior: smooth;
+        }
+
         /* CSS Ẩn/Hiện quyền chỉnh sửa */
         .admin-only {
             display: none;
@@ -179,17 +188,9 @@
             const empty = document.getElementById('empty-state');
             container.innerHTML = "";
 
-            // Sắp xếp theo thời gian
-            const filtered = Object.keys(data)
-                .map(key => ({ id: key, ...data[key] }))
-                .filter(ev => ev.day === currentDay)
-                .sort((a, b) => {
-                    const getMinutes = (t) => {
-                        const [h, m] = t.split(':').map(Number);
-                        return (h || 0) * 60 + (m || 0);
-                    };
-                    return getMinutes(a.time) - getMinutes(b.time);
-                });
+            // Gom dữ liệu theo giờ
+            const eventsArray = Object.keys(data).map(key => ({ id: key, ...data[key] }));
+            const filtered = eventsArray.filter(ev => ev.day === currentDay);
 
             if (filtered.length === 0) {
                 empty.classList.remove('hidden');
@@ -197,44 +198,74 @@
             }
             empty.classList.add('hidden');
 
-            filtered.forEach(ev => {
-                // --- LOGIC XỬ LÝ LINK MAP ---
-                let description = ev.desc || "";
-                let mapLink = "";
+            // NHÓM CÁC MỤC TRÙNG GIỜ LẠI
+            const groups = filtered.reduce((acc, item) => {
+                if (!acc[item.time]) acc[item.time] = [];
+                acc[item.time].push(item);
+                return acc;
+            }, {});
 
-                // Tìm link trong mô tả (regex tìm chuỗi bắt đầu bằng http)
-                const urlRegex = /(https?:\/\/[^\s]+)/g;
-                const matches = description.match(urlRegex);
+            // Sắp xếp các mốc giờ tăng dần
+            const sortedTimes = Object.keys(groups).sort((a, b) => {
+                const toMin = (t) => t.split(':').reduce((h, m) => h * 60 + +m);
+                return toMin(a) - toMin(b);
+            });
 
-                if (matches) {
-                    mapLink = matches[0]; // Lấy link đầu tiên tìm thấy
-                    description = description.replace(mapLink, "").trim(); // Xóa link khỏi text cho sạch
-                }
-                // ----------------------------
+            sortedTimes.forEach(time => {
+                const items = groups[time];
+                const isMultiple = items.length > 1;
 
                 container.innerHTML += `
-            <div class="relative">
-                <div class="absolute -left-[30px] top-1 w-5 h-5 bg-white border-4 border-green-500 rounded-full z-10 shadow-sm"></div>
-                <div class="flex justify-between items-start">
-                    <span class="text-xs font-bold text-green-600 bg-green-50 px-2 py-1 rounded-md shadow-sm">${ev.time}</span>
-                    
-                    <div class="admin-only gap-3 items-center">
-                        <button onclick="openEditModal('${ev.id}')" class="text-blue-500 hover:text-blue-700 text-[11px] font-bold uppercase">Sửa</button>
-                        <button onclick="deleteEvent('${ev.id}')" class="text-red-400 hover:text-red-600 text-[11px] font-bold uppercase">Xóa</button>
+                <div class="relative">
+                    <!-- Dấu mốc thời gian -->
+                    <div class="absolute -left-[30px] top-1 w-5 h-5 bg-white border-4 border-green-500 rounded-full z-10 shadow-sm"></div>
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="text-xs font-bold text-green-700 bg-green-100 px-2 py-1 rounded-lg">${time}</span>
+                        ${isMultiple ? '<span class="text-[10px] text-orange-500 font-bold uppercase animate-pulse">↔️ Có lựa chọn backup</span>' : ''}
                     </div>
-                </div>
-                <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 mt-2">
-                    <h4 class="font-bold text-gray-800 text-base">${ev.title}</h4>
-                    ${description ? `<p class="text-xs text-gray-500 mt-1 leading-relaxed">${description}</p>` : ''}
-                    
-                    ${mapLink ? `
-                        <a href="${mapLink}" target="_blank" class="mt-3 inline-flex items-center gap-1 text-[11px] font-bold text-blue-600 bg-blue-50 px-3 py-2 rounded-xl hover:bg-blue-100 transition-all border border-blue-100">
-                            📍 Xem vị trí trên Maps
-                        </a>
-                    ` : ''}
-                </div>
-            </div>`;
+
+                    <!-- Vùng chứa các lựa chọn (Scroll ngang nếu > 1) -->
+                    <div class="flex gap-3 overflow-x-auto pb-4 snap-x snap-mandatory scrollbar-hide">
+                        ${items.map((ev, index) => `
+                            <div class="${isMultiple ? 'min-w-[85%] border-orange-100 bg-orange-50/30' : 'w-full bg-white'} snap-start flex-shrink-0 p-4 rounded-2xl shadow-sm border border-gray-100 relative">
+                                ${isMultiple ? `<span class="absolute top-2 right-2 text-[9px] bg-orange-200 text-orange-700 px-2 py-0.5 rounded-full font-bold">Option ${index + 1}</span>` : ''}
+                                
+                                <div class="flex justify-between">
+                                    <h4 class="font-bold text-gray-800 text-base">${ev.title}</h4>
+                                    <div class="admin-only gap-2">
+                                        <button onclick="openEditModal('${ev.id}')" class="text-blue-500 text-[10px] font-bold">SỬA</button>
+                                        <button onclick="deleteEvent('${ev.id}')" class="text-red-400 text-[10px] font-bold">XÓA</button>
+                                    </div>
+                                </div>
+
+                                ${processDescription(ev.desc)}
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>`;
             });
+        }
+
+        function processDescription(desc) {
+            if (!desc) return '';
+            let text = desc;
+            let mapLink = "";
+            const urlRegex = /(https?:\/\/[^\s]+)/g;
+            const matches = text.match(urlRegex);
+
+            if (matches) {
+                mapLink = matches[0];
+                text = text.replace(mapLink, "").trim();
+            }
+
+            return `
+                <p class="text-xs text-gray-500 mt-1 leading-relaxed line-clamp-2">${text}</p>
+                ${mapLink ? `
+                    <a href="${mapLink}" target="_blank" class="mt-3 inline-flex items-center gap-1 text-[11px] font-bold text-blue-600 bg-blue-50 px-3 py-1.5 rounded-lg border border-blue-100">
+                        📍 Xem vị trí
+                    </a>
+                ` : ''}
+            `;
         }
 
         // --- HÀM XỬ LÝ MODAL ---
