@@ -30,13 +30,13 @@
         .scrollbar-hide::-webkit-scrollbar {
             display: none;
         }
+
         .scrollbar-hide {
             -ms-overflow-style: none;
             scrollbar-width: none;
             scroll-behavior: smooth;
         }
 
-        /* CSS Ẩn/Hiện quyền chỉnh sửa */
         .admin-only {
             display: none;
         }
@@ -45,7 +45,6 @@
             display: flex;
         }
 
-        /* CSS Ẩn/Hiện công cụ Admin ở Header */
         #admin-tools {
             display: none;
         }
@@ -67,39 +66,194 @@
             color: #16a34a;
             font-weight: bold;
         }
+
+        .has-images::after {
+            content: '📷';
+            position: absolute;
+            right: 10px;
+            top: 10px;
+            font-size: 18px;
+            background: white;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .image-popup {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 70;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .image-popup-content {
+            background: white;
+            border-radius: 24px;
+            padding: 24px;
+            max-width: 600px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .carousel-container {
+            position: relative;
+            width: 100%;
+            margin: 16px 0;
+        }
+
+        .carousel-image {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            border-radius: 16px;
+            display: none;
+        }
+
+        .carousel-image.active {
+            display: block;
+        }
+
+        .carousel-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 20px;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .carousel-btn.prev {
+            left: 10px;
+        }
+
+        .carousel-btn.next {
+            right: 10px;
+        }
+
+        .carousel-dots {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .carousel-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #cbd5e1;
+            cursor: pointer;
+        }
+
+        .carousel-dot.active {
+            background: #16a34a;
+            width: 24px;
+            border-radius: 4px;
+        }
+
+        .thumbnail-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .thumbnail-item {
+            position: relative;
+            aspect-ratio: 1;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 2px solid #e5e7eb;
+        }
+
+        .thumbnail-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .thumbnail-delete {
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            background: rgba(239, 68, 68, 0.9);
+            color: white;
+            border: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            font-size: 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .upload-progress {
+            display: none;
+            margin-top: 8px;
+        }
+
+        .upload-progress.active {
+            display: block;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 4px;
+            background: #e5e7eb;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: #16a34a;
+            width: 0%;
+            transition: width 0.3s;
+        }
     </style>
 </head>
 
 <body class="pb-20">
 
-    <!-- Header & Login -->
+    <!-- Header -->
     <div class="bg-green-600 text-white p-5 sticky top-0 z-50 shadow-lg">
         <div class="max-w-xl mx-auto flex justify-between items-center">
             <div>
                 <h1 class="text-xl font-bold">Lịch Trình Đà Lạt 🚀</h1>
-                <p class="text-[10px] opacity-80 uppercase tracking-widest text-green-100">T7 (Hội quân) ➔ CN (Đám cưới)
-                    ➔ T2 (Về)</p>
+                <p class="text-[10px] opacity-80 uppercase tracking-widest">Team Vinh 2026</p>
             </div>
             <div class="flex gap-2">
-                <!-- Nút Đăng nhập cho Vinh -->
                 <button id="btn-login" onclick="login()"
                     class="text-xs bg-white/20 px-3 py-1 rounded-full border border-white/30">🔑 Vinh Login</button>
-
-                <!-- Công cụ chỉ hiện khi Vinh đã Logged In -->
                 <div id="admin-tools" class="gap-2 items-center">
                     <button onclick="toggleAdmin()"
                         class="bg-yellow-400 text-green-900 px-3 py-1 rounded-full text-xs font-bold shadow-sm">🛠️ Edit
                         Mode</button>
                     <button onclick="openAddModal()"
                         class="bg-white text-green-600 w-8 h-8 rounded-full font-bold flex items-center justify-center shadow-lg">+</button>
-                    <button onclick="logout()" class="text-xs bg-red-500/50 p-1 rounded-full"
-                        title="Đăng xuất">🚪</button>
+                    <button onclick="logout()" class="text-xs bg-red-500/50 p-1 rounded-full">🚪</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Tabs Ngày -->
+    <!-- Tabs -->
     <div class="bg-white shadow-sm sticky top-[72px] z-40">
         <div class="max-w-xl mx-auto flex justify-around">
             <button onclick="showDay('Sat')" id="tabSat" class="py-3 px-4 text-sm tab-active">T7 (Hội quân)</button>
@@ -109,56 +263,86 @@
     </div>
 
     <div class="max-w-xl mx-auto px-4 mt-6">
-        <!-- Timeline Content -->
         <div id="timeline-container" class="relative timeline-line pl-10 space-y-8"></div>
-
-        <!-- Empty State -->
         <div id="empty-state" class="hidden text-center py-20 text-gray-400">
             <p>Chưa có lịch trình cho ngày này.</p>
         </div>
     </div>
 
-    <!-- Modal Thêm/Sửa Sự Kiện -->
+    <!-- Modal Event -->
     <div id="add-modal" class="fixed inset-0 bg-black/60 hidden z-[60] flex items-center justify-center p-4">
         <div class="bg-white w-full max-w-sm rounded-3xl p-6 shadow-2xl">
             <h3 id="modal-title" class="font-bold text-lg mb-4 text-green-700">➕ Thêm hoạt động</h3>
             <input type="hidden" id="edit-id">
-
             <div class="space-y-4">
-                <div>
-                    <label class="text-[10px] font-bold text-gray-400 uppercase">Chọn ngày</label>
-                    <select id="input-day" class="w-full p-3 bg-gray-50 border rounded-xl font-bold">
-                        <option value="Sat">Thứ Bảy (Hội quân)</option>
-                        <option value="Sun">Chủ Nhật (Đám cưới)</option>
-                        <option value="Mon">Thứ Hai (Về)</option>
-                    </select>
-                </div>
+                <select id="input-day" class="w-full p-3 bg-gray-50 border rounded-xl font-bold">
+                    <option value="Sat">Thứ Bảy</option>
+                    <option value="Sun">Chủ Nhật</option>
+                    <option value="Mon">Thứ Hai</option>
+                </select>
                 <div class="grid grid-cols-3 gap-3">
-                    <div class="col-span-1">
-                        <label class="text-[10px] font-bold text-gray-400 uppercase">Giờ</label>
-                        <input id="input-time" type="text" placeholder="04:00"
-                            class="w-full p-3 bg-gray-50 border rounded-xl font-bold">
-                    </div>
-                    <div class="col-span-2">
-                        <label class="text-[10px] font-bold text-gray-400 uppercase">Hoạt động</label>
-                        <input id="input-title" type="text" placeholder="Ăn sáng, đi cafe..."
-                            class="w-full p-3 bg-gray-50 border rounded-xl font-bold">
-                    </div>
+                    <input id="input-time" type="text" placeholder="04:00"
+                        class="col-span-1 p-3 bg-gray-50 border rounded-xl font-bold">
+                    <input id="input-title" type="text" placeholder="Tên hoạt động..."
+                        class="col-span-2 p-3 bg-gray-50 border rounded-xl font-bold">
                 </div>
-                <div>
-                    <label class="text-[10px] font-bold text-gray-400 uppercase">Ghi chú</label>
-                    <textarea id="input-desc" placeholder="Địa chỉ hoặc lưu ý..."
-                        class="w-full p-3 bg-gray-50 border rounded-xl text-sm" rows="2"></textarea>
-                </div>
-                <div class="flex gap-2 pt-2">
+                <textarea id="input-desc" placeholder="Ghi chú, link map..."
+                    class="w-full p-3 bg-gray-50 border rounded-xl text-sm" rows="2"></textarea>
+                <div class="flex gap-2">
                     <button onclick="hideModal()" class="flex-1 py-3 text-gray-500 font-bold">Hủy</button>
                     <button id="btn-save" onclick="saveEvent()"
-                        class="flex-1 py-3 bg-green-600 text-white rounded-xl font-bold shadow-lg">Lưu lại</button>
+                        class="flex-1 py-3 bg-green-600 text-white rounded-xl font-bold">Lưu lại</button>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- Popup Image Carousel -->
+    <div id="image-popup" class="image-popup" onclick="closeImagePopup(event)">
+        <div class="image-popup-content" onclick="event.stopPropagation()">
+            <h3 id="popup-title" class="font-bold text-lg text-green-700"></h3>
+            <p id="popup-time" class="text-xs text-gray-500 mb-2"></p>
+
+            <div id="carousel-container" class="carousel-container" style="display: none;">
+                <div id="carousel-images"></div>
+                <button class="carousel-btn prev" onclick="changeSlide(-1)">‹</button>
+                <button class="carousel-btn next" onclick="changeSlide(1)">›</button>
+                <div id="carousel-dots" class="carousel-dots"></div>
+            </div>
+
+            <div id="no-images" class="text-center py-8 text-gray-400" style="display: none;">📷 Chưa có hình ảnh</div>
+            <p id="popup-desc" class="text-sm text-gray-600 mt-3"></p>
+
+            <div id="upload-section" class="admin-only mt-4 pt-4 border-t flex-col gap-3">
+                <label class="text-xs font-bold text-gray-700">📷 Thêm ảnh (Lưu trực tiếp DB)</label>
+                <input id="popup-image-upload" type="file" accept="image/*" multiple
+                    class="w-full p-2 bg-gray-50 border rounded-xl text-sm mt-2">
+                <div class="upload-progress" id="upload-progress">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progress-fill"></div>
+                    </div>
+                    <p class="text-xs text-gray-500 mt-1" id="progress-text">Đang xử lý ảnh...</p>
+                </div>
+                <button onclick="uploadImagesDB()"
+                    class="w-full mt-2 py-2 bg-green-600 text-white rounded-xl font-bold text-sm">💾 Tải ảnh
+                    lên</button>
+
+                <div id="thumbnail-section" style="display: none;">
+                    <p class="text-xs font-bold text-gray-700 mt-4 mb-2">Quản lý ảnh:</p>
+                    <div id="thumbnail-grid" class="thumbnail-grid"></div>
+                </div>
+            </div>
+
+            <button onclick="closeImagePopup()"
+                class="w-full mt-4 py-3 bg-gray-100 rounded-xl font-bold text-gray-600">Đóng</button>
+        </div>
+    </div>
+    <div id="zoom-overlay" class="fixed inset-0 bg-black z-[100] hidden flex items-center justify-center"
+        onclick="this.classList.add('hidden')">
+        <button class="absolute top-6 right-6 text-white text-4xl">&times;</button>
+        <img id="zoom-img" class="max-w-full max-h-full object-contain transition-transform duration-300"
+            onclick="event.stopPropagation()">
+    </div>
     <script>
         const firebaseConfig = {
             apiKey: "AIzaSyCrayfdLPobe8xiTU6siDYbI1T6bv9K9jo",
@@ -176,11 +360,14 @@
 
         let currentDay = 'Sat';
         let allEvents = {};
+        let currentEventId = null;
+        let currentSlide = 0;
 
         // Lắng nghe dữ liệu
         db.ref('trips/dalat/timeline').on('value', (snap) => {
             allEvents = snap.val() || {};
             renderTimeline(allEvents);
+            if (currentEventId) updatePopupData();
         });
 
         function renderTimeline(data) {
@@ -188,7 +375,6 @@
             const empty = document.getElementById('empty-state');
             container.innerHTML = "";
 
-            // Gom dữ liệu theo giờ
             const eventsArray = Object.keys(data).map(key => ({ id: key, ...data[key] }));
             const filtered = eventsArray.filter(ev => ev.day === currentDay);
 
@@ -198,53 +384,240 @@
             }
             empty.classList.add('hidden');
 
-            // NHÓM CÁC MỤC TRÙNG GIỜ LẠI
             const groups = filtered.reduce((acc, item) => {
                 if (!acc[item.time]) acc[item.time] = [];
                 acc[item.time].push(item);
                 return acc;
             }, {});
 
-            // Sắp xếp các mốc giờ tăng dần
-            const sortedTimes = Object.keys(groups).sort((a, b) => {
-                const toMin = (t) => t.split(':').reduce((h, m) => h * 60 + +m);
-                return toMin(a) - toMin(b);
-            });
+            const sortedTimes = Object.keys(groups).sort((a, b) => a.localeCompare(b));
 
             sortedTimes.forEach(time => {
                 const items = groups[time];
-                const isMultiple = items.length > 1;
-
                 container.innerHTML += `
                 <div class="relative">
-                    <!-- Dấu mốc thời gian -->
                     <div class="absolute -left-[30px] top-1 w-5 h-5 bg-white border-4 border-green-500 rounded-full z-10 shadow-sm"></div>
                     <div class="flex justify-between items-center mb-2">
                         <span class="text-xs font-bold text-green-700 bg-green-100 px-2 py-1 rounded-lg">${time}</span>
-                        ${isMultiple ? '<span class="text-[10px] text-orange-500 font-bold uppercase animate-pulse">↔️ Có lựa chọn khác - lướt ngang để xem</span>' : ''}
                     </div>
-
-                    <!-- Vùng chứa các lựa chọn (Scroll ngang nếu > 1) -->
-                    <div class="flex gap-3 overflow-x-auto pb-4 snap-x snap-mandatory scrollbar-hide">
+                    <div class="flex gap-3 overflow-x-auto pb-4 snap-x scrollbar-hide">
                         ${items.map((ev, index) => `
-                            <div class="${isMultiple ? 'min-w-[85%] max-w-[100%] border-orange-100 bg-orange-50/30' : 'w-full bg-white'} snap-start flex-shrink-0 p-4 rounded-2xl shadow-sm border border-gray-100 relative">
-                                ${isMultiple ? `<span class="absolute top-2 right-2 text-[9px] bg-orange-200 text-orange-700 px-2 py-0.5 rounded-full font-bold">Option ${index + 1}</span>` : ''}
-                                
+                            <div onclick="showEventDetail('${ev.id}')" 
+                                class="w-full min-w-[90%] bg-white ${ev.images ? 'has-images' : ''} snap-start p-4 rounded-2xl shadow-sm border border-gray-100 relative cursor-pointer">
                                 <div class="flex justify-between">
-                                    <h4 class="font-bold text-gray-800 text-base">${ev.title}</h4>
+                                    <h4 class="font-bold text-gray-800">${ev.title}</h4>
                                     <div class="admin-only gap-2">
-                                        <button onclick="openEditModal('${ev.id}')" class="text-blue-500 text-[10px] font-bold">SỬA</button>
-                                        <button onclick="deleteEvent('${ev.id}')" class="text-red-400 text-[10px] font-bold">XÓA</button>
+                                        <button onclick="event.stopPropagation(); openEditModal('${ev.id}')" class="text-blue-500 text-[10px] font-bold">SỬA</button>
+                                        <button onclick="event.stopPropagation(); deleteEvent('${ev.id}')" class="text-red-400 text-[10px] font-bold">XÓA</button>
                                     </div>
                                 </div>
-
-                                ${processDescription(ev.desc)}
+                                <p class="text-xs text-gray-500 mt-1 line-clamp-2">${ev.desc || ''}</p>
                             </div>
                         `).join('')}
                     </div>
                 </div>`;
             });
         }
+
+        // === LOGIC XỬ LÝ ẢNH (BASE64 & COMPRESSION) ===
+
+        // Nén ảnh để không làm nặng Database
+        function compressImage(file) {
+            return new Promise((resolve) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = (event) => {
+                    const img = new Image();
+                    img.src = event.target.result;
+                    img.onload = () => {
+                        const canvas = document.createElement('canvas');
+                        const MAX_WIDTH = 800; // Giới hạn chiều rộng để giảm dung lượng
+                        let width = img.width;
+                        let height = img.height;
+
+                        if (width > MAX_WIDTH) {
+                            height *= MAX_WIDTH / width;
+                            width = MAX_WIDTH;
+                        }
+                        canvas.width = width;
+                        canvas.height = height;
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0, width, height);
+                        // Xuất ra base64 dạng jpeg chất lượng 0.7 cho nhẹ
+                        resolve(canvas.toDataURL('image/jpeg', 0.7));
+                    };
+                };
+            });
+        }
+
+        async function uploadImagesDB() {
+            const files = document.getElementById('popup-image-upload').files;
+            if (files.length === 0) return alert('Chọn ảnh đã Vinh ơi!');
+
+            const progressDiv = document.getElementById('upload-progress');
+            const progressFill = document.getElementById('progress-fill');
+            const progressText = document.getElementById('progress-text');
+
+            progressDiv.classList.add('active');
+
+            const ev = allEvents[currentEventId];
+            const existingImages = ev.images || [];
+            const newBase64Images = [];
+
+            for (let i = 0; i < files.length; i++) {
+                progressText.textContent = `Đang nén ảnh ${i + 1}/${files.length}...`;
+                progressFill.style.width = `${((i + 1) / files.length) * 100}%`;
+                const base64 = await compressImage(files[i]);
+                newBase64Images.push(base64);
+            }
+
+            const updatedImages = [...existingImages, ...newBase64Images];
+
+            try {
+                await db.ref(`trips/dalat/timeline/${currentEventId}`).update({ images: updatedImages });
+                document.getElementById('popup-image-upload').value = "";
+                progressDiv.classList.remove('active');
+                alert('✅ Đã lưu ảnh vào DB!');
+            } catch (e) {
+                alert('Lỗi: Có thể do ảnh quá nặng, hãy thử tải ít ảnh hơn.');
+                console.error(e);
+            }
+        }
+
+        function deleteImage(index) {
+            if (!confirm('Xóa ảnh này?')) return;
+            const images = allEvents[currentEventId].images;
+            images.splice(index, 1);
+            db.ref(`trips/dalat/timeline/${currentEventId}`).update({
+                images: images.length > 0 ? images : null
+            });
+        }
+
+        // === UI & POPUP ===
+        function showEventDetail(id) {
+            currentEventId = id;
+            currentSlide = 0;
+            updatePopupData();
+            document.getElementById('image-popup').style.display = 'flex';
+        }
+
+        function updatePopupData() {
+            const ev = allEvents[currentEventId];
+            if (!ev) return closeImagePopup();
+
+            document.getElementById('popup-title').textContent = ev.title;
+            document.getElementById('popup-time').textContent = `🕐 ${ev.time}`;
+            const descContainer = document.getElementById('popup-desc');
+            descContainer.innerHTML = processDescription(ev.desc || '');
+
+            const images = ev.images || [];
+            if (images.length > 0) {
+                document.getElementById('carousel-container').style.display = 'block';
+                document.getElementById('no-images').style.display = 'none';
+                renderCarousel(images);
+                renderThumbnails(images);
+            } else {
+                document.getElementById('carousel-container').style.display = 'none';
+                document.getElementById('no-images').style.display = 'block';
+                document.getElementById('thumbnail-section').style.display = 'none';
+            }
+        }
+
+        function renderCarousel(images) {
+            const container = document.getElementById('carousel-images');
+            const dots = document.getElementById('carousel-dots');
+            container.innerHTML = images.map((src, i) => `
+                    <img src="${src}" 
+                        onclick="openZoom('${src}')" 
+                        class="carousel-image cursor-zoom-in ${i === currentSlide ? 'active' : ''}">
+                `).join('');
+
+                        dots.innerHTML = images.map((_, i) => `
+                    <div class="carousel-dot ${i === currentSlide ? 'active' : ''}" onclick="currentSlide=${i};updatePopupData()"></div>
+                `).join('');
+        }
+
+        function renderThumbnails(images) {
+            const section = document.getElementById('thumbnail-section');
+            const grid = document.getElementById('thumbnail-grid');
+            section.style.display = 'block';
+            grid.innerHTML = images.map((src, i) => `
+                <div class="thumbnail-item">
+                    <img src="${src}">
+                    <button class="thumbnail-delete" onclick="deleteImage(${i})">×</button>
+                </div>
+            `).join('');
+        }
+
+        function changeSlide(n) {
+            const len = (allEvents[currentEventId].images || []).length;
+            if (len === 0) return;
+            currentSlide = (currentSlide + n + len) % len;
+            updatePopupData();
+        }
+
+        function closeImagePopup(e) {
+            if (e && e.target.id !== 'image-popup') return;
+            document.getElementById('image-popup').style.display = 'none';
+            currentEventId = null;
+        }
+
+        // === CÁC HÀM KHÁC ===
+        function showDay(day) {
+            currentDay = day;
+            document.querySelectorAll('[id^="tab"]').forEach(el => el.classList.remove('tab-active'));
+            document.getElementById('tab' + day).classList.add('tab-active');
+            renderTimeline(allEvents);
+        }
+
+        function openAddModal() {
+            document.getElementById('modal-title').innerText = "➕ Thêm hoạt động";
+            document.getElementById('edit-id').value = "";
+            document.getElementById('input-time').value = "";
+            document.getElementById('input-title').value = "";
+            document.getElementById('input-desc').value = "";
+            document.getElementById('add-modal').classList.remove('hidden');
+        }
+
+        function openEditModal(id) {
+            const ev = allEvents[id];
+            document.getElementById('modal-title').innerText = "📝 Sửa hoạt động";
+            document.getElementById('edit-id').value = id;
+            document.getElementById('input-day').value = ev.day;
+            document.getElementById('input-time').value = ev.time;
+            document.getElementById('input-title').value = ev.title;
+            document.getElementById('input-desc').value = ev.desc || "";
+            document.getElementById('add-modal').classList.remove('hidden');
+        }
+
+        function hideModal() { document.getElementById('add-modal').classList.add('hidden'); }
+
+        function saveEvent() {
+            const id = document.getElementById('edit-id').value;
+            const data = {
+                day: document.getElementById('input-day').value,
+                time: document.getElementById('input-time').value,
+                title: document.getElementById('input-title').value,
+                desc: document.getElementById('input-desc').value
+            };
+            if (id) db.ref(`trips/dalat/timeline/${id}`).update(data).then(hideModal);
+            else db.ref('trips/dalat/timeline').push(data).then(hideModal);
+        }
+
+        function deleteEvent(id) {
+            if (confirm("Xóa mốc này hả Vinh?")) db.ref(`trips/dalat/timeline/${id}`).remove();
+        }
+
+        function toggleAdmin() {
+            document.body.classList.toggle('is-admin');
+        }
+
+        function login() { auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()); }
+        function logout() { auth.signOut().then(() => location.reload()); }
+
+        auth.onAuthStateChanged(user => {
+            if (user && user.email === 'nguyenbavinhcntt@gmail.com') document.body.classList.add('is-logged-in');
+        });
 
         function processDescription(desc) {
             if (!desc) return '';
@@ -259,103 +632,34 @@
             }
 
             return `
-                <p class="text-xs text-gray-500 mt-1 leading-relaxed line-clamp-2">${text}</p>
+                <p class="text-sm text-gray-600 leading-relaxed">${text}</p>
                 ${mapLink ? `
-                    <a href="${mapLink}" target="_blank" class="mt-3 inline-flex items-center gap-1 text-[11px] font-bold text-blue-600 bg-blue-50 px-3 py-1.5 rounded-lg border border-blue-100">
-                        📍 Xem vị trí
+                    <a href="${mapLink}" target="_blank" class="mt-4 inline-flex items-center justify-center gap-2 w-full font-bold text-blue-600 bg-blue-50 py-3 rounded-xl border border-blue-100 shadow-sm">
+                        📍 Xem vị trí trên Bản đồ
                     </a>
                 ` : ''}
             `;
         }
 
-        // --- HÀM XỬ LÝ MODAL ---
-        function openAddModal() {
-            document.getElementById('modal-title').innerText = "➕ Thêm hoạt động";
-            document.getElementById('btn-save').innerText = "Lưu lại";
-            document.getElementById('edit-id').value = "";
-            document.getElementById('input-time').value = "";
-            document.getElementById('input-title').value = "";
-            document.getElementById('input-desc').value = "";
-            document.getElementById('input-day').value = currentDay;
-            document.getElementById('add-modal').classList.remove('hidden');
+        function openZoom(src) {
+            const overlay = document.getElementById('zoom-overlay');
+            const zoomImg = document.getElementById('zoom-img');
+            zoomImg.src = src;
+            overlay.classList.remove('hidden');
+            
+            // Tùy chọn: Reset zoom khi mở
+            zoomImg.style.transform = 'scale(1)';
         }
 
-        function openEditModal(id) {
-            const ev = allEvents[id];
-            if (!ev) return;
-            document.getElementById('modal-title').innerText = "📝 Sửa hoạt động";
-            document.getElementById('btn-save').innerText = "Cập nhật";
-            document.getElementById('edit-id').value = id;
-            document.getElementById('input-day').value = ev.day;
-            document.getElementById('input-time').value = ev.time;
-            document.getElementById('input-title').value = ev.title;
-            document.getElementById('input-desc').value = ev.desc || "";
-            document.getElementById('add-modal').classList.remove('hidden');
-        }
-
-        function hideModal() { document.getElementById('add-modal').classList.add('hidden'); }
-
-        // --- HÀM XỬ LÝ DỮ LIỆU ---
-        function saveEvent() {
-            const id = document.getElementById('edit-id').value;
-            const eventData = {
-                day: document.getElementById('input-day').value,
-                time: document.getElementById('input-time').value,
-                title: document.getElementById('input-title').value,
-                desc: document.getElementById('input-desc').value
-            };
-
-            if (!eventData.time || !eventData.title) return alert("Nhập đủ giờ và tên nha!");
-
-            if (id) db.ref(`trips/dalat/timeline/${id}`).update(eventData).then(hideModal);
-            else db.ref('trips/dalat/timeline').push(eventData).then(hideModal);
-        }
-
-        function deleteEvent(id) {
-            if (confirm("Chắc chắn xóa mốc này không Vinh?")) db.ref(`trips/dalat/timeline/${id}`).remove();
-        }
-
-        function showDay(day) {
-            currentDay = day;
-            document.querySelectorAll('[id^="tab"]').forEach(el => el.classList.remove('tab-active'));
-            document.getElementById('tab' + day).classList.add('tab-active');
-            renderTimeline(allEvents);
-        }
-
-        // --- AUTH & ADMIN LOGIC ---
-        function toggleAdmin() {
-            document.body.classList.toggle('is-admin');
-            const btn = document.querySelector('#admin-tools button');
-            if (document.body.classList.contains('is-admin')) {
-                btn.innerText = "✅ Editing";
-                btn.classList.replace('bg-yellow-400', 'bg-green-700');
-                btn.classList.replace('text-green-900', 'text-white');
+        // Bổ sung: Cho phép zoom bằng cách nhấn đúp (double click) trên điện thoại
+        document.getElementById('zoom-img').addEventListener('dblclick', function() {
+            if (this.style.transform === 'scale(2)') {
+                this.style.transform = 'scale(1)';
             } else {
-                btn.innerText = "🛠️ Edit Mode";
-                btn.classList.replace('bg-green-700', 'bg-yellow-400');
-                btn.classList.replace('text-white', 'text-green-900');
-            }
-        }
-
-        function login() {
-            const provider = new firebase.auth.GoogleAuthProvider();
-            auth.signInWithPopup(provider);
-        }
-
-        function logout() {
-            auth.signOut().then(() => {
-                document.body.classList.remove('is-logged-in', 'is-admin');
-                location.reload();
-            });
-        }
-
-        auth.onAuthStateChanged((user) => {
-            if (user && user.email === 'nguyenbavinhcntt@gmail.com') {
-                document.body.classList.add('is-logged-in');
-            } else {
-                document.body.classList.remove('is-logged-in', 'is-admin');
+                this.style.transform = 'scale(2)';
             }
         });
+
     </script>
 </body>
 
