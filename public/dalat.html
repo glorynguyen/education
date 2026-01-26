@@ -610,6 +610,21 @@
 
         function toggleAdmin() {
             document.body.classList.toggle('is-admin');
+            
+            const btn = document.querySelector('#admin-tools button'); 
+            if (!btn) return;
+
+            const isAdmin = document.body.classList.contains('is-admin');
+
+            if (isAdmin) {
+                btn.innerText = "✅ Editing";
+                btn.classList.replace('bg-yellow-400', 'bg-green-700');
+                btn.classList.replace('text-green-900', 'text-white');
+            } else {
+                btn.innerText = "🛠️ Edit Mode";
+                btn.classList.replace('bg-green-700', 'bg-yellow-400');
+                btn.classList.replace('text-white', 'text-green-900');
+            }
         }
 
         function login() { auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()); }
