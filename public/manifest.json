@@ -1,0 +1,18 @@
+{
+    "name": "Đà Lạt Timeline 2026",
+    "short_name": "Đà Lạt Trip",
+    "description": "Lịch trình chuyến đi Đà Lạt - Team Vinh 2026",
+    "start_url": "./dalat.html",
+    "display": "standalone",
+    "background_color": "#f8fafc",
+    "theme_color": "#16a34a",
+    "orientation": "portrait",
+    "icons": [
+        {
+            "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🗺️</text></svg>",
+            "sizes": "any",
+            "type": "image/svg+xml"
+        }
+    ],
+    "categories": ["travel", "lifestyle"]
+}
