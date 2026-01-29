@@ -17,6 +17,18 @@
                 ".read": "$uid === auth.uid",
                 ".write": "$uid === auth.uid"
             }
+        },
+        "trips": {
+            "dalat": {
+                "config": {
+                    ".read": true,
+                    ".write": "auth != null && auth.token.email === 'nguyenbavinhcntt@gmail.com'"
+                },
+                "timeline": {
+                    ".read": true,
+                    ".write": "auth != null && auth.token.email === 'nguyenbavinhcntt@gmail.com'"
+                }
+            }
         }
     }
 }

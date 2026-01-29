@@ -8,6 +8,11 @@ Xây dựng nền tảng lên kế hoạch chuyến đi collaborative, dễ sử
 
 ## Changelog
 
+### v1.2.0 (2026-01-29)
+- ✅ **Dynamic Tabs** - Tabs cấu hình động từ Firebase, thêm/sửa/xóa/sắp xếp qua UI
+- ✅ **Tabs Config Modal** - Giao diện quản lý tabs cho admin
+- ✅ **Firebase Rules Update** - Thêm rules cho `trips/dalat/config`
+
 ### v1.1.0 (2026-01-29)
 - ✅ **Offline Support** - Service Worker với caching strategy, localStorage backup
 - ✅ **Pull to Refresh** - Kéo xuống để refresh trên mobile với animation
@@ -32,7 +37,7 @@ Xây dựng nền tảng lên kế hoạch chuyến đi collaborative, dễ sử
 - [ ] **Image Gallery View** - Xem tất cả ảnh của chuyến đi
 - [ ] **Pinch to Zoom** - Zoom ảnh bằng 2 ngón tay trên mobile
 - [ ] **Image Captions** - Thêm chú thích cho từng ảnh
-- [ ] **Cloud Storage Migration** - Chuyển từ base64 sang Firebase Storage
+- [ ] **Cloud Storage Migration** - Chuyển từ base64 sang Firebase Storage ⚠️ *Requires Firebase Console setup*
 
 ### 1.3 Timeline Enhancements
 - [ ] **Event Duration** - Hiển thị thời gian kết thúc hoạt động
@@ -76,6 +81,7 @@ Xây dựng nền tảng lên kế hoạch chuyến đi collaborative, dễ sử
 - [ ] **Trip Dashboard** - Trang chủ hiển thị các chuyến đi
 
 ### 3.2 Customization
+- [x] **Dynamic Tabs** - Thêm/sửa/xóa ngày linh hoạt qua UI ✅
 - [ ] **Custom Dates** - Chọn ngày bắt đầu/kết thúc linh hoạt
 - [ ] **Theme Colors** - Tùy chỉnh màu sắc theo chuyến đi
 - [ ] **Cover Image** - Ảnh bìa cho chuyến đi
@@ -165,14 +171,22 @@ Xây dựng nền tảng lên kế hoạch chuyến đi collaborative, dễ sử
 |---------|--------|--------|----------|--------|
 | Offline Support | High | Medium | P1 | ✅ Done |
 | Pull to Refresh | Medium | Low | P1 | ✅ Done |
-| Cloud Storage Migration | High | Medium | P1 | 🔲 Todo |
+| Dynamic Tabs | Medium | Medium | P1 | ✅ Done |
+| Cloud Storage Migration | High | Medium | P1 | ⚠️ Requires Firebase setup |
 | Event Categories | Medium | Low | P1 | 🔲 Todo |
-| Multi-user Roles | High | High | P2 | 🔲 Todo |
+| Swipe Navigation | Medium | Low | P1 | 🔲 Todo |
+| Loading States | Medium | Low | P1 | 🔲 Todo |
+| Multi-user Roles | High | High | P2 | ⚠️ Requires Firebase setup |
 | Map Integration | High | High | P2 | 🔲 Todo |
 | Comments | Medium | Medium | P2 | 🔲 Todo |
 | Trip Templates | Medium | Medium | P3 | 🔲 Todo |
 | AI Itinerary | High | High | P3 | 🔲 Todo |
 | Photo Book Export | Medium | High | P4 | 🔲 Todo |
+
+### Legend
+- ✅ Done - Completed
+- 🔲 Todo - Can be implemented with code only
+- ⚠️ Requires Firebase setup - Needs Firebase Console configuration
 
 ---
 

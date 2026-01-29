@@ -373,6 +373,8 @@
                         Mode</button>
                     <button onclick="openAddModal()"
                         class="bg-white text-green-600 w-8 h-8 rounded-full font-bold flex items-center justify-center shadow-lg">+</button>
+                    <button onclick="openTabsConfigModal()"
+                        class="bg-blue-500 text-white w-8 h-8 rounded-full font-bold flex items-center justify-center shadow-lg text-sm">⚙</button>
                     <button onclick="logout()" class="text-xs bg-red-500/50 p-1 rounded-full">🚪</button>
                 </div>
             </div>
@@ -381,10 +383,8 @@
 
     <!-- Tabs -->
     <div class="bg-white shadow-sm sticky top-[72px] z-40">
-        <div class="max-w-xl mx-auto flex justify-around">
-            <button onclick="showDay('Sat')" id="tabSat" class="py-3 px-4 text-sm tab-active">T7 (Hội quân)</button>
-            <button onclick="showDay('Sun')" id="tabSun" class="py-3 px-4 text-sm">CN (Đám cưới)</button>
-            <button onclick="showDay('Mon')" id="tabMon" class="py-3 px-4 text-sm">Thứ 2 (Về)</button>
+        <div id="tabs-container" class="max-w-xl mx-auto flex justify-around">
+            <!-- Tabs rendered dynamically -->
         </div>
     </div>
 
@@ -392,6 +392,25 @@
         <div id="timeline-container" class="relative timeline-line pl-10 space-y-8"></div>
         <div id="empty-state" class="hidden text-center py-20 text-gray-400">
             <p>Chưa có lịch trình cho ngày này.</p>
+        </div>
+    </div>
+
+    <!-- Modal Tabs Config -->
+    <div id="tabs-config-modal" class="fixed inset-0 bg-black/60 hidden z-[60] flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-sm rounded-3xl p-6 shadow-2xl max-h-[90vh] overflow-y-auto">
+            <h3 class="font-bold text-lg mb-4 text-blue-700">⚙️ Quản lý Tabs</h3>
+            <div id="tabs-list" class="space-y-3 mb-4">
+                <!-- Tabs will be rendered here -->
+            </div>
+            <button onclick="addNewTab()"
+                class="w-full py-3 bg-blue-50 text-blue-600 rounded-xl font-bold border-2 border-dashed border-blue-200 mb-4">
+                + Thêm Tab mới
+            </button>
+            <div class="flex gap-2">
+                <button onclick="hideTabsConfigModal()" class="flex-1 py-3 text-gray-500 font-bold">Hủy</button>
+                <button onclick="saveTabsConfig()"
+                    class="flex-1 py-3 bg-blue-600 text-white rounded-xl font-bold">Lưu Tabs</button>
+            </div>
         </div>
     </div>
 
@@ -484,10 +503,18 @@
         const db = firebase.database();
         const auth = firebase.auth();
 
-        let currentDay = 'Sat';
+        let currentDay = null;
         let allEvents = {};
+        let allTabs = [];
         let currentEventId = null;
         let currentSlide = 0;
+
+        // Default tabs (fallback if config not set)
+        const defaultTabs = [
+            { id: "Sat", label: "T7 (Hội quân)" },
+            { id: "Sun", label: "CN (Đám cưới)" },
+            { id: "Mon", label: "Thứ 2 (Về)" }
+        ];
 
         // Note: Firebase listener moved to bottom for offline support
 
@@ -683,6 +710,127 @@
             currentEventId = null;
         }
 
+        // === TABS MANAGEMENT ===
+        let editingTabs = [];
+
+        function renderTabs(tabs) {
+            const container = document.getElementById('tabs-container');
+            container.innerHTML = tabs.map((tab, index) => `
+                <button onclick="showDay('${tab.id}')" id="tab${tab.id}"
+                    class="py-3 px-4 text-sm ${index === 0 ? 'tab-active' : ''}">${tab.label}</button>
+            `).join('');
+
+            // Set first tab as default if no current day
+            if (!currentDay && tabs.length > 0) {
+                currentDay = tabs[0].id;
+            }
+
+            // Update dropdown in modal
+            updateDayDropdown(tabs);
+        }
+
+        function updateDayDropdown(tabs) {
+            const dropdown = document.getElementById('input-day');
+            dropdown.innerHTML = tabs.map(tab =>
+                `<option value="${tab.id}">${tab.label}</option>`
+            ).join('');
+        }
+
+        // === TABS CONFIG MODAL ===
+        function openTabsConfigModal() {
+            editingTabs = JSON.parse(JSON.stringify(allTabs)); // Deep copy
+            renderTabsList();
+            document.getElementById('tabs-config-modal').classList.remove('hidden');
+        }
+
+        function hideTabsConfigModal() {
+            document.getElementById('tabs-config-modal').classList.add('hidden');
+        }
+
+        function renderTabsList() {
+            const container = document.getElementById('tabs-list');
+            container.innerHTML = editingTabs.map((tab, index) => `
+                <div class="flex gap-2 items-center bg-gray-50 p-3 rounded-xl">
+                    <span class="text-gray-400 cursor-move">☰</span>
+                    <input type="text" value="${tab.id}" placeholder="ID (vd: Sat)"
+                        onchange="updateTabId(${index}, this.value)"
+                        class="w-20 p-2 bg-white border rounded-lg text-sm font-mono">
+                    <input type="text" value="${tab.label}" placeholder="Tên hiển thị"
+                        onchange="updateTabLabel(${index}, this.value)"
+                        class="flex-1 p-2 bg-white border rounded-lg text-sm">
+                    <button onclick="moveTabUp(${index})" class="p-2 text-gray-400 hover:text-blue-500 ${index === 0 ? 'opacity-30' : ''}">↑</button>
+                    <button onclick="moveTabDown(${index})" class="p-2 text-gray-400 hover:text-blue-500 ${index === editingTabs.length - 1 ? 'opacity-30' : ''}">↓</button>
+                    <button onclick="deleteTab(${index})" class="p-2 text-red-400 hover:text-red-600">✕</button>
+                </div>
+            `).join('');
+        }
+
+        function updateTabId(index, value) {
+            editingTabs[index].id = value.trim();
+        }
+
+        function updateTabLabel(index, value) {
+            editingTabs[index].label = value.trim();
+        }
+
+        function addNewTab() {
+            editingTabs.push({ id: '', label: '' });
+            renderTabsList();
+            // Focus on the new tab's ID input
+            const inputs = document.querySelectorAll('#tabs-list input[type="text"]');
+            if (inputs.length > 0) {
+                inputs[inputs.length - 2].focus();
+            }
+        }
+
+        function deleteTab(index) {
+            if (editingTabs.length <= 1) {
+                alert('Phải có ít nhất 1 tab!');
+                return;
+            }
+            if (confirm('Xóa tab này?')) {
+                editingTabs.splice(index, 1);
+                renderTabsList();
+            }
+        }
+
+        function moveTabUp(index) {
+            if (index === 0) return;
+            [editingTabs[index], editingTabs[index - 1]] = [editingTabs[index - 1], editingTabs[index]];
+            renderTabsList();
+        }
+
+        function moveTabDown(index) {
+            if (index === editingTabs.length - 1) return;
+            [editingTabs[index], editingTabs[index + 1]] = [editingTabs[index + 1], editingTabs[index]];
+            renderTabsList();
+        }
+
+        function saveTabsConfig() {
+            // Validate
+            const validTabs = editingTabs.filter(t => t.id && t.label);
+            if (validTabs.length === 0) {
+                alert('Phải có ít nhất 1 tab hợp lệ!');
+                return;
+            }
+
+            // Check for duplicate IDs
+            const ids = validTabs.map(t => t.id);
+            if (new Set(ids).size !== ids.length) {
+                alert('ID của các tab không được trùng nhau!');
+                return;
+            }
+
+            db.ref('trips/dalat/config/tabs').set(validTabs)
+                .then(() => {
+                    hideTabsConfigModal();
+                    alert('✅ Đã lưu cấu hình tabs!');
+                })
+                .catch(err => {
+                    alert('Lỗi: ' + err.message);
+                });
+        }
+
         // === CÁC HÀM KHÁC ===
         function showDay(day) {
             currentDay = day;
@@ -845,12 +993,26 @@
             return null;
         }
 
+        // Load tabs config from Firebase
+        db.ref('trips/dalat/config/tabs').on('value', (snap) => {
+            const tabsData = snap.val();
+            allTabs = tabsData || defaultTabs;
+            renderTabs(allTabs);
+            // Re-render timeline with current day after tabs load
+            if (Object.keys(allEvents).length > 0) {
+                renderTimeline(allEvents);
+            }
+        });
+
         // Update the Firebase listener to save offline data
         const originalDbRef = db.ref('trips/dalat/timeline');
         originalDbRef.on('value', (snap) => {
             allEvents = snap.val() || {};
             saveOfflineData(allEvents); // Save for offline
-            renderTimeline(allEvents);
+            // Only render if tabs are loaded
+            if (allTabs.length > 0) {
+                renderTimeline(allEvents);
+            }
             if (currentEventId) updatePopupData();
         });
 

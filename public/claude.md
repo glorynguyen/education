@@ -18,14 +18,18 @@ A Vietnamese trip planning timeline web application for "Team Vinh 2026" Dalat t
 - **Font**: Quicksand (Google Fonts)
 
 ## Firebase Configuration
-- Database path: `trips/dalat/timeline`
+- Database paths:
+  - `trips/dalat/timeline` - Timeline events data
+  - `trips/dalat/config/tabs` - Dynamic tabs configuration
 - Authentication: Google OAuth (restricted to specific admin email)
 - Admin email: `nguyenbavinhcntt@gmail.com`
+- Rules file: `database.rules.json`
 
 ## Key Features
 
 ### Timeline Display
-- Three-day trip schedule with tabs: Saturday (Hội quân), Sunday (Đám cưới), Monday (Về)
+- Dynamic tabs loaded from Firebase config (default: Saturday, Sunday, Monday)
+- Admin can add/edit/delete/reorder tabs via config modal
 - Events grouped by time with horizontal scrolling for multiple options at same time
 - Real-time data sync from Firebase
 
@@ -41,6 +45,7 @@ A Vietnamese trip planning timeline web application for "Team Vinh 2026" Dalat t
 - Edit mode toggle to show/hide admin controls
 - Add/Edit/Delete events
 - Upload/Delete images for events
+- **Tabs Config** - Manage dynamic tabs (add/edit/delete/reorder days)
 
 ## Main Functions
 
@@ -49,6 +54,16 @@ A Vietnamese trip planning timeline web application for "Team Vinh 2026" Dalat t
 - `saveEvent()` - Creates or updates an event
 - `deleteEvent(id)` - Removes an event
 - `showDay(day)` - Switches between day tabs
+
+### Tabs Configuration
+- `renderTabs(tabs)` - Renders dynamic tabs from config
+- `updateDayDropdown(tabs)` - Updates day select options in modal
+- `openTabsConfigModal()` - Opens tabs management modal
+- `renderTabsList()` - Renders editable tabs list in config modal
+- `addNewTab()` - Adds a new tab entry
+- `deleteTab(index)` - Removes a tab
+- `moveTabUp(index)` / `moveTabDown(index)` - Reorders tabs
+- `saveTabsConfig()` - Saves tabs to Firebase
 
 ### Image Handling
 - `compressImage(file)` - Compresses images to base64
@@ -71,10 +86,12 @@ A Vietnamese trip planning timeline web application for "Team Vinh 2026" Dalat t
 - `.is-logged-in` / `.is-admin` - Body classes for auth state
 
 ## Data Structure
+
+### Timeline Events (`trips/dalat/timeline`)
 ```javascript
 {
   "eventId": {
-    "day": "Sat" | "Sun" | "Mon",
+    "day": "Sat" | "Sun" | "Mon",  // Matches tab ID
     "time": "HH:MM",
     "title": "Event title",
     "desc": "Description with optional URL",
@@ -83,12 +100,22 @@ A Vietnamese trip planning timeline web application for "Team Vinh 2026" Dalat t
 }
 ```
 
+### Tabs Config (`trips/dalat/config/tabs`)
+```javascript
+[
+  { "id": "Sat", "label": "T7 (Hội quân)" },
+  { "id": "Sun", "label": "CN (Đám cưới)" },
+  { "id": "Mon", "label": "Thứ 2 (Về)" }
+]
+```
+
 ## UI Components
 - Sticky header with login/admin buttons
-- Day tabs (sticky below header)
+- Day tabs (sticky below header) - **dynamically loaded from config**
 - Timeline with time markers and event cards
 - Event detail popup with image carousel
 - Add/Edit modal form
+- **Tabs config modal** - Manage tabs (admin only)
 - Full-screen image zoom overlay
 
 ## Styling Notes
