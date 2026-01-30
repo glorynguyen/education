@@ -26,7 +26,20 @@
                 },
                 "timeline": {
                     ".read": true,
-                    ".write": "auth != null && auth.token.email === 'nguyenbavinhcntt@gmail.com'"
+                    ".write": "auth != null && auth.token.email === 'nguyenbavinhcntt@gmail.com'",
+                    "$eventId": {
+                        "menu": {
+                            "$catIdx": {
+                                "items": {
+                                    "$itemIdx": {
+                                        "qty": {
+                                            ".write": true
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }

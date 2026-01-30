@@ -331,6 +331,201 @@
             transform: translateX(-50%) translateY(0);
             opacity: 1;
         }
+
+        /* Menu styles */
+        .has-menu::before {
+            content: '🍽️';
+            position: absolute;
+            left: 10px;
+            bottom: 10px;
+            font-size: 18px;
+            background: white;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .menu-popup {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 80;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .menu-popup-content {
+            background: white;
+            border-radius: 24px;
+            padding: 20px;
+            max-width: 500px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .menu-category {
+            background: #d35400;
+            color: white;
+            padding: 8px 12px;
+            margin-top: 16px;
+            border-radius: 8px;
+            font-size: 0.9em;
+            font-weight: bold;
+        }
+
+        .menu-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 5px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .menu-item:hover {
+            background: #fffaf5;
+        }
+
+        .menu-item-info {
+            flex: 2;
+        }
+
+        .menu-item-name {
+            font-weight: bold;
+            display: block;
+            color: #333;
+            font-size: 0.9em;
+        }
+
+        .menu-item-price {
+            color: #e67e22;
+            font-size: 0.85em;
+            font-weight: bold;
+        }
+
+        .menu-item-qty {
+            width: 40px;
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .qty-controls {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .qty-btn {
+            width: 32px;
+            height: 32px;
+            border: none;
+            border-radius: 50%;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .qty-btn.minus {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        .qty-btn.plus {
+            background: #dcfce7;
+            color: #16a34a;
+        }
+
+        .qty-btn:active {
+            transform: scale(0.95);
+        }
+
+        .menu-total-bar {
+            position: sticky;
+            bottom: 0;
+            background: white;
+            padding: 12px;
+            border-top: 2px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 16px;
+        }
+
+        .menu-total-amount {
+            color: #d35400;
+            font-size: 1.3em;
+            font-weight: bold;
+        }
+
+        /* Admin menu editor */
+        .menu-admin-section {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 12px;
+            margin-top: 16px;
+        }
+
+        .json-textarea {
+            width: 100%;
+            height: 150px;
+            font-family: monospace;
+            font-size: 11px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 8px;
+            resize: vertical;
+        }
+
+        .prompt-box {
+            background: #e8f4e8;
+            border: 1px solid #16a34a;
+            border-radius: 8px;
+            padding: 10px;
+            font-size: 11px;
+            max-height: 120px;
+            overflow-y: auto;
+            margin-bottom: 10px;
+        }
+
+        .menu-item-edit {
+            display: grid;
+            grid-template-columns: 1fr 80px 30px;
+            gap: 8px;
+            align-items: center;
+            padding: 8px;
+            background: white;
+            border-radius: 8px;
+            margin-bottom: 6px;
+        }
+
+        .menu-item-edit input {
+            padding: 6px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+
+        .menu-item-delete {
+            background: #ef4444;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 4px 8px;
+            cursor: pointer;
+        }
+
     </style>
 </head>
 
@@ -488,6 +683,113 @@
         <img id="zoom-img" class="max-w-full max-h-full object-contain transition-transform duration-300"
             onclick="event.stopPropagation()">
     </div>
+
+    <!-- Menu Popup -->
+    <div id="menu-popup" class="menu-popup" onclick="closeMenuPopup(event)">
+        <div class="menu-popup-content" onclick="event.stopPropagation()">
+            <div class="flex justify-between items-center mb-3">
+                <h3 id="menu-popup-title" class="font-bold text-lg text-orange-700"></h3>
+                <button onclick="closeMenuPopup()" class="text-gray-400 text-2xl">&times;</button>
+            </div>
+
+            <input type="text" id="menu-search" class="w-full p-2 bg-gray-50 border rounded-lg text-sm mb-3"
+                placeholder="Tim mon nhanh..." onkeyup="filterMenuItems()">
+
+            <div id="menu-items-container">
+                <!-- Menu items rendered here -->
+            </div>
+
+            <div class="menu-total-bar">
+                <div>
+                    <small class="text-gray-500">TONG CONG:</small><br>
+                    <span class="menu-total-amount" id="menu-grand-total">0</span> <small>d</small>
+                </div>
+                <button onclick="showMenuBill()" class="bg-orange-500 text-white px-3 py-2 rounded-lg font-bold text-sm">
+                    XEM DON
+                </button>
+            </div>
+
+            <!-- Admin Section -->
+            <div id="menu-admin-section" class="menu-admin-section admin-only flex-col">
+                <h4 class="font-bold text-sm text-gray-700 mb-2">Admin: Quan ly Menu</h4>
+
+                <!-- LLM Prompt Template -->
+                <details class="mb-3">
+                    <summary class="cursor-pointer text-blue-600 text-sm font-bold">Copy Prompt cho LLM (Gemini/ChatGPT)</summary>
+                    <div class="prompt-box mt-2">
+                        <button onclick="copyMenuPrompt()" class="text-xs bg-blue-500 text-white px-2 py-1 rounded mb-2">Copy Prompt</button>
+                        <pre id="llm-prompt" class="whitespace-pre-wrap text-xs">Hay phan tich hinh anh menu nay va tra ve JSON theo dinh dang sau:
+
+[
+  {
+    "category": "TEN DANH MUC",
+    "items": [
+      { "name": "Ten mon", "price": 50000 },
+      { "name": "Ten mon 2", "price": 75000 }
+    ]
+  }
+]
+
+Luu y:
+- Price la so nguyen (VND), khong co dau phay
+- Neu gia la "Thoi gia" hoac "Market Price" thi de price = 0
+- Giu nguyen ten mon tieng Viet
+- Nhom cac mon theo danh muc neu co</pre>
+                    </div>
+                </details>
+
+                <!-- JSON Input -->
+                <label class="text-xs font-bold text-gray-600">Paste JSON tu LLM:</label>
+                <textarea id="menu-json-input" class="json-textarea" placeholder='[{"category": "...", "items": [...]}]'></textarea>
+                <button onclick="importMenuFromJSON()" class="w-full mt-2 py-2 bg-blue-600 text-white rounded-lg font-bold text-sm">
+                    Import JSON
+                </button>
+
+                <!-- Manual Add Item -->
+                <div class="mt-4 pt-4 border-t">
+                    <label class="text-xs font-bold text-gray-600">Them mon thu cong:</label>
+                    <div class="grid grid-cols-3 gap-2 mt-2">
+                        <input type="text" id="manual-category" placeholder="Danh muc" class="p-2 border rounded text-sm">
+                        <input type="text" id="manual-name" placeholder="Ten mon" class="p-2 border rounded text-sm">
+                        <input type="number" id="manual-price" placeholder="Gia" class="p-2 border rounded text-sm">
+                    </div>
+                    <button onclick="addManualMenuItem()" class="w-full mt-2 py-2 bg-green-600 text-white rounded-lg font-bold text-sm">
+                        + Them mon
+                    </button>
+                </div>
+
+                <!-- Edit Existing Items -->
+                <div class="mt-4 pt-4 border-t">
+                    <label class="text-xs font-bold text-gray-600">Sua menu hien tai:</label>
+                    <input type="text" id="menu-edit-search" class="w-full p-2 bg-gray-50 border rounded-lg text-sm mt-2 mb-2"
+                        placeholder="Tim mon de sua..." onkeyup="filterEditMenuItems()">
+                    <div id="menu-edit-list" class="mt-2 max-h-[200px] overflow-y-auto">
+                        <!-- Edit items here -->
+                    </div>
+                    <button onclick="saveMenuChanges()" class="w-full mt-2 py-2 bg-orange-600 text-white rounded-lg font-bold text-sm">
+                        Luu thay doi
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Menu Bill Modal -->
+    <div id="menu-bill-modal" class="fixed inset-0 bg-black/60 hidden z-[90] flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-sm rounded-2xl p-5 max-h-[85vh] flex flex-col">
+            <h2 class="text-center font-bold text-lg text-gray-700 mb-4">CHI TIET DON HANG</h2>
+            <div id="menu-bill-details" class="space-y-2 overflow-y-auto flex-1" style="max-height: 40vh;"></div>
+            <div class="mt-4 pt-4 border-t text-right">
+                <strong>Tong: <span id="menu-bill-total" class="text-orange-600">0</span> d</strong>
+            </div>
+            <p class="text-xs text-gray-400 mt-2">* Gia chua bao gom VAT</p>
+
+            <button onclick="closeMenuBill()" class="w-full mt-3 py-2 bg-gray-100 rounded-xl font-bold text-gray-600 text-sm">
+                Dong
+            </button>
+        </div>
+    </div>
+
     <script>
         const firebaseConfig = {
             apiKey: "AIzaSyCrayfdLPobe8xiTU6siDYbI1T6bv9K9jo",
@@ -550,16 +852,23 @@
                     </div>
                     <div class="flex gap-3 overflow-x-auto pb-4 snap-x scrollbar-hide">
                         ${items.map((ev, index) => `
-                            <div onclick="showEventDetail('${ev.id}')" 
-                                class="w-full min-w-[90%] bg-white ${ev.images ? 'has-images' : ''} snap-start p-4 rounded-2xl shadow-sm border border-gray-100 relative cursor-pointer">
+                            <div onclick="showEventDetail('${ev.id}')"
+                                class="w-full min-w-[90%] bg-white ${ev.images ? 'has-images' : ''} ${ev.menu && ev.menu.length > 0 ? 'has-menu' : ''} snap-start p-4 rounded-2xl shadow-sm border border-gray-100 relative cursor-pointer">
                                 <div class="flex justify-between">
                                     <h4 class="font-bold text-gray-800">${ev.title}</h4>
                                     <div class="admin-only gap-2">
-                                        <button onclick="event.stopPropagation(); openEditModal('${ev.id}')" class="text-blue-500 text-[10px] font-bold">SỬA</button>
-                                        <button onclick="event.stopPropagation(); deleteEvent('${ev.id}')" class="text-red-400 text-[10px] font-bold">XÓA</button>
+                                        <button onclick="event.stopPropagation(); openEditModal('${ev.id}')" class="text-blue-500 text-[10px] font-bold">SUA</button>
+                                        <button onclick="event.stopPropagation(); openMenuEditor('${ev.id}')" class="text-orange-500 text-[10px] font-bold">MENU</button>
+                                        <button onclick="event.stopPropagation(); deleteEvent('${ev.id}')" class="text-red-400 text-[10px] font-bold">XOA</button>
                                     </div>
                                 </div>
                                 <p class="text-xs text-gray-500 mt-1 line-clamp-2">${ev.desc || ''}</p>
+                                ${ev.menu && ev.menu.length > 0 ? `
+                                    <button onclick="event.stopPropagation(); showEventMenu('${ev.id}')"
+                                        class="mt-2 text-xs bg-orange-100 text-orange-600 px-3 py-1 rounded-full font-bold">
+                                        Xem Menu & Tinh tien
+                                    </button>
+                                ` : ''}
                             </div>
                         `).join('')}
                     </div>
@@ -1169,6 +1478,356 @@
                     })
                     .catch(reject);
             });
+        }
+
+        // === MENU FUNCTIONALITY ===
+        let currentMenuEventId = null;
+        let editingMenuData = [];
+        let menuListener = null;
+
+        function showEventMenu(eventId) {
+            event.stopPropagation();
+            currentMenuEventId = eventId;
+            const ev = allEvents[eventId];
+
+            document.getElementById('menu-popup-title').textContent = ev.title + ' - Menu';
+            document.getElementById('menu-search').value = '';
+
+            renderMenuItems(ev.menu || []);
+            renderMenuEditList(ev.menu || []);
+
+            // Set up real-time listener for menu quantities
+            setupMenuListener(eventId);
+
+            document.getElementById('menu-popup').style.display = 'flex';
+        }
+
+        function setupMenuListener(eventId) {
+            // Remove previous listener if exists
+            if (menuListener) {
+                db.ref(`trips/dalat/timeline/${menuListener}`).off('value');
+            }
+            menuListener = eventId;
+
+            // Listen for menu changes
+            db.ref(`trips/dalat/timeline/${eventId}/menu`).on('value', (snap) => {
+                const menuData = snap.val() || [];
+                // Update allEvents with latest menu data
+                if (allEvents[eventId]) {
+                    allEvents[eventId].menu = menuData;
+                }
+                // Only re-render if this menu popup is currently open
+                if (currentMenuEventId === eventId && document.getElementById('menu-popup').style.display === 'flex') {
+                    renderMenuItems(menuData);
+                }
+            });
+        }
+
+        function closeMenuPopup(e) {
+            if (e && e.target.id !== 'menu-popup') return;
+            document.getElementById('menu-popup').style.display = 'none';
+            // Remove listener when closing
+            if (menuListener) {
+                db.ref(`trips/dalat/timeline/${menuListener}/menu`).off('value');
+                menuListener = null;
+            }
+            currentMenuEventId = null;
+        }
+
+        function renderMenuItems(menuData) {
+            const container = document.getElementById('menu-items-container');
+
+            if (!menuData || menuData.length === 0) {
+                container.innerHTML = '<p class="text-center text-gray-400 py-8">Chua co menu. Admin co the them menu ben duoi.</p>';
+                return;
+            }
+
+            let html = '';
+            menuData.forEach((cat, catIdx) => {
+                html += `<div class="menu-category">${cat.category}</div>`;
+                (cat.items || []).forEach((item, idx) => {
+                    const inputId = `qty-${catIdx}-${idx}`;
+                    const currentQty = item.qty || 0;
+                    html += `
+                        <div class="menu-item" data-name="${item.name.toLowerCase()}">
+                            <div class="menu-item-info">
+                                <span class="menu-item-name">${item.name}</span>
+                                <span class="menu-item-price">${item.price > 0 ? item.price.toLocaleString() + ' d' : 'Thoi gia'}</span>
+                            </div>
+                            <div class="qty-controls">
+                                <button class="qty-btn minus" onclick="changeQty(${catIdx}, ${idx}, -1)">-</button>
+                                <input type="number" id="${inputId}" class="menu-item-qty" value="${currentQty}" min="0"
+                                    data-name="${item.name}" data-price="${item.price}" data-cat="${catIdx}" data-idx="${idx}"
+                                    onchange="syncQtyToFirebase(${catIdx}, ${idx}, this.value)">
+                                <button class="qty-btn plus" onclick="changeQty(${catIdx}, ${idx}, 1)">+</button>
+                            </div>
+                        </div>`;
+                });
+            });
+            container.innerHTML = html;
+            calcMenuTotal();
+        }
+
+        function changeQty(catIdx, itemIdx, delta) {
+            const inputId = `qty-${catIdx}-${itemIdx}`;
+            const input = document.getElementById(inputId);
+            let val = parseInt(input.value) || 0;
+            val = Math.max(0, val + delta);
+            input.value = val;
+            syncQtyToFirebase(catIdx, itemIdx, val);
+        }
+
+        function syncQtyToFirebase(catIdx, itemIdx, qty) {
+            if (!currentMenuEventId) return;
+            const qtyVal = Math.max(0, parseInt(qty) || 0);
+            db.ref(`trips/dalat/timeline/${currentMenuEventId}/menu/${catIdx}/items/${itemIdx}/qty`).set(qtyVal);
+            calcMenuTotal();
+        }
+
+        function filterMenuItems() {
+            const q = document.getElementById('menu-search').value.toLowerCase();
+            document.querySelectorAll('.menu-item').forEach(el => {
+                el.style.display = el.dataset.name.includes(q) ? 'flex' : 'none';
+            });
+        }
+
+        function calcMenuTotal() {
+            let total = 0;
+            document.querySelectorAll('.menu-item-qty').forEach(input => {
+                total += parseInt(input.value || 0) * parseInt(input.dataset.price || 0);
+            });
+            document.getElementById('menu-grand-total').innerText = total.toLocaleString();
+        }
+
+        function showMenuBill() {
+            let html = '';
+            let total = 0;
+            document.querySelectorAll('.menu-item-qty').forEach(input => {
+                const v = parseInt(input.value || 0);
+                if (v > 0) {
+                    const sub = v * parseInt(input.dataset.price || 0);
+                    total += sub;
+                    html += `
+                        <div class="flex justify-between py-2 border-b border-dashed border-gray-200">
+                            <span>${input.dataset.name} x ${v}</span>
+                            <span class="font-bold">${sub.toLocaleString()} d</span>
+                        </div>`;
+                }
+            });
+
+            if (total === 0) {
+                alert('Ban chua chon mon nao!');
+                return;
+            }
+
+            document.getElementById('menu-bill-details').innerHTML = html;
+            document.getElementById('menu-bill-total').innerText = total.toLocaleString();
+            document.getElementById('menu-bill-modal').classList.remove('hidden');
+        }
+
+        function closeMenuBill() {
+            document.getElementById('menu-bill-modal').classList.add('hidden');
+        }
+
+        // === ADMIN MENU FUNCTIONS ===
+        function copyMenuPrompt() {
+            const prompt = document.getElementById('llm-prompt').innerText;
+            navigator.clipboard.writeText(prompt).then(() => {
+                alert('Da copy prompt! Hay paste vao Gemini/ChatGPT cung voi hinh anh menu.');
+            });
+        }
+
+        function importMenuFromJSON() {
+            const jsonText = document.getElementById('menu-json-input').value.trim();
+            if (!jsonText) {
+                alert('Hay paste JSON vao!');
+                return;
+            }
+
+            try {
+                const newMenuData = JSON.parse(jsonText);
+
+                // Validate structure
+                if (!Array.isArray(newMenuData)) {
+                    throw new Error('JSON phai la array');
+                }
+
+                // Get existing menu data
+                const ev = allEvents[currentMenuEventId];
+                let existingMenu = ev.menu || [];
+
+                // Merge: append new items to existing categories, create new categories if needed
+                newMenuData.forEach(newCat => {
+                    // Find existing category
+                    let existingCatIndex = existingMenu.findIndex(c =>
+                        c.category.toLowerCase() === newCat.category.toLowerCase()
+                    );
+
+                    if (existingCatIndex === -1) {
+                        // New category - add it with distinct items
+                        const distinctItems = [];
+                        (newCat.items || []).forEach(item => {
+                            const exists = distinctItems.some(i =>
+                                i.name.toLowerCase() === item.name.toLowerCase()
+                            );
+                            if (!exists) {
+                                distinctItems.push(item);
+                            }
+                        });
+                        existingMenu.push({ category: newCat.category, items: distinctItems });
+                    } else {
+                        // Existing category - append only new distinct items
+                        (newCat.items || []).forEach(item => {
+                            const exists = existingMenu[existingCatIndex].items.some(i =>
+                                i.name.toLowerCase() === item.name.toLowerCase()
+                            );
+                            if (!exists) {
+                                existingMenu[existingCatIndex].items.push(item);
+                            }
+                        });
+                    }
+                });
+
+                // Save merged menu to Firebase
+                db.ref(`trips/dalat/timeline/${currentMenuEventId}`).update({ menu: existingMenu })
+                    .then(() => {
+                        alert('Da import menu thanh cong! (Chi them mon moi, khong trung lap)');
+                        document.getElementById('menu-json-input').value = '';
+                    })
+                    .catch(err => alert('Loi: ' + err.message));
+
+            } catch (e) {
+                alert('JSON khong hop le: ' + e.message);
+            }
+        }
+
+        function addManualMenuItem() {
+            const category = document.getElementById('manual-category').value.trim();
+            const name = document.getElementById('manual-name').value.trim();
+            const price = parseInt(document.getElementById('manual-price').value) || 0;
+
+            if (!category || !name) {
+                alert('Hay nhap danh muc va ten mon!');
+                return;
+            }
+
+            const ev = allEvents[currentMenuEventId];
+            let menuData = ev.menu || [];
+
+            // Find or create category (case-insensitive match)
+            let catIndex = menuData.findIndex(c => c.category.toLowerCase() === category.toLowerCase());
+            if (catIndex === -1) {
+                menuData.push({ category: category, items: [] });
+                catIndex = menuData.length - 1;
+            }
+
+            // Check for duplicate item (case-insensitive)
+            const exists = menuData[catIndex].items.some(i =>
+                i.name.toLowerCase() === name.toLowerCase()
+            );
+
+            if (exists) {
+                alert('Mon nay da ton tai trong danh muc!');
+                return;
+            }
+
+            // Add item
+            menuData[catIndex].items.push({ name, price });
+
+            // Save
+            db.ref(`trips/dalat/timeline/${currentMenuEventId}`).update({ menu: menuData })
+                .then(() => {
+                    document.getElementById('manual-category').value = '';
+                    document.getElementById('manual-name').value = '';
+                    document.getElementById('manual-price').value = '';
+                    alert('Da them mon!');
+                });
+        }
+
+        function renderMenuEditList(menuData) {
+            const container = document.getElementById('menu-edit-list');
+            editingMenuData = JSON.parse(JSON.stringify(menuData || []));
+
+            if (!menuData || menuData.length === 0) {
+                container.innerHTML = '<p class="text-xs text-gray-400">Chua co menu de sua.</p>';
+                return;
+            }
+
+            let html = '';
+            menuData.forEach((cat, catIdx) => {
+                html += `<div class="menu-edit-category text-xs font-bold text-orange-600 mt-2 mb-1" data-cat="${catIdx}">${cat.category}</div>`;
+                (cat.items || []).forEach((item, itemIdx) => {
+                    html += `
+                        <div class="menu-item-edit" data-name="${item.name.toLowerCase()}" data-cat="${catIdx}">
+                            <input type="text" value="${item.name}"
+                                onchange="updateEditingMenu(${catIdx}, ${itemIdx}, 'name', this.value)">
+                            <input type="number" value="${item.price}"
+                                onchange="updateEditingMenu(${catIdx}, ${itemIdx}, 'price', this.value)">
+                            <button class="menu-item-delete" onclick="deleteEditingItem(${catIdx}, ${itemIdx})">x</button>
+                        </div>`;
+                });
+            });
+            container.innerHTML = html;
+        }
+
+        function filterEditMenuItems() {
+            const q = document.getElementById('menu-edit-search').value.toLowerCase();
+            const visibleCats = new Set();
+
+            // Filter items
+            document.querySelectorAll('.menu-item-edit').forEach(el => {
+                const matches = el.dataset.name.includes(q);
+                el.style.display = matches ? 'grid' : 'none';
+                if (matches) {
+                    visibleCats.add(el.dataset.cat);
+                }
+            });
+
+            // Show/hide category headers based on visible items
+            document.querySelectorAll('.menu-edit-category').forEach(el => {
+                el.style.display = visibleCats.has(el.dataset.cat) ? 'block' : 'none';
+            });
+        }
+
+        function updateEditingMenu(catIdx, itemIdx, field, value) {
+            if (field === 'price') {
+                editingMenuData[catIdx].items[itemIdx][field] = parseInt(value) || 0;
+            } else {
+                editingMenuData[catIdx].items[itemIdx][field] = value;
+            }
+        }
+
+        function deleteEditingItem(catIdx, itemIdx) {
+            if (!confirm('Xoa mon nay?')) return;
+            editingMenuData[catIdx].items.splice(itemIdx, 1);
+
+            // Remove empty category
+            if (editingMenuData[catIdx].items.length === 0) {
+                editingMenuData.splice(catIdx, 1);
+            }
+
+            renderMenuEditList(editingMenuData);
+        }
+
+        function saveMenuChanges() {
+            db.ref(`trips/dalat/timeline/${currentMenuEventId}`).update({ menu: editingMenuData })
+                .then(() => alert('Da luu thay doi!'))
+                .catch(err => alert('Loi: ' + err.message));
+        }
+
+        // Add menu button to events
+        function openMenuEditor(eventId) {
+            event.stopPropagation();
+            currentMenuEventId = eventId;
+            const ev = allEvents[eventId];
+
+            document.getElementById('menu-popup-title').textContent = ev.title + ' - Quan ly Menu';
+            document.getElementById('menu-search').value = '';
+
+            renderMenuItems(ev.menu || []);
+            renderMenuEditList(ev.menu || []);
+
+            document.getElementById('menu-popup').style.display = 'flex';
         }
 
     </script>
